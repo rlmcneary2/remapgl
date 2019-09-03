@@ -1,29 +1,31 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import mapboxgl, { LngLatBounds, Map as MapboxMap } from "mapbox-gl";
+import MapContextProvider from "./map-context";
 
 
 const Map: React.FC<Props> = ({
   accessToken,
+  children,
   className,
   location,
   style,
   zoom: _zoom
-}): JSX.Element => {
+}): JSX.Element | null => {
   const [center, setCenter] = useState(location);
   const [zoom, setZoom] = useState(_zoom);
   const elementRef = useRef<HTMLElement>();
-  const mapboxMap = useRef<MapboxMap>();
+  const [map, setMap] = useState();
 
-  // Create the one and only leaflet map object.
+  // Create the one and only MapboxGL map object.
   useEffect(() => {
-    if (mapboxMap.current || !elementRef.current) {
+    if (map || !elementRef.current) {
       return;
     }
 
     (mapboxgl.accessToken as any) = accessToken;
 
     console.log("creating map instance");
-    const map = new MapboxMap({
+    const nextMap = new MapboxMap({
       center,
       container: elementRef.current,
       style,
@@ -31,17 +33,22 @@ const Map: React.FC<Props> = ({
     });
 
     function loadHandler() {
-      map.off("styledata", loadHandler);
-      mapboxMap.current = map;
+      nextMap.off("styledata", loadHandler);
+      setMap(nextMap);
     }
 
-    map.on("styledata", loadHandler);
-  });
+    nextMap.on("styledata", loadHandler);
+  }, [accessToken, center, map, setMap, style, zoom]);
 
+  console.log("render Map");
   return (
-    <>
-      <div className={className} ref={elementRef as any} />
-    </>
+    <div className={className} ref={elementRef as any}>
+      {map &&
+        <MapContextProvider map={map}>
+          {children}
+        </MapContextProvider>
+      }
+    </div>
   );
 };
 
