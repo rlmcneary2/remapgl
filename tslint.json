@@ -1,0 +1,114 @@
+{
+    "extends": [
+        "tslint:latest",
+        "tslint-eslint-rules",
+        "tslint-react"
+    ],
+    "rules": {
+        "arrow-parens": false,
+        "array-type": false,
+        "class-name": true,
+        "comment-format": [
+            true
+        ],
+        "indent": [
+            true,
+            "spaces"
+        ],
+        "interface-name": false,
+        "jsx-boolean-value": ["never"],
+        "jsx-no-multiline-js": false,
+        "linebreak-style": [
+            true,
+            "CRLF"
+        ],
+        "max-line-length": false,
+        "member-ordering": [
+            true,
+            {
+              "order": [
+                "public-constructor",
+                "public-instance-field",
+                "public-instance-method",
+                "protected-instance-field",
+                "protected-instance-method",
+                "private-instance-field",
+                "private-instance-method"
+              ]
+            }
+        ],
+        "no-consecutive-blank-lines": [true, 2],
+        "no-implicit-dependencies": false,
+        "no-var-requires": false,
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-whitespace"
+        ],
+        "no-var-keyword": true,
+        "quotemark": [
+            true,
+            "double",
+            "avoid-escape"
+        ],
+        "semicolon": [
+            true,
+            "always",
+            "ignore-bound-class-methods"
+        ],
+        "trailing-comma": [
+            true,
+            {
+                "esSpecCompliant": true,
+                "multiline": "never",
+                "singleline": "never"
+            }
+        ],
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-leading-underscore",
+            "allow-pascal-case"
+        ],
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-separator",
+            "check-type"
+        ],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            },
+            {
+                "call-signature": "onespace",
+                "index-signature": "onespace",
+                "parameter": "onespace",
+                "property-declaration": "onespace",
+                "variable-declaration": "onespace"
+            }
+        ],
+        "no-internal-module": true,
+        "no-trailing-whitespace": [
+            true,
+            "ignore-template-strings",
+            "ignore-comments",
+            "ignore-jsdoc"
+        ],
+        "no-inferrable-types": true,
+        "no-null-keyword": false,
+        "prefer-const": true,
+        "no-switch-case-fall-through": true,
+        "triple-equals": true,
+        "jsdoc-format": true
+    }
+}

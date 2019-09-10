@@ -1,11 +1,11 @@
-import React, { useState, useContext, useEffect } from "react";
 import { Map } from "mapbox-gl";
+import React, { useContext, useEffect, useState } from "react";
 
 
-const MapContext = React.createContext<MapContextValue>({} as any);
+const mapContext = React.createContext<MapContextValue>({} as any);
 
 
-const MapContextProvider: React.FC<Props> = ({ children, map }): JSX.Element => {
+const MapContextProvider: React.FC<Props> = ({ children, map }): React.ReactElement => {
   const [ value, setValue ] = useState<MapContextValue>({ map });
 
   useEffect(() => {
@@ -14,16 +14,14 @@ const MapContextProvider: React.FC<Props> = ({ children, map }): JSX.Element => 
     }
   }, [map, setValue, value]);
 
-  console.log("value=", value);
-
-  return <MapContext.Provider value={value}>{children}</MapContext.Provider>;
-}
+  return <mapContext.Provider value={value}>{children}</mapContext.Provider>;
+};
 
 export default MapContextProvider;
 
 
 export function useMap() {
-  const { map } = useContext(MapContext);
+  const { map } = useContext(mapContext);
   return map;
 }
 

@@ -1,0 +1,65 @@
+{
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "project": "./tsconfig.json"
+    },
+    "plugins": [
+      "react",
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "@typescript-eslint/explicit-function-return-type": [0],
+      "@typescript-eslint/indent": ["error", 2],
+      "@typescript-eslint/no-explicit-any": [0],
+      "@typescript-eslint/no-use-before-define": [0],
+      "indent": [
+          "error",
+          2
+      ],
+      "linebreak-style": [
+          "error",
+          "windows"
+      ],
+      "no-console": [
+          0
+      ],
+      "no-empty-function": [
+          "error"
+      ],
+      "no-param-reassign": [
+          "error"
+      ],
+      "quotes": [
+          "error",
+          "double"
+      ],
+      "react/prop-types": [
+        0
+      ],
+      "semi": [
+          "error",
+          "always"
+      ],
+      "strict": [
+          "error"
+      ]
+    },
+    "settings": {
+      "react": {
+        "pragma": "React",
+        "version": "detect"
+      }
+    }
+}

@@ -1,15 +1,20 @@
+import { LngLatLike, Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import { useMap } from "../map/map-context";
-import { LngLatLike, Marker as MarkerGL } from "mapbox-gl";
+import { Props as PopupProps } from "./marker-popup";
 
 
-const Marker: React.FC<Props> = ({ children, location }): JSX.Element => {
+/**
+ * Creates a marker component.
+ */
+const Marker: React.FC<Props> = ({ children, className, location, popup, showPopup }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const markerRef = useRef<MarkerGL | null>(null);
+  const markerObj = useRef<MarkerGL | null>(null);
+  const [popupObj, setPopupObj] = useState<PopupGL | null>(null);
   const map = useMap();
 
   useEffect(() => {
-    if (!ref.current || markerRef.current) {
+    if (!ref.current || markerObj.current) {
       return;
     }
 
@@ -18,33 +23,85 @@ const Marker: React.FC<Props> = ({ children, location }): JSX.Element => {
     // don't want the Marker removed and recreated just because it moved. A
     // location is needed because if there is no location when the Marker is
     // added to the map an error will be thrown.
-    const markerState = new MarkerGL(ref.current);
-    markerState.setLngLat([0, 0]);
-    markerState.addTo(map);
+    const marker = new MarkerGL(ref.current)
+      .setLngLat([0, 0])
+      .addTo(map);
 
-    markerRef.current = markerState;
+    markerObj.current = marker;
 
     return () => {
-      markerState.remove();
-      markerRef.current = null;
-    };
-  }, [map]);
+        marker.remove();
+        markerObj.current = null;
+      };
+    }, [map]);
 
-    // Update the vehicle location.
-    useEffect(() => {
-      if (markerRef.current){
-        markerRef.current.setLngLat(location);
-      }
-    }, [location]);
-  
+  // Update the marker location.
+  useEffect(() => {
+    if (markerObj.current) {
+      markerObj.current.setLngLat(location);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    const { current: marker } = markerObj;
+    if (marker && popupObj) {
+      marker.setPopup(popupObj);
+    }
+
+    // tslint:disable-next-line no-unused-expression
+    return () => { marker && marker.setPopup(); };
+  }, [popupObj]);
+
+  function handleClick() {
+    if (showPopup === "hover" && markerObj.current) {
+      markerObj.current.togglePopup();
+    }
+  }
+
+  function handleMouseChange() {
+    if (showPopup === "hover" && markerObj.current) {
+      markerObj.current.togglePopup();
+    }
+  }
+
   return (
-    <div ref={ref}>{children}</div>
-  )
-}
+    <div
+      className={className}
+      onClick={handleClick}
+      onMouseEnter={handleMouseChange}
+      onMouseLeave={handleMouseChange}
+      ref={ref}
+    >
+      {children}
+      {popup && React.cloneElement(popup, { setMapboxglPopup: setPopupObj } as any)}
+    </div>
+  );
+};
+
+Marker.defaultProps = {
+  popup: null
+};
 
 export default Marker;
 
 
 export interface Props {
+  /**
+   * A class name to set on the containing DIV element.
+   */
+  className?: string;
+  /**
+   * Set the marker's geographical position and move it.
+   */
   location: LngLatLike;
+  /**
+   * A Popup component with content for this marker.
+   */
+  popup?: React.ReactElement<PopupProps> | null;
+  /**
+   * Displays a provided popup when the provided value is met.
+   * - "hover" When the mouse is over the marker the popup will appear.
+   * - "click" Clicking the marker will display the popup.
+   */
+  showPopup?: "click" | "hover";
 }

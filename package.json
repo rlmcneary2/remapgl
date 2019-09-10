@@ -21,9 +21,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -37,6 +34,9 @@
     ]
   },
   "devDependencies": {
-    "@types/mapbox-gl": "^0.54.3"
+    "@types/mapbox-gl": "^0.54.3",
+    "tslint": "^5.19.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-react": "^4.0.0"
   }
 }

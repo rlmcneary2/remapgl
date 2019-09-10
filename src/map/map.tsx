@@ -1,18 +1,25 @@
+import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
-import mapboxgl, { LngLatBounds, Map as MapboxMap } from "mapbox-gl";
 import MapContextProvider from "./map-context";
 
 
+/**
+ * The Map object represents the map on your page.
+ */
 const Map: React.FC<Props> = ({
   accessToken,
+  center: _center,
   children,
   className,
-  location,
   style,
   zoom: _zoom
 }): JSX.Element | null => {
-  const [center, setCenter] = useState(location);
-  const [zoom, setZoom] = useState(_zoom);
+  const defaultOptions = Object.freeze({
+    attributionControl: false // This is controlled by the Attribution component.
+  });
+
+  const [center] = useState(_center);
+  const [zoom] = useState(_zoom);
   const elementRef = useRef<HTMLElement>();
   const [map, setMap] = useState();
 
@@ -24,8 +31,8 @@ const Map: React.FC<Props> = ({
 
     (mapboxgl.accessToken as any) = accessToken;
 
-    console.log("creating map instance");
     const nextMap = new MapboxMap({
+      ...defaultOptions,
       center,
       container: elementRef.current,
       style,
@@ -38,9 +45,8 @@ const Map: React.FC<Props> = ({
     }
 
     nextMap.on("styledata", loadHandler);
-  }, [accessToken, center, map, setMap, style, zoom]);
+  }, [accessToken, center, defaultOptions, map, setMap, style, zoom]);
 
-  console.log("render Map");
   return (
     <div className={className} ref={elementRef as any}>
       {map &&
@@ -54,17 +60,33 @@ const Map: React.FC<Props> = ({
 
 
 Map.defaultProps = {
-  location: [-68.2954881, 44.3420759],
+  center: [-68.2954881, 44.3420759],
   style: "mapbox://styles/mapbox/outdoors-v10",
   zoom: 9.5
-}
+};
 
 export default Map;
 
 export interface Props {
+  /**
+   * Sets the map's access token.
+   */
   accessToken: string;
+  /**
+   * A class name to set on the containing DIV element.
+   */
   className?: string;
-  location?: [number, number];
+  /**
+   * The inital geographical centerpoint of the map.
+   */
+  center?: [number, number];
+  /**
+   * The map's Mapbox style. This must be an a JSON object conforming to the
+   * schema described in the Mapbox Style Specification, or a URL to such JSON.
+   */
   style?: string;
+  /**
+   * The initial zoom level of the map.
+   */
   zoom?: number;
 }
