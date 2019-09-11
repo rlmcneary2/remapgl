@@ -18,10 +18,6 @@
         "interface-name": false,
         "jsx-boolean-value": ["never"],
         "jsx-no-multiline-js": false,
-        "linebreak-style": [
-            true,
-            "CRLF"
-        ],
         "max-line-length": false,
         "member-ordering": [
             true,
