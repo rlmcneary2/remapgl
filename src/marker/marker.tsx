@@ -64,6 +64,8 @@ const Marker: React.FC<Props> = ({ children, className, location, popup, showPop
     }
   }
 
+  const popupComponent = popup && popup();
+
   return (
     <div
       className={className}
@@ -73,7 +75,7 @@ const Marker: React.FC<Props> = ({ children, className, location, popup, showPop
       ref={ref}
     >
       {children}
-      {popup && React.cloneElement(popup, { setMapboxglPopup: setPopupObj } as any)}
+      {popupComponent && React.cloneElement(popupComponent, { setMapboxglPopup: setPopupObj } as any)}
     </div>
   );
 };
@@ -97,7 +99,7 @@ export interface Props {
   /**
    * A Popup component with content for this marker.
    */
-  popup?: React.ReactElement<PopupProps> | null;
+  popup?: (() => React.ReactElement<PopupProps> | null) | null;
   /**
    * Displays a provided popup when the provided value is met.
    * - "hover" When the mouse is over the marker the popup will appear.

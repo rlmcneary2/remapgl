@@ -16,7 +16,7 @@ const App: React.FC = (): React.ReactElement => {
       <Navigation />
       <Marker
         location={[-68.2954881, 44.3420759]}
-        popup={(
+        popup={() => (
           <Popup
             closeButton={false}
             offset={10}
