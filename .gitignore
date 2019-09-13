@@ -11,6 +11,13 @@
 # production
 /build
 
+# library
+/dist
+
+# temp library build
+/.rts*
+
+
 # misc
 .DS_Store
 .env.local
