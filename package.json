@@ -1,6 +1,6 @@
 {
   "name": "remapgl",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Richard L. McNeary II <rich@limnous.com> (https://limnous.com/)",
   "dependencies": {
     "@mapbox/togeojson": "0.16.0",
