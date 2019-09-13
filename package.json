@@ -1,6 +1,6 @@
 {
   "name": "remapgl",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Richard L. McNeary II <rich@limnous.com> (https://limnous.com/)",
   "dependencies": {
     "@mapbox/togeojson": "0.16.0",
@@ -43,7 +43,7 @@
     "react": "16.9.0"
   },
   "files": [
-	"dist"
+    "dist"
   ],
   "source": "src/index.ts",
   "main": "dist/remapgl.js",
