@@ -14,8 +14,21 @@ const Marker: React.FC<Props> = ({ children, className, location, popup, showPop
   const map = useMap();
 
   useEffect(() => {
-    if (!ref.current || markerObj.current) {
+    if (markerObj.current) {
       return;
+    }
+
+    const hasChildren = 0 < React.Children.count(children);
+
+    // If there are children then the React element attached to ref has to exist
+    // before the Marker can be created.
+    let args: HTMLDivElement | undefined;
+    if (hasChildren) {
+      if (!ref.current) {
+        return;
+      } else {
+        args = ref.current;
+      }
     }
 
     // Create a marker but provide a dummy location. Don't use the location prop
@@ -23,7 +36,7 @@ const Marker: React.FC<Props> = ({ children, className, location, popup, showPop
     // don't want the Marker removed and recreated just because it moved. A
     // location is needed because if there is no location when the Marker is
     // added to the map an error will be thrown.
-    const marker = new MarkerGL(ref.current)
+    const marker = new MarkerGL(args)
       .setLngLat([0, 0])
       .addTo(map);
 
