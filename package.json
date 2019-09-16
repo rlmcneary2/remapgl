@@ -49,8 +49,5 @@
   ],
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "unpkg": "dist/index.umd.js",
-  "np": {
-    "contents": "dist"
-  }
+  "unpkg": "dist/index.umd.js"
 }
