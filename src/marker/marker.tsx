@@ -8,32 +8,33 @@ import { PopupProps } from "../popup/popup";
  * Creates a marker component.
  */
 const Marker: React.FC<Props> = ({
+  as = "div",
   children,
   className,
   location,
-  popup,
+  popup: popupGetter,
   showPopup = ["click"]
 }): JSX.Element => {
-  const ref = useRef<HTMLElement | null>(null);
-  const markerObj = useRef<MarkerGL | null>(null);
-  const [popupObj, setPopupObj] = useState<PopupGL>();
+  const markerElement = useRef<HTMLElement | null>(null);
+  const [ marker, setMarker ] = useState<MarkerGL | null>(null);
+  const [ popup, setPopup ] = useState<PopupGL>();
   const map = useMap();
 
   const hasChildren = 0 < React.Children.count(children);
 
   useEffect(() => {
-    if (markerObj.current) {
+    if (marker) {
       return;
     }
 
     // If there are children then the React element attached to ref has to exist
     // before the Marker can be created.
-    let args: HTMLElement | undefined;
+    let args: HTMLElement | null = null;
     if (hasChildren) {
-      if (!ref.current) {
+      if (!markerElement.current) {
         return;
       } else {
-        args = ref.current;
+        args = markerElement.current;
       }
     }
 
@@ -42,69 +43,61 @@ const Marker: React.FC<Props> = ({
     // don't want the Marker removed and recreated just because it moved. A
     // location is needed because if there is no location when the Marker is
     // added to the map an error will be thrown.
-    const marker = new MarkerGL(args)
+    const nextMarker = new MarkerGL(args as any)
       .setLngLat([0, 0])
       .addTo(map);
 
-    markerObj.current = marker;
+    setMarker(nextMarker);
 
     return () => {
-        marker.remove();
-        markerObj.current = null;
+        nextMarker.remove();
+        setMarker(null);
       };
   }, [map]);
 
-  // Connect event handlers to the default Marker element if no children are
-  // provided.
+  // Connect event handlers to the Marker element.
   useEffect(() => {
-    if (hasChildren) {
+    if (!marker) {
       return;
     }
 
-    let elem: HTMLElement;
-    if (markerObj.current && !ref.current) {
-      elem = markerObj.current.getElement();
-      ref.current = elem;
+    const elem = marker.getElement();
+    elem.removeEventListener("click", handleClick);
+    elem.removeEventListener("mouseenter", handleMouseChange);
+    elem.removeEventListener("mouseleave", handleMouseChange);
 
-      elem.addEventListener("click", handleClick);
-      elem.addEventListener("mouseenter", handleMouseChange);
-      elem.addEventListener("mouseleave", handleMouseChange);
-    }
+    elem.addEventListener("click", handleClick);
+    elem.addEventListener("mouseenter", handleMouseChange);
+    elem.addEventListener("mouseleave", handleMouseChange);
 
     return () => {
-      if (!elem) {
-        return;
-      }
-
       elem.removeEventListener("click", handleClick);
       elem.removeEventListener("mouseenter", handleMouseChange);
       elem.removeEventListener("mouseleave", handleMouseChange);
-      ref.current = null;
     };
-  }, [ hasChildren ]);
+  }, [ marker ]);
 
   // Update the marker location.
   useEffect(() => {
-    if (markerObj.current) {
-      markerObj.current.setLngLat(location);
+    if (marker) {
+      marker.setLngLat(location);
     }
-  }, [location]);
+  }, [location, marker]);
 
   // Setup the Marker's popup (if it exists).
   useEffect(() => {
-    const { current: marker } = markerObj;
-    if (marker && popupObj) {
-      marker.setPopup(popupObj);
+    if (marker && popup) {
+      marker.setPopup(popup);
       marker.togglePopup();
     }
 
     // tslint:disable-next-line no-unused-expression
     return () => { marker && marker.setPopup(); };
-  }, [popupObj]);
+  }, [marker, popup]);
 
   function handleClick(evt: any) {
-    if (showPopup.includes("click") && markerObj.current) {
-      markerObj.current.togglePopup();
+    if (showPopup.includes("click") && marker) {
+      marker.togglePopup();
     }
 
     // Always stop propagation so that the default marker and children markers
@@ -115,30 +108,26 @@ const Marker: React.FC<Props> = ({
   }
 
   function handleMouseChange() {
-    if (showPopup.includes("hover") && markerObj.current) {
-      markerObj.current.togglePopup();
+    if (showPopup.includes("hover") && marker) {
+      marker.togglePopup();
     }
   }
 
   // TODO: this must be an instance of a <Popup /> component. How to type this
   // properly with TypeScript?
-  const popupComponent = popup && popup();
+  const popupComponent = popupGetter && popupGetter();
 
-  // TODO: clone children with additional props rather than creating a div element.
   return (
     <>
-      {hasChildren &&
-        <div
-          className={className}
-          onClick={handleClick}
-          onMouseEnter={handleMouseChange}
-          onMouseLeave={handleMouseChange}
-          ref={ref as any}
-        >
-          {children}
-        </div>
-      }
-      {popupComponent && React.cloneElement(popupComponent, { setMapboxglPopup: setPopupObj } as any)}
+      {hasChildren && React.createElement(
+        as,
+        {
+          className,
+          ref: markerElement
+        },
+        children
+      )}
+      {popupComponent && React.cloneElement(popupComponent, { setMapboxglPopup: setPopup } as any)}
     </>
   );
 };
@@ -149,6 +138,11 @@ export default Marker;
 type showPopupOn = "click" | "hover";
 
 export interface Props {
+  /**
+   * The type of HTML element that wraps provided children; defaults to DIV.
+   * Ignored if there are no children.
+   */
+  as?: string;
   /**
    * A class name to set on the containing DIV element.
    */

@@ -4,43 +4,43 @@ import { useMap } from "../map/map-context";
 
 
 export const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, closeButton = true, offset, ...popupProps }): JSX.Element => {
-  const ref = useRef<HTMLDivElement>(null);
-  const popupObj = useRef<PopupGL | null>(null);
+  const popupElement = useRef<HTMLDivElement>(null);
+  const popup = useRef<PopupGL | null>(null);
   const map = useMap();
 
   const { className, location, setMapboxglPopup, ...props } = popupProps as any;
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!popupElement.current) {
       return;
     }
 
-    const popup = new PopupGL({
+    const popupNext = new PopupGL({
       closeButton,
       offset
     })
-      .setDOMContent(ref.current)
+      .setDOMContent(popupElement.current)
       .addTo(map);
 
-    location && popup.setLngLat([0, 0]); // tslint:disable-line no-unused-expression
+    location && popupNext.setLngLat([0, 0]); // tslint:disable-line no-unused-expression
 
-    popupObj.current = popup;
-    setMapboxglPopup && setMapboxglPopup(popup); // tslint:disable-line no-unused-expression
+    popup.current = popupNext;
+    setMapboxglPopup && setMapboxglPopup(popupNext); // tslint:disable-line no-unused-expression
 
     return () => {
-      popup.remove();
-      popupObj.current = null;
+      popupNext.remove();
+      popup.current = null;
     };
   }, [map]);
 
   useEffect(() => {
-    if (location && popupObj.current) {
-      popupObj.current.setLngLat(location);
+    if (location && popup.current) {
+      popup.current.setLngLat(location);
     }
   }, [location]);
 
   // TODO: this should be a clone with additional props.
-  return <div className={className} ref={ref}>{children}</div>;
+  return <div className={className} ref={popupElement}>{children}</div>;
 };
 
 export default Popup;
