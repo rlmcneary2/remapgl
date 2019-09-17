@@ -49,10 +49,6 @@ export default Popup;
 export interface MarkerPopupProps {
   children: React.ReactNode;
   /**
-   * A class name to set on the containing DIV element.
-   */
-  className?: string;
-  /**
    * Sets the geographical location of the popup's anchor, and moves the popup to it.
    */
   closeButton?: boolean;

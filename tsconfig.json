@@ -19,7 +19,8 @@
     "noEmit": true,
     "jsx": "react",
     "noImplicitAny": false,
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceMap": true
   },
   "exclude": [
     "src/*.tsx",
