@@ -8,7 +8,7 @@ export const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, close
   const popupObj = useRef<PopupGL | null>(null);
   const map = useMap();
 
-  const { location, setMapboxglPopup, ...props } = popupProps as any;
+  const { className, location, setMapboxglPopup, ...props } = popupProps as any;
 
   useEffect(() => {
     if (!ref.current) {
@@ -39,7 +39,8 @@ export const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, close
     }
   }, [location]);
 
-  return <div ref={ref}>{children}</div>;
+  // TODO: this should be a clone with additional props.
+  return <div className={className} ref={ref}>{children}</div>;
 };
 
 export default Popup;

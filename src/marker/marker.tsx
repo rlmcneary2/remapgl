@@ -124,6 +124,7 @@ const Marker: React.FC<Props> = ({
   // properly with TypeScript?
   const popupComponent = popup && popup();
 
+  // TODO: clone children with additional props rather than creating a div element.
   return (
     <>
       {hasChildren &&
