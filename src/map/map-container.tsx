@@ -1,12 +1,13 @@
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import MapContextProvider from "./map-context";
+import MapData from "./map-data";
 
 
 /**
  * Creates the HTML object for the map and a MaboxGL Map object.
  */
-const Map: React.FC<Props> = ({
+const MapContainer: React.FC<Props> = ({
   accessToken,
   as = "div",
   center: _center = [-68.2954881, 44.3420759],
@@ -15,14 +16,14 @@ const Map: React.FC<Props> = ({
   style = "mapbox://styles/mapbox/outdoors-v10",
   zoom: _zoom = 9.5
 }): JSX.Element => {
-  const defaultOptions = Object.freeze({
-    attributionControl: false // This is controlled by the Attribution component.
-  });
-
   const [center] = useState(_center);
   const [map, setMap] = useState();
   const mapElement = useRef<HTMLElement>();
   const [zoom] = useState(_zoom);
+
+  const defaultOptions = Object.freeze({
+    attributionControl: false // This is controlled by the Attribution component.
+  });
 
   // Create the one and only MapboxGL map object.
   useEffect(() => {
@@ -40,12 +41,12 @@ const Map: React.FC<Props> = ({
       zoom
     });
 
-    function loadHandler() {
-      nextMap.off("styledata", loadHandler);
+    function styleLoadHandler() {
+      nextMap.off("styledata", styleLoadHandler);
       setMap(nextMap);
     }
 
-    nextMap.on("styledata", loadHandler);
+    nextMap.on("styledata", styleLoadHandler);
   }, [accessToken, center, defaultOptions, map, setMap, style, zoom]);
 
   return React.createElement(
@@ -56,13 +57,15 @@ const Map: React.FC<Props> = ({
     },
     map && (
       <MapContextProvider map={map}>
-        {children}
+        <MapData>
+          {children}
+        </MapData>
       </MapContextProvider>
     )
   );
 };
 
-export default Map;
+export default MapContainer;
 
 
 export interface Props {
