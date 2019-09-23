@@ -51,7 +51,7 @@ The type of HTML element that hosts the marker; defaults to DIV.
 If the Marker component has children they will be displayed, otherwise the default pin marker will be displayed.
 ### className: [string]
 A class name to set on the containing element.
-### location: LngLatLike
+### location: LngLat
 Set the marker's geographical position and move to it.
 ### popup: [() => \<Popup\>]
 A Popup component with content for this marker.
@@ -97,5 +97,5 @@ A pixel offset applied to the popup's location.
 - a single number specifying a distance from the popup's location
 - a PointLike specifying a constant offset
 - an object of Points specifing an offset for each anchor position Negative offsets indicate left and up.
-### location: LngLatLike
+### location: LngLat
 Set the popup's geographical position and move to it.

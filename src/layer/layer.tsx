@@ -64,7 +64,7 @@ const Layer: React.FC<Props> = ({ id, paint, source, type, ...props }): null => 
 
 export default Layer;
 
-interface Props {
+export interface Props {
   /**
    * Unique layer name.
    */

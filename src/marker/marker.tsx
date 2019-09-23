@@ -1,7 +1,8 @@
-import { LngLatLike, Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
+import { Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import { useMap } from "../map/map-context";
 import { PopupProps } from "../popup/popup";
+import { LngLat } from "../types/location";
 
 
 /**
@@ -150,7 +151,7 @@ export interface Props {
   /**
    * Set the marker's geographical position and move it.
    */
-  location: LngLatLike;
+  location: LngLat;
   /**
    * A Popup component with content for this marker.
    */

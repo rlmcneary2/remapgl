@@ -1,6 +1,7 @@
-import { LngLatLike, Point, PointLike, Popup as PopupGL } from "mapbox-gl";
+import { Point, PointLike, Popup as PopupGL } from "mapbox-gl";
 import React, { forwardRef, useEffect, useRef } from "react";
 import { useMap } from "../map/map-context";
+import { LngLat } from "../types/location";
 
 
 export const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, closeButton = true, offset, ...popupProps }): JSX.Element => {
@@ -49,7 +50,7 @@ export default Popup;
 export interface MarkerPopupProps {
   children: React.ReactNode;
   /**
-   * Sets the geographical location of the popup's anchor, and moves the popup to it.
+   * If true, a close button will appear in the top right corner of the popup.
    */
   closeButton?: boolean;
   /**
@@ -62,5 +63,8 @@ export interface MarkerPopupProps {
 }
 
 export interface PopupProps extends MarkerPopupProps {
-  location: LngLatLike;
+  /**
+   * Sets the geographical location of the popup's anchor, and moves the popup to it.
+   */
+  location: LngLat;
 }
