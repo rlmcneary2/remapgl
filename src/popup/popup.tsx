@@ -4,7 +4,7 @@ import { useMap } from "../map/map-context";
 import { LngLat } from "../types/location";
 
 
-export const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, closeButton = true, offset, ...popupProps }): JSX.Element => {
+const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, closeButton = true, offset, ...popupProps }): JSX.Element => {
   const popupElement = useRef<HTMLDivElement>(null);
   const popup = useRef<PopupGL | null>(null);
   const map = useMap();

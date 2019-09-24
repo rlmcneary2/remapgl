@@ -8,7 +8,7 @@ import { LngLat } from "../types/location";
 /**
  * Creates a marker component.
  */
-const Marker: React.FC<Props> = ({
+const Marker: React.FC<MarkerProps> = ({
   as = "div",
   children,
   className,
@@ -138,7 +138,7 @@ export default Marker;
 
 type showPopupOn = "click" | "hover";
 
-export interface Props {
+export interface MarkerProps {
   /**
    * The type of HTML element that wraps provided children; defaults to DIV.
    * Ignored if there are no children.

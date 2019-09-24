@@ -9,6 +9,7 @@
   },
   "scripts": {
     "clean": "rimraf ./dist ./.rts2_cache_*",
+    "doc": "rimraf ./doc && ./node_modules/.bin/typedoc --ignoreCompilerErrors --mode file --name remapgl --out doc",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",

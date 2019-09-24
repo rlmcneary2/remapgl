@@ -2,7 +2,7 @@ import { NavigationControl } from "mapbox-gl";
 import React, { useEffect } from "react";
 import { useMap } from "../map/map-context";
 
-const Navigation = (props: Props): React.ReactElement | null => {
+const Navigation = (props: NavigationProps): React.ReactElement | null => {
   const map = useMap();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const Navigation = (props: Props): React.ReactElement | null => {
   return null;
 };
 
-interface Props {
+interface NavigationProps {
   /**
    * If true the compass button is included.
    */

@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 const mapContext = React.createContext<MapContextValue>({} as any);
 
 
-const MapContextProvider: React.FC<Props> = ({ children, map }): React.ReactElement => {
+const MapContextProvider: React.FC<ProviderProps> = ({ children, map }): React.ReactElement => {
   const [ value, setValue ] = useState<MapContextValue>({ map });
 
   useEffect(() => {
@@ -30,7 +30,7 @@ interface MapContextValue {
   map: Map;
 }
 
-interface Props {
+interface ProviderProps {
   children: React.ReactNode;
   map: Map;
 }

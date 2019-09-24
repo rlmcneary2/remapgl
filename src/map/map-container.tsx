@@ -9,7 +9,7 @@ import MapData from "./map-data";
 /**
  * Creates the HTML object for the map and a MaboxGL Map object.
  */
-const MapContainer: React.FC<Props> = ({
+const MapContainer: React.FC<MapContainerProps> = ({
   accessToken,
   as = "div",
   bounds: _bounds,
@@ -171,7 +171,7 @@ const MapContainer: React.FC<Props> = ({
 export default MapContainer;
 
 
-export interface Props {
+export interface MapContainerProps {
   /**
    * Sets the map's access token.
    */

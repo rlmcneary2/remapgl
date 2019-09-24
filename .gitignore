@@ -17,6 +17,9 @@
 # temp library build
 /.rts*
 
+# doc
+/doc
+
 
 # misc
 .DS_Store

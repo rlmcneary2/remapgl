@@ -4,7 +4,7 @@ import { useMap } from "../map/map-context";
 /**
  * A layer in a map.
  */
-const Layer: React.FC<Props> = ({ id, paint, source, type, ...props }): null => {
+const Layer: React.FC<LayerProps> = ({ id, paint, source, type, ...props }): null => {
   const map = useMap();
   // This is a "secret" prop added by map-data to let us know which layer, if
   // any this layer goes before.
@@ -64,7 +64,7 @@ const Layer: React.FC<Props> = ({ id, paint, source, type, ...props }): null => 
 
 export default Layer;
 
-export interface Props {
+export interface LayerProps {
   /**
    * Unique layer name.
    */

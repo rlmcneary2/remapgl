@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MapContainer, { Props as MapContainerProps } from "./map-container";
+import MapContainer, { MapContainerProps } from "./map-container";
 
 
 const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css";
@@ -8,7 +8,7 @@ const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css";
 /**
  * Add a map to an HTML document.
  */
-const Map: React.FC<Props> = ({
+const Map: React.FC<MapProps> = ({
   children,
   cssFile = MAPBOXGL_CSS,
   ...props
@@ -58,7 +58,7 @@ const Map: React.FC<Props> = ({
 export default Map;
 
 
-export interface Props extends MapContainerProps {
+export interface MapProps extends MapContainerProps {
   /**
    * The MapboxGL CSS file to use; defaults to
    * "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css".
