@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useMap } from "../map/map-context";
 
+
 /**
  * A layer in a map.
  */
@@ -20,8 +21,6 @@ const Layer: React.FC<LayerProps> = ({ id, paint, source, type, ...props }): nul
     if (beforeId) {
       args.push(beforeId);
     }
-
-    console.log(`${id} moveLayer(${JSON.stringify(args)})`);
 
     map.moveLayer(...args);
   }, [ beforeId, id ]);
@@ -44,8 +43,6 @@ const Layer: React.FC<LayerProps> = ({ id, paint, source, type, ...props }): nul
       args.push(beforeId);
     }
 
-    console.log(`${id} addLayer(${args[1]})`);
-
     map.addLayer(...args);
 
     return () => {
@@ -64,6 +61,10 @@ const Layer: React.FC<LayerProps> = ({ id, paint, source, type, ...props }): nul
 
 export default Layer;
 
+
+/**
+ * Props for the Layer component.
+ */
 export interface LayerProps {
   /**
    * Unique layer name.
@@ -82,7 +83,6 @@ export interface LayerProps {
    */
   type: "circle";
 }
-
 
 /**
  * The source of information for the layer.

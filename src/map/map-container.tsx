@@ -1,7 +1,9 @@
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
+import { useMapView } from "../hook/useMapView/useMapView";
 import { EventData } from "../types/event";
-import { BoundsOptions, CenterOptions, FitBoundsOptions, LngLat, LngLatBounds, ZoomOptions } from "../types/location";
+import { AnimationOptions, BoundsOptions, CenterOptions, FitBoundsOptions, LngLat, LngLatBounds, MotionType, ZoomOptions } from "../types/location";
+import { extractBounds, extractCenter, extractZoom } from "../util/extractors/extractors";
 import MapContextProvider from "./map-context";
 import MapData from "./map-data";
 
@@ -29,6 +31,14 @@ const MapContainer: React.FC<MapContainerProps> = ({
 }): JSX.Element => {
   const [map, setMap] = useState<MapboxMap>();
   const mapElement = useRef<HTMLElement>();
+  useMapView(
+    map,
+    animationOptions,
+    motionType,
+    _bounds,
+    _center,
+    _zoom
+  );
 
   const defaultOptions = Object.freeze({
     attributionControl: false // This is controlled by the Attribution component.
@@ -86,31 +96,6 @@ const MapContainer: React.FC<MapContainerProps> = ({
    * Update the map when props change.
    */
   useEffect(() => {
-    if (map && _bounds) {
-      const { bounds, eventData } = extractBounds(_bounds);
-
-      map.fitBounds(
-        bounds,
-        animationOptions && motionType
-          ? { ...animationOptions, linear: motionType === "ease" }
-          : undefined,
-        eventData
-      );
-    }
-  }, [_bounds]);
-
-  useEffect(() => {
-    if (map && _center) {
-      const { center, eventData, motionType, options } = _center;
-      if (motionType) {
-        map[`${motionType}To`]({ ...options, center }, eventData);
-      } else {
-        map.setCenter(center, eventData);
-      }
-    }
-  }, [_center]);
-
-  useEffect(() => {
     if (map && events && onEvent) {
       for (let i = 0; i < events.length; i++) {
         map.on(events[0], onEvent);
@@ -150,17 +135,6 @@ const MapContainer: React.FC<MapContainerProps> = ({
     }
   }, [style]);
 
-  useEffect(() => {
-    if (map && _zoom) {
-      const { eventData, motionType, options, zoom } = _zoom;
-      if (motionType) {
-        map[`${motionType}To`]({ ...options, zoom }, eventData);
-      } else {
-        map.zoomTo(zoom, options, eventData);
-      }
-    }
-  }, [_zoom]);
-
   return React.createElement(
     as,
     {
@@ -179,66 +153,6 @@ const MapContainer: React.FC<MapContainerProps> = ({
 
 export default MapContainer;
 
-
-function extractBounds(
-  options: BoundsOptions | LngLatBounds
-): {
-  bounds: LngLatBounds;
-  eventData: {[key: string]: any} | undefined;
-  fitBoundsOptions: FitBoundsOptions | undefined
-} {
-  let bounds: LngLatBounds;
-  let eventData: {[key: string]: any} | undefined;
-  let fitBoundsOptions: FitBoundsOptions | undefined;
-  if (isBoundsOptions(options)) {
-    ({ bounds, eventData } = options);
-    const { maxZoom: boundsMaxZoom, padding } = options;
-    fitBoundsOptions = { maxZoom: boundsMaxZoom, padding };
-  } else {
-    bounds = options;
-  }
-
-  return {
-    bounds,
-    eventData,
-    fitBoundsOptions
-  };
-}
-
-function extractCenter(
-  options: CenterOptions | LngLat
-): { center: LngLat; eventData: {[key: string]: any} | undefined; } {
-  let center: LngLat;
-  let eventData: {[key: string]: any} | undefined;
-  if (isCenterOptions(options)) {
-    ({ center, eventData } = options);
-  } else {
-    center = options;
-  }
-
-  return {
-    center,
-    eventData
-  };
-}
-
-function extractZoom(
-  options: number | ZoomOptions | undefined
-): { zoom: number | undefined; eventData: {[key: string]: any} | undefined; } {
-  let zoom: number | undefined;
-  let eventData: {[key: string]: any} | undefined;
-  if (isZoomOptions(options)) {
-    ({ eventData, zoom } = (options as ZoomOptions));
-  } else if (options) {
-    zoom = options;
-  }
-
-  return {
-    eventData,
-    zoom
-  };
-
-}
 
 export interface MapContainerProps {
   /**
@@ -273,7 +187,7 @@ export interface MapContainerProps {
   /**
    * The map will listen for these events. If onEvent is provided it will be invoked when an event occurs.
    */
-  events: string[];
+  events?: string[];
   /**
    * Controls the duration of the fade-in/fade-out animation for label
    * collisions, in milliseconds.
@@ -294,11 +208,11 @@ export interface MapContainerProps {
   /**
    * How the camera moves when transitioning from one location to another through bounds, center, or zoom.
    */
-  motionType?: "ease" | "fly" | "jump";
+  motionType?: MotionType;
   /**
    * Invoked when an event specified in "events" occurs.
    */
-  onEvent: (data: EventData) => void;
+  onEvent?: (data: EventData) => void;
   /**
    * The map's Mapbox style. This must be an a JSON object conforming to the
    * schema described in the Mapbox Style Specification, or a URL to such JSON.
@@ -309,30 +223,4 @@ export interface MapContainerProps {
    * controlled through animationOptions and motionType.
    */
   zoom?: number | ZoomOptions;
-}
-
-/**
- * Options common to map movement methods that involve animation.
- */
-interface AnimationOptions {
-  /**
-   * The animation's duration, measured in milliseconds.
-   */
-  duration?: number;
-  /**
-   * A function taking a time in the range 0..1 and returning a number where 0 is the initial state and 1 is the final state.
-   */
-  easing?: (input: number) => number;
-}
-
-function isBoundsOptions(options: LngLatBounds | BoundsOptions | undefined): options is BoundsOptions {
-  return !!options && "bounds" in options;
-}
-
-function isCenterOptions(options: LngLat | CenterOptions | undefined): options is CenterOptions {
-  return !!options && "center" in options;
-}
-
-function isZoomOptions(options: number | ZoomOptions | undefined): options is ZoomOptions {
-  return !!options && typeof options === "object";
 }

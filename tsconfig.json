@@ -20,8 +20,7 @@
     "jsx": "react",
     "noImplicitAny": false,
     "outDir": "dist",
-    "sourceMap": true,
-    "declaration": false 
+    "sourceMap": true
   },
   "exclude": [
     "src/*.tsx",
