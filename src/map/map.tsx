@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import isDev from "../util/is-dev/is-dev";
 import MapContainer, { MapContainerProps } from "./map-container";
 
 
@@ -27,6 +28,10 @@ const Map: React.FC<MapProps> = ({
       link = links[i];
       if (link.href.endsWith("mapbox-gl.css")) {
         setCssAdded(true);
+        if (isDev) {
+          // tslint:disable-next-line: no-console
+          console.warn("The cssFile can not be changed once it has been set.");
+        }
         return;
       }
     }

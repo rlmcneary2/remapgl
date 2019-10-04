@@ -4,6 +4,7 @@ import { useMapView } from "../hook/useMapView/useMapView";
 import { EventData } from "../types/event";
 import { AnimationOptions, BoundsOptions, CenterOptions, FitBoundsOptions, LngLat, LngLatBounds, MotionType, ZoomOptions } from "../types/location";
 import { extractBounds, extractCenter, extractZoom } from "../util/extractors/extractors";
+import isDev from "../util/is-dev/is-dev";
 import MapContextProvider from "./map-context";
 import MapData from "./map-data";
 
@@ -51,7 +52,12 @@ const MapContainer: React.FC<MapContainerProps> = ({
       return;
     }
 
-    (mapboxgl.accessToken as any) = accessToken;
+    if (!!(mapboxgl.accessToken as any)) {
+      (mapboxgl.accessToken as any) = accessToken;
+    } else if (isDev) {
+      // tslint:disable-next-line: no-console
+      console.warn("The accessToken has already been set.");
+    }
 
     const { bounds, fitBoundsOptions } = _bounds ? extractBounds(_bounds) : {} as any;
     const { center } = extractCenter(_center);
@@ -91,6 +97,13 @@ const MapContainer: React.FC<MapContainerProps> = ({
     style,
     _zoom
   ]);
+
+  useEffect(() => {
+    if (isDev && !!(mapboxgl.accessToken as any)) {
+      // tslint:disable-next-line: no-console
+      console.warn("The accessToken can not be changed once it has been set.");
+    }
+  }, [accessToken]);
 
   /**
    * Update the map when props change.
