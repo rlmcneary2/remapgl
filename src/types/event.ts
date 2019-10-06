@@ -1,11 +1,10 @@
+import { LngLat } from "./location";
 
 /**
  * The data object passed to fire, extended with target and type properties.
  */
-interface EventData {
+export interface EventData {
   [key: string]: any;
   target: any;
-  type: any;
+  type: string;
 }
-
-export { EventData };
