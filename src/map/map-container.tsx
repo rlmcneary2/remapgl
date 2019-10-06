@@ -51,7 +51,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
       return;
     }
 
-    if (!!(mapboxgl.accessToken as any)) {
+    if (!(mapboxgl.accessToken as any)) {
       (mapboxgl.accessToken as any) = accessToken;
     } else if (isDev) {
       // tslint:disable-next-line: no-console
