@@ -74,6 +74,11 @@ export type LngLatBounds = [LngLat, LngLat];
  */
 export type MotionType = "ease" | "fly" | "jump";
 
+export interface Point {
+  x: number;
+  y: number;
+}
+
 /**
  * Zoom from one level to another.
  */

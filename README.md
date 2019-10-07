@@ -31,22 +31,8 @@ The geojson object with path locations.
 ## [Map](./src/map/README.md)
 The root component of remapgl; creates and displays a map.
 
-## Marker
-Creates a marker component. 
-### as: [string="div"] TODO!!!
-The type of HTML element that hosts the marker; defaults to DIV.
-### children: [React.ReactElement]
-If the Marker component has children they will be displayed, otherwise the default pin marker will be displayed.
-### className: [string]
-A class name to set on the containing element.
-### location: LngLat
-Set the marker's geographical position and move to it.
-### popup: [() => \<Popup\>]
-A Popup component with content for this marker.
-### showPopup: ["click" | "hover"[]]
-Displays a popup when one or more of the provided states occurs.
-- "hover" When the mouse is over the marker the popup will appear.
-- "click" Clicking the marker will toggle the display of the popup.
+## [Marker](.src/marker/marker.md)
+Creates a marker component.
 
 ## Navigation
 ### showCompass: [boolean=true]
