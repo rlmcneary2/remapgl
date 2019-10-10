@@ -1,7 +1,7 @@
 # Layer
-The `<Layer/>` component is a child of [Map](../map/README.md), it causes a layer to be added to a map. Layers are not DOM objects, they are rendered by the Map in its presentation layer, for example a canvas element.
+The `<Layer/>` component is a child of [Map](../../map/README.md), it causes a layer to be added to a map. Layers are not DOM objects, they are rendered by the Map in its presentation layer, for example a canvas element.
 
-The order that layers appear in a Map are controlled by their order as children of a `<Map/>`. As in an HTML document the last Layer in a `<Map/>` component will be the top layer in the Map.
+The order that layers appear in a Map are controlled by their order as children of a `<Map/>`. As in an HTML document the last Layer in a `<Map/>` component will be the top Layer in the Map.
 
 ## LayerProps
 These are the props that can be passed to the `<Layer />` component.
@@ -14,7 +14,7 @@ A property followed by a "?" indicates an optional prop.
 |**id**|string|Unique layer name.|
 |layout?|Layout|Layout properties for the layer.|
 |maxZoom?|number|The maximum zoom level (0 - 24) for the layer. At zoom levels equal to or greater than the maxzoom, the layer will be hidden.|
-|metadata?|object|Arbitrary properties useful to track with the layer, but do not influence rendering. Properties should be prefixed to avoid collisions, like 'mapbox:'.|
+|metadata?|object|Arbitrary properties useful to track with the layer, but do not influence rendering. Properties should be prefixed to avoid collisions, like 'remapgl:'.|
 |minZoom?|number|The minimum zoom level (0 - 24) for the layer. At zoom levels less than the minzoom, the layer will be hidden.|
 |onClick?|(MapMouseEvent) => void|Fired when a pointing device (usually a mouse) is pressed and released at the same point on the layer.|
 |onContextmenu?|(MapMouseEvent) => void|Fired when the right button of the mouse is clicked or the context menu key is pressed within the layer.|

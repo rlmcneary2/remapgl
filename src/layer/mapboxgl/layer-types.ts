@@ -67,49 +67,49 @@ export interface LayerProps {
   minZoom?: number;
   /**
    * Fired when a pointing device (usually a mouse) is pressed and released at
-   * the same point on the map.
+   * the same point on the layer.
    */
   onClick?: (data: mapboxgl.MapMouseEvent) => void;
   /**
    * Fired when the right button of the mouse is clicked or the context menu key
-   * is pressed within the map.
+   * is pressed within the layer.
    */
   onContextmenu?: (data: mapboxgl.MapMouseEvent) => void;
   /**
    * Fired when a pointing device (usually a mouse) is clicked twice at the same
-   * point on the map.
+   * point on the layer.
    */
   onDblclick?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when a pointing device (usually a mouse) is pressed within the map.
+   * Fired when a pointing device (usually a mouse) is pressed within the layer.
    */
   onMousedown?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when a pointing device (usually a mouse) is moved within the map.
+   * Fired when a pointing device (usually a mouse) is moved within the layer.
    */
   onMousemove?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when a point device (usually a mouse) leaves the map's canvas.
+   * Fired when a point device (usually a mouse) leaves the layer.
    */
   onMouseout?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when a pointing device (usually a mouse) is moved within the map.
+   * Fired when a pointing device (usually a mouse) is moved within the layer.
    */
   onMouseover?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when a pointing device (usually a mouse) is released within the map.
+   * Fired when a pointing device (usually a mouse) is released within the layer.
    */
   onMouseup?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when a touchcancel event occurs within the map.
+   * Fired when a touchcancel event occurs within the layer.
    */
   onTouchcancel?: (data: mapboxgl.MapTouchEvent) => void;
   /**
-   * Fired when a touchend event occurs within the map.
+   * Fired when a touchend event occurs within the layer.
    */
   onTouchend?: (data: mapboxgl.MapTouchEvent) => void;
   /**
-   * Fired when a touchstart event occurs within the map.
+   * Fired when a touchstart event occurs within the layer.
    */
   onTouchstart?: (data: mapboxgl.MapTouchEvent) => void;
   /**
