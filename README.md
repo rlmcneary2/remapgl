@@ -28,7 +28,7 @@ TODO: display a layer wih a path.
 ### geoJson: object
 The geojson object with path locations.
 
-# [Layer](./src/layer/mapboxgl/layer.md)
+## [Layer](./src/layer/mapboxgl/layer.md)
 Display a set of information on a map.
 
 ## [Map](./src/map/README.md)
