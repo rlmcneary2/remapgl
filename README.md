@@ -34,7 +34,7 @@ Display a set of information on a map.
 ## [Map](./src/map/README.md)
 The root component of remapgl; creates and displays a map.
 
-## [Marker](.src/marker/marker.md)
+## [Marker](./src/marker/marker.md)
 Creates a marker component.
 
 ## Navigation
