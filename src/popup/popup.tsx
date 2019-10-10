@@ -1,10 +1,15 @@
 import { Point, PointLike, Popup as PopupGL } from "mapbox-gl";
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useMap } from "../map/map-context";
 import { LngLat } from "../types/location";
 
 
-const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, closeButton = true, offset, ...popupProps }): JSX.Element => {
+const Popup: React.FC<PopupProps | MarkerPopupProps> = ({
+  children,
+  closeButton = true,
+  offset,
+  ...popupProps
+}): JSX.Element => {
   const popupElement = useRef<HTMLDivElement>(null);
   const popup = useRef<PopupGL | null>(null);
   const map = useMap();
@@ -41,7 +46,11 @@ const Popup: React.FC<PopupProps | MarkerPopupProps> = ({ children, closeButton 
   }, [location]);
 
   // TODO: this should be a clone with additional props.
-  return <div className={className} ref={popupElement}>{children}</div>;
+  return (
+    <div className={className} ref={popupElement}>
+      {children}
+    </div>
+  );
 };
 
 export default Popup;

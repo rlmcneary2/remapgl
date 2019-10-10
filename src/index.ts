@@ -1,4 +1,4 @@
-import Layer from "./layer/layer";
+import Layer from "./layer/mapboxgl/layer";
 import Map from "./map/map";
 import Marker from "./marker/marker";
 import Popup from "./popup/popup";

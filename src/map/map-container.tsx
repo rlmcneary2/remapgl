@@ -2,8 +2,20 @@ import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import { useMapView } from "../hook/useMapView/useMapView";
 import { EventData } from "../types/event";
-import { AnimationOptions, BoundsOptions, CenterOptions, FitBoundsOptions, LngLat, LngLatBounds, MotionType, ZoomOptions } from "../types/location";
-import { extractBounds, extractCenter, extractZoom } from "../util/extractors/extractors";
+import {
+  AnimationOptions,
+  BoundsOptions,
+  CenterOptions,
+  LngLat,
+  LngLatBounds,
+  MotionType,
+  ZoomOptions
+} from "../types/location";
+import {
+  extractBounds,
+  extractCenter,
+  extractZoom
+} from "../util/extractors/extractors";
 import isDev from "../util/is-dev/is-dev";
 import MapContextProvider from "./map-context";
 import MapData from "./map-data";
@@ -229,7 +241,8 @@ export interface MapContainerProps {
    */
   minZoom?: number;
   /**
-   * How the camera moves when transitioning from one location to another through bounds, center, or zoom.
+   * How the camera moves when transitioning from one location to another
+   * through bounds, center, or zoom.
    */
   motionType?: MotionType;
   /**
@@ -245,15 +258,18 @@ export interface MapContainerProps {
    */
   onBoxzoomstart?: (data: mapboxgl.MapBoxZoomEvent) => void;
   /**
-   * Fired when a pointing device (usually a mouse) is pressed and released at the same point on the map.
+   * Fired when a pointing device (usually a mouse) is pressed and released at
+   * the same point on the map.
    */
   onClick?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when the right button of the mouse is clicked or the context menu key is pressed within the map.
+   * Fired when the right button of the mouse is clicked or the context menu key
+   * is pressed within the map.
    */
   onContextmenu?: (data: mapboxgl.MapMouseEvent) => void;
   /**
-   * Fired when a pointing device (usually a mouse) is clicked twice at the same point on the map.
+   * Fired when a pointing device (usually a mouse) is clicked twice at the same
+   * point on the map.
    */
   onDblclick?: (data: mapboxgl.MapMouseEvent) => void;
   /**
