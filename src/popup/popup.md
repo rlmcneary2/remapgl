@@ -25,8 +25,11 @@ Props that are only valid for a `<Popup />` component **not** associated with a 
 
 ## AnchorType
 A string indicating the part of the Marker that should be positioned closest to the coordinate set by location.
-
 `"center" | "top" | "bottom" | "left" | "right" | "top-left" | "top-right" | "bottom-left" | "bottom-right"`
+
+## LngLat
+Represents a geographic location on the map. When using the tuple (array) signature the first element is the longitude and the second element is the latitude.
+`[number, number]` | `{ lat: number; lng: number; }`
 
 ## Point
 A Point geometry object, which has x and y properties representing screen coordinates in pixels.

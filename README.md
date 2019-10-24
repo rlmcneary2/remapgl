@@ -4,7 +4,7 @@ Declarative MapboxGL bindings <🌎>
 Quickly and easily create MapboxGL-based maps. Add Markers, Layers, Popups, and other controls to a map using remapgl's React components and props. See it [live at codesandbox](https://codesandbox.io/s/remapgl-hfuhl?fontsize=14).
 
 # API
-You want to start with the [Map](#map) component.
+You probably want to start with the [Map](#map) component.
 
 ## [Attribution](./src/user-interface/attribution.md)
 An AttributionControl control presents the map's attribution information.
@@ -16,7 +16,7 @@ TODO: display a layer wih circles on it generated from an array of points.
 TODO: display a layer wih circles on it generated from GeoJSON features.
 
 ## GeoJsonPathLayer
-TODO: display a layer wih a path generated from a GEoJSON feature.
+TODO: display a layer wih a path generated from a GeoJSON feature.
 
 ## [Layer](./src/layer/mapboxgl/layer.md)
 Display a set of information on a map.

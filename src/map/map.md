@@ -138,7 +138,7 @@ A property followed by a "?" indicates an optional prop.
 
 ## LngLat
 Represents a geographic location on the map. When using the tuple (array) signature the first element is the longitude and the second element is the latitude.
-`[number, number] | { lat: number; lng: number; }`
+`[number, number]` | `{ lat: number; lng: number; }`
 
 ## LngLatBounds
 Represents a geographic rectangle on a map. A tuple; the first element is the south west corner, the second element is the north east corner.
