@@ -2,9 +2,11 @@ import { Point, PointLike, Popup as PopupGL } from "mapbox-gl";
 import React, { useEffect, useRef } from "react";
 import { useMap } from "../map/map-context";
 import { LngLat } from "../types/location";
+import { AnchorType } from "../types/ui";
 
 
 const Popup: React.FC<PopupProps | MarkerPopupProps> = ({
+  anchor,
   children,
   closeButton = true,
   offset,
@@ -22,6 +24,7 @@ const Popup: React.FC<PopupProps | MarkerPopupProps> = ({
     }
 
     const popupNext = new PopupGL({
+      anchor,
       closeButton,
       offset
     })
@@ -57,18 +60,21 @@ export default Popup;
 
 
 export interface MarkerPopupProps {
+  /**
+   * A string indicating the part of the Marker that should be positioned
+   * closest to the coordinate set by location. Can't be changed once set.
+   */
+  anchor?: AnchorType;
   children: React.ReactNode;
   /**
    * If true, a close button will appear in the top right corner of the popup.
    */
   closeButton?: boolean;
   /**
-   * A pixel offset applied to the popup's location.
-   * - a single number specifying a distance from the popup's location
-   * - a PointLike specifying a constant offset
-   * - an object of Points specifing an offset for each anchor position Negative offsets indicate left and up.
+   * The offset in pixels to apply relative to the element's center. Negative
+   * values indicate left and up.
    */
-  offset?: number | PointLike | { [key: string]: Point };
+  offset?: Point;
 }
 
 export interface PopupProps extends MarkerPopupProps {

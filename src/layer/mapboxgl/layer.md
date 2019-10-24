@@ -1,5 +1,5 @@
 # Layer
-The `<Layer/>` component is a child of [Map](../../map/README.md), it causes a layer to be added to a map. Layers are not DOM objects, they are rendered by the Map in its presentation layer, for example a canvas element.
+The `<Layer/>` component is a child of [Map](../../map/map.md), it causes a layer to be added to a map. Layers are not DOM objects, they are rendered by the Map in its presentation layer, for example a canvas element.
 
 The order that layers appear in a Map are controlled by their order as children of a `<Map/>`. As in an HTML document the last Layer in a `<Map/>` component will be the top Layer in the Map.
 

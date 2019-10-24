@@ -1,5 +1,5 @@
 # Marker
-The `<Marker/>` component is a child of [Map](../map/README.md), it causes a marker to appear at a specific location on a map. Markers can have popups that provide more information as needed.
+The `<Marker/>` component is a child of [Map](../map/map.md), it causes a marker to appear at a specific location on a map. Markers can have popups that provide more information as needed.
 
 ## MarkerProps
 These are the props that can be passed to the `<Marker />` component.
@@ -28,7 +28,7 @@ A property followed by a "?" indicates an optional prop.
 # Associated Types
 
 ## AnchorType
-A string indicating the part of the Marker that should be positioned closest to the coordinate set ny location.
+A string indicating the part of the Marker that should be positioned closest to the coordinate set by location.
 
 `"center" | "top" | "bottom" | "left" | "right" | "top-left" | "top-right" | "bottom-left" | "bottom-right"`
 

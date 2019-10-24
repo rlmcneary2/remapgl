@@ -1,12 +1,7 @@
 import { PopupProps } from "../popup/popup";
 import { LngLat, Point } from "../types/location";
+import { AnchorType } from "../types/ui";
 
-
-/**
- * A string indicating the part of the Marker that should be positioned closest
- * to the coordinate set ny location.
- */
-type AnchorType = "center" | "top" | "bottom" | "left" | "right" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 type DragHandler = (data: LngLat) => void;
 
@@ -24,7 +19,7 @@ export interface MarkerProps {
   as?: string;
   /**
    * A string indicating the part of the Marker that should be positioned
-   * closest to the coordinate set ny location. Can't be changed once set.
+   * closest to the coordinate set by location. Can't be changed once set.
    */
   anchor?: AnchorType;
   /**
