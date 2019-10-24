@@ -1,6 +1,13 @@
 {
   "name": "remapgl",
   "version": "0.8.0",
+  "author": "Richard L. McNeary II <rich@limnous.com> (https://limnous.com/)",
+  "bugs": { "url": "https://github.com/rlmcneary2/remapgl/issues" },
+  "description": "Quickly and easily create MapboxGL-based maps. Add Markers, Layers, Popups, and other controls to a map using remapgl's React components and props.",
+  "homepage": "https://github.com/rlmcneary2/remapgl",
+  "keywords": ["map", "react", "mapbox", "mapboxgl", "mapbox-gl", "reactjs", "geography", "latitude", "longitude", "earth"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/rlmcneary2/remapgl.git" },
   "@pika/pack": {
     "pipeline": [
       [
@@ -8,7 +15,6 @@
       ]
     ]
   },
-  "author": "Richard L. McNeary II <rich@limnous.com> (https://limnous.com/)",
   "dependencies": {
     "@mapbox/togeojson": "0.16.0",
     "@turf/bbox": "6.0.1",
