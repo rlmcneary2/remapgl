@@ -40,7 +40,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
   style = "mapbox://styles/mapbox/outdoors-v10",
   zoom: _zoom = { zoom: 9.5 },
   ...eventListeners
-}): JSX.Element => {
+}: React.PropsWithChildren<MapContainerProps>): JSX.Element => {
   const [map, setMap] = useState<MapboxMap>();
   const mapElement = useRef<HTMLElement>();
   useMapView(

@@ -13,7 +13,7 @@ const Map: React.FC<MapProps> = ({
   children,
   cssFile = MAPBOXGL_CSS,
   ...props
-}): JSX.Element | null => {
+}: React.PropsWithChildren<MapProps>): JSX.Element | null => {
   const [cssAdded, setCssAdded] = useState(false);
 
   // Add the MapboxGL CSS to the document.
