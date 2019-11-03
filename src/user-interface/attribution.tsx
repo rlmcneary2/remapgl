@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useMap } from "../map/map-context";
 
 
-function Attribution({ compact = false, customAttribution }: AttributionProps): null {
+export default function Attribution({ compact = false, customAttribution }: AttributionProps): null {
   const map = useMap();
 
   useEffect(() => {
@@ -14,8 +14,6 @@ function Attribution({ compact = false, customAttribution }: AttributionProps): 
 
   return null;
 }
-
-export default Attribution;
 
 export interface AttributionProps {
   /**

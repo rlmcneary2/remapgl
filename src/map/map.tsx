@@ -9,11 +9,12 @@ const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css";
 /**
  * Add a map to an HTML document.
  */
-const Map: React.FC<MapProps> = ({
-  children,
-  cssFile = MAPBOXGL_CSS,
-  ...props
-}: React.PropsWithChildren<MapProps>): JSX.Element | null => {
+export default function Map(props: MapProps): JSX.Element | null {
+  const {
+    children,
+    cssFile = MAPBOXGL_CSS,
+    ..._props
+  } = props as React.PropsWithChildren<MapProps>;
   const [cssAdded, setCssAdded] = useState(false);
 
   // Add the MapboxGL CSS to the document.
@@ -56,11 +57,9 @@ const Map: React.FC<MapProps> = ({
   }, [cssAdded, setCssAdded]);
 
   return cssAdded
-    ? (<MapContainer {...props}>{children}</MapContainer>)
+    ? (<MapContainer {..._props}>{children}</MapContainer>)
     : null;
-};
-
-export default Map;
+}
 
 
 export interface MapProps extends MapContainerProps {

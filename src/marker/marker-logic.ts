@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Map as MapGL, Marker as MarkerGL, Point as PointGL } from "mapbox-gl";
 import React, { useEffect } from "react";
 import { ListenerProps, MarkerProps } from "./marker-types";
