@@ -28,16 +28,11 @@
     ],
     "rules": {
       "@typescript-eslint/explicit-function-return-type": [0],
-      "@typescript-eslint/indent": ["error", 2],
       "@typescript-eslint/no-explicit-any": [0],
       "@typescript-eslint/no-use-before-define": [0],
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "prettier/prettier": "error",
-      "indent": [
-          "error",
-          2
-      ],
       "linebreak-style": [
           "error",
           "windows"
@@ -51,16 +46,8 @@
       "no-param-reassign": [
           "error"
       ],
-      "quotes": [
-          "error",
-          "double"
-      ],
       "react/prop-types": [
         0
-      ],
-      "semi": [
-          "error",
-          "always"
       ],
       "strict": [
           "error"
