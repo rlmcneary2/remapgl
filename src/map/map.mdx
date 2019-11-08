@@ -1,6 +1,7 @@
 ---
-name: Map Component
-route: /map
+menu: Components
+name: Map
+route: /src/map/map.mdx
 ---
 
 import { Props } from "docz";
@@ -9,17 +10,141 @@ import Map from "./map";
 # Map
 The `<Map/>` component creates and displays a map. The Map can be controlled and interacted with via its props. The only required prop is `accessToken`. This is [a string token provided by Mapbox](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/), you will need to create a Mapbox account to get one.
 
-A Map component can accept a number of other components as children. Data at a specific point is displayed on a map using a `<Marker/>`. Information that applies to paths or regions on a map can be applied by `<Layer/>` components.
+A Map component can accept a number of other components as children. Data at a specific point is displayed on a map using a [Marker](/src/marker/marker.mdx). Information that applies to paths or regions on a map can be applied by [Layer](/src/layer/mapboxgl/layer.mdx) components.
 
-Camera position: TODO
-
-CSS styling: TODO
-
-MapboxGL style: TODO
-
-Animation: TODO
-
-## MapProps
-These are the props that can be passed to the `<Map/>` component which is the root component of remapgl.
+## Props
 
 <Props of={Map} />
+
+## Sample
+```jsx
+<Map
+  accessToken="my_token"
+  center={[-68.8008887, 44.5591077]}
+  motionType="ease"
+  zoom={9}
+>
+  {
+    markers.map(marker => (
+      <Marker
+        location={marker.location}
+      >{marker.name}</Marker>
+    ))
+  }
+  <Layer
+    id={selectedLayer.id}
+    paint={selectedLayerPaint}
+    source={selectedLayer.source}
+    type="path"
+  />
+  {
+    layers.filter(layer => layer.id !== selectedLayer.id)
+      .map(layer => (
+        <Layer
+          id={layer.id}
+          paint={layerPaint}
+          source={layer.source}
+          type="path"
+        />
+      ))
+  }
+</Map>
+```
+
+## Associated types
+### AnimationOptions
+
+|Property|Type|Comments|
+|---|---|---|
+|duration?|number|The animation's duration, measured in milliseconds.|
+|easing?|(input: number) => number|A function taking a time in the range 0..1 and returning a number where 0 is the initial state and 1 is the final state.|
+
+### BoundsOptions
+
+|Property|Type|Comments|
+|---|---|---|
+|**bounds**|LngLatBounds|Center these bounds in the viewport and use the highest zoom level up to and including maxZoom that fits them in the viewport.|
+|eventData?|object|Additional properties to be added to event objects of events triggered by a change.|
+
+### CenterOptions
+
+|Property|Type|Comments|
+|---|---|---|
+|**center**|LngLat|The geographical center point of the map. Changing this value will cause the map position to change.|
+|eventData?|object|Additional properties to be added to event objects of events triggered by a change.|
+
+### LngLat
+Represents a geographic location on the map. When using the tuple (array) signature the first element is the longitude and the second element is the latitude.
+`[number, number]` | `{ lat: number; lng: number; }`
+
+### LngLatBounds
+Represents a geographic rectangle on a map. A tuple; the first element is the south west corner, the second element is the north east corner.
+`[LngLat, LngLat]`
+
+
+### MapBoxZoomEvent
+
+|Property|Type|Comments|
+|---|---|---|
+|originalEvent|MouseEvent|The DOM event which caused the map event.|
+
+
+### MapDataEvent
+
+|Property|Type|Comments|
+|---|---|---|
+|coord?|Coordinate|The coordinate of the tile if the event has a dataType of "source" and the event is related to loading of a tile.
+|dataType|string|The type of data that has changed. One of "source" or "style".|
+|isSourceLoaded?|boolean|True if the event has a dataType of source and the source has no outstanding network requests.|
+|source?|object|The style spec representation of the source if the event has a dataType of "source".|
+|sourceDataType?|string|Included if the event has a dataType of "source" and the event signals that internal data has been received or changed. Possible values are "metadata" and "content".|
+|tile?|object|The tile being loaded or changed, if the event has a dataType of "source" and the event is related to loading of a tile.|
+|type|string|The event type.|
+
+### MapMouseEvent
+
+|Property|Type|Comments|
+|---|---|---|
+|defaultPrevented|boolean|true if preventDefault has been called.|
+|lngLat|LngLat|The geographic location on the map of the mouse cursor.|
+|originalEvent|Event|The DOM event which caused the map event.|
+|point|*|The pixel coordinates of the mouse cursor, relative to the map and measured from the top left corner.|
+|preventDefault|() => void|Prevents subsequent default processing of the event by the map.|
+|target|Map|The object that fired the event.|
+|type|*|The event type.|
+
+### MapTouchEvent
+
+|Property|Type|Comments|
+|---|---|---|
+|defaultPrevented|boolean|true if preventDefault has been called.|
+|lngLat|LngLat|The geographic location on the map of the center of the touch event points.|
+|lngLats|LngLat|The geographical locations on the map corresponding to a touch event's touches property.|
+|originalEvent|Event|The DOM event which caused the map event.|
+|point|*|The pixel coordinates of the center of the touch event points, relative to the map and measured from the top left corner.|
+|points|*|The array of pixel coordinates corresponding to a touch event's touches property.|
+|preventDefault|() => void|Prevents subsequent default processing of the event by the map.|
+|target|Map|The object that fired the event.|
+|type|*|The event type.|
+
+
+### MapWheelEvent
+
+|Property|Type|Comments|
+|---|---|---|
+|defaultPrevented|boolean|true if preventDefault has been called.|
+|originalEvent|Event|The DOM event which caused the map event.|
+|preventDefault|() => void|Prevents subsequent default processing of the event by the map.|
+|target|Map|The object that fired the event.|
+|type|*|The event type.|
+
+### MotionType
+Type of motion the camera should use when transitioning from one location to another.
+`"ease" | "fly" | "jump"`
+
+### ZoomOptions
+
+|Property|Type|Comments|
+|---|---|---|
+|eventData?|object|Additional properties to be added to event objects of events triggered by a change.|
+|**zoom**|number|The zoom level of the map.|

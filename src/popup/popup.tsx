@@ -5,14 +5,13 @@ import { LngLat } from "../types/location";
 import { AnchorType } from "../types/ui";
 
 
-export default function Popup(props: PopupProps | MarkerPopupProps): JSX.Element {
-  const {
-    anchor,
-    children,
-    closeButton = true,
-    offset,
-    ...popupProps
-  } = props;
+export default function Popup({
+  anchor,
+  children,
+  closeButton = true,
+  offset,
+  ...popupProps
+}: PopupProps | MarkerPopupProps): JSX.Element {
   const popupElement = useRef<HTMLDivElement>(null);
   const popup = useRef<PopupGL | null>(null);
   const map = useMap();

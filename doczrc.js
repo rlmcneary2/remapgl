@@ -1,1 +1,4 @@
-export default { typescript: true };
+export default {
+  menu: ["Getting Started", "Components"],
+  typescript: true
+};

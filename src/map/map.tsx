@@ -2,19 +2,16 @@ import React, { useEffect, useState } from "react";
 import isDev from "../util/is-dev/is-dev";
 import MapContainer, { MapContainerProps } from "./map-container";
 
-
 const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css";
-
 
 /**
  * Add a map to an HTML document.
  */
-export default function Map(props: MapProps): JSX.Element | null {
-  const {
-    children,
-    cssFile = MAPBOXGL_CSS,
-    ..._props
-  } = props as React.PropsWithChildren<MapProps>;
+export default function Map({
+  children,
+  cssFile = MAPBOXGL_CSS,
+  ..._props
+}: React.PropsWithChildren<MapProps>): JSX.Element | null {
   const [cssAdded, setCssAdded] = useState(false);
 
   // Add the MapboxGL CSS to the document.
@@ -56,11 +53,8 @@ export default function Map(props: MapProps): JSX.Element | null {
     };
   }, [cssAdded, setCssAdded]);
 
-  return cssAdded
-    ? (<MapContainer {..._props}>{children}</MapContainer>)
-    : null;
+  return cssAdded ? <MapContainer {..._props}>{children}</MapContainer> : null;
 }
-
 
 export interface MapProps extends MapContainerProps {
   /**

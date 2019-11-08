@@ -1,14 +1,21 @@
-import { Marker as MarkerGL, Point as PointGL, Popup as PopupGL } from "mapbox-gl";
+import {
+  Marker as MarkerGL,
+  Point as PointGL,
+  Popup as PopupGL
+} from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import { useMap } from "../map/map-context";
-import { connectEventListeners, connectMarkerEventListeners, createMapboxGLMarker } from "./marker-logic";
+import {
+  connectEventListeners,
+  connectMarkerEventListeners,
+  createMapboxGLMarker
+} from "./marker-logic";
 import { ListenerProps, MarkerProps } from "./marker-types";
-
 
 /**
  * Creates a marker component.
  */
-const Marker: React.FC<MarkerProps> = (props): JSX.Element => {
+function Marker(props: MarkerProps): JSX.Element {
   const {
     as = "div",
     children,
@@ -19,8 +26,8 @@ const Marker: React.FC<MarkerProps> = (props): JSX.Element => {
     ...eventListeners
   } = props;
   const markerElement = useRef<HTMLElement | null>(null);
-  const [ marker, setMarker ] = useState<MarkerGL | null>(null);
-  const [ popup, setPopup ] = useState<PopupGL>();
+  const [marker, setMarker] = useState<MarkerGL | null>(null);
+  const [popup, setPopup] = useState<PopupGL>();
   const popupDisplayed = useRef(false);
   const map = useMap();
 
@@ -56,7 +63,9 @@ const Marker: React.FC<MarkerProps> = (props): JSX.Element => {
     }
 
     // tslint:disable-next-line no-unused-expression
-    return () => { marker && marker.setPopup(); };
+    return () => {
+      marker && marker.setPopup();
+    };
   }, [marker, popup]);
 
   useEffect(() => {
@@ -81,15 +90,19 @@ const Marker: React.FC<MarkerProps> = (props): JSX.Element => {
 
   return (
     <>
-      {hasChildren && React.createElement(
-        as,
-        {
-          className,
-          ref: markerElement
-        },
-        children
-      )}
-      {popupComponent && React.cloneElement(popupComponent, { setMapboxglPopup: setPopup } as any)}
+      {hasChildren &&
+        React.createElement(
+          as,
+          {
+            className,
+            ref: markerElement
+          },
+          children
+        )}
+      {popupComponent &&
+        React.cloneElement(popupComponent, {
+          setMapboxglPopup: setPopup
+        } as any)}
     </>
   );
 };

@@ -1,37 +1,29 @@
+---
+name: Getting Started
+---
+
 # remapgl
 Declarative MapboxGL bindings <🌎>
 
-Quickly and easily create MapboxGL-based maps. Add Markers, Layers, Popups, and other controls to a map using remapgl's React components and props. See it [live at codesandbox](https://codesandbox.io/s/remapgl-hfuhl?fontsize=14).
+Quickly and easily create maps with [MapboxGL](https://docs.mapbox.com/mapbox-gl-js/api/) with [React](https://reactjs.org/). Add Markers, Layers, Popups, and other controls to a map using remapgl's React components and props. See it [live at codesandbox](https://codesandbox.io/s/remapgl-hfuhl?fontsize=14).
 
-# API
-You probably want to start with the [Map](#map) component.
+## API
+You probably want to start with the [Map](./src/map/map.mdx) component.
 
-## [Attribution](./src/user-interface/attribution.md)
+### [Attribution](./src/user-interface/attribution.mdx)
 An AttributionControl control presents the map's attribution information.
 
-## CircleLayer
-TODO: display a layer wih circles on it generated from an array of points.
-
-## GeoJsonCircleLayer
-TODO: display a layer wih circles on it generated from GeoJSON features.
-
-## GeoJsonPathLayer
-TODO: display a layer wih a path generated from a GeoJSON feature.
-
-## [Layer](./src/layer/mapboxgl/layer.md)
+### [Layer](./src/layer/mapboxgl/layer.mdx)
 Display a set of information on a map.
 
-## [Map](./src/map/map.md)
+### [Map](./src/map/map.mdx)
 The root component of remapgl; creates and displays a map.
 
-## [Marker](./src/marker/marker.md)
+### [Marker](./src/marker/marker.mdx)
 Creates a marker component.
 
-## [Navigation](./src/user-interface/navigation.md)
+### [Navigation](./src/user-interface/navigation.mdx)
 Creates the navigation control in the map that contains zoom buttons and a compass.
 
-## PathLayer
-TODO: display a layer wih a path.
-
-## [Popup](./src/popup/popup.md)
+### [Popup](./src/popup/popup.mdx)
 Provides information when the user manipulates a control.
