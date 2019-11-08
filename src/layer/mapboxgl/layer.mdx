@@ -1,0 +1,31 @@
+---
+menu: Components
+name: Layer
+route: /src/layer/mapboxgl/layer.mdx
+---
+
+import { Props } from "docz";
+import Layer from "./layer";
+
+# Layer
+The `<Layer/>` component is a child of [Map](/src/map/map.mdx), it causes a layer to be added to a map. Layers are not DOM objects, they are rendered by the Map in its presentation layer, for example a canvas element.
+
+The order that layers appear in a Map are controlled by their order as children of a `<Map/>`. As in an HTML document the last Layer in a `<Map/>` component will be the top Layer in the Map.
+
+## Props
+
+<Props of={Layer} />
+
+## Associated types
+### Expression
+Please see the [MapboxGL documentation for expressions](https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions).
+
+### Layout
+Please see the [MapboxGL documentation for layers](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers).
+
+### Paint
+Please see the [MapboxGL documentation for layers](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers).
+
+### RenderingType
+Rendering type of this layer.<br/>
+`"background" | "circle" | "fill" | "fill-extrusion" | "heatmap" | "hillshade" | "line" | "raster" | "symbol"`
