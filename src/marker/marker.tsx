@@ -1,8 +1,4 @@
-import {
-  Marker as MarkerGL,
-  Point as PointGL,
-  Popup as PopupGL
-} from "mapbox-gl";
+import { Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import { useMap } from "../map/map-context";
 import {
@@ -105,6 +101,6 @@ function Marker(props: MarkerProps): JSX.Element {
         } as any)}
     </>
   );
-};
+}
 
 export default Marker;

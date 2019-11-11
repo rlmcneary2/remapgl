@@ -4,7 +4,6 @@ import { useMap } from "../map/map-context";
 import { LngLat } from "../types/location";
 import { AnchorType } from "../types/ui";
 
-
 export default function Popup({
   anchor,
   children,
@@ -56,7 +55,6 @@ export default function Popup({
   );
 }
 
-
 export interface MarkerPopupProps {
   /**
    * A string indicating the part of the Marker that should be positioned
@@ -72,7 +70,7 @@ export interface MarkerPopupProps {
    * The offset in pixels to apply relative to the element's center. Negative
    * values indicate left and up.
    */
-  offset?: Point;
+  offset?: number | Point;
 }
 
 export interface PopupProps extends MarkerPopupProps {
