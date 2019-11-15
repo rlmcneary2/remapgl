@@ -27,7 +27,7 @@
   "scripts": {
     "clean": "rimraf ./dist ./.rts2_cache_* ./pkg",
     "docz:build": "yarn docz:clean && docz build",
-    "docz:clean": "rimraf ./.docz ./doc",
+    "docz:clean": "rimraf ./.docz ./docs",
     "docz:dev": "docz dev",
     "start": "react-scripts start",
     "build": "react-scripts build",
