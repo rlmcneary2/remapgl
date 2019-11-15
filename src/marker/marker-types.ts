@@ -2,13 +2,19 @@ import { PopupProps } from "../popup/popup";
 import { LngLat, Point } from "../types/location";
 import { AnchorType } from "../types/ui";
 
-
 type DragHandler = (data: LngLat) => void;
 
 type ListenerProp = (data: MarkerProps) => void;
 
 export interface ListenerProps {
   [key: string]: ListenerProp | undefined;
+}
+
+export interface MarkerPropsInternal extends MarkerProps {
+  /**
+   * A unique identifier for the marker.
+   */
+  uid: string;
 }
 
 export interface MarkerProps {
