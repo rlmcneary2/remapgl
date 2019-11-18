@@ -1,7 +1,3 @@
----
-name: Getting Started
----
-
 # remapgl
 Declarative MapboxGL bindings <🌎>
 
