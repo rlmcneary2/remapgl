@@ -20,7 +20,6 @@ import isDev from "../util/is-dev/is-dev";
 import MapContextProvider from "./map-context";
 import MapData from "./map-data";
 
-
 /**
  * Creates the HTML object for the map and a MaboxGL Map object.
  */
@@ -43,14 +42,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
 }: React.PropsWithChildren<MapContainerProps>): JSX.Element => {
   const [map, setMap] = useState<MapboxMap>();
   const mapElement = useRef<HTMLElement>();
-  useMapView(
-    map,
-    animationOptions,
-    motionType,
-    _bounds,
-    _center,
-    _zoom
-  );
+  useMapView(map, animationOptions, motionType, _bounds, _center, _zoom);
 
   const defaultOptions = Object.freeze({
     attributionControl: false // This is controlled by the Attribution component.
@@ -70,7 +62,9 @@ const MapContainer: React.FC<MapContainerProps> = ({
       console.warn("The accessToken has already been set.");
     }
 
-    const { bounds, fitBoundsOptions } = _bounds ? extractBounds(_bounds) : {} as any;
+    const { bounds, fitBoundsOptions } = _bounds
+      ? extractBounds(_bounds)
+      : ({} as any);
     const { center } = extractCenter(_center);
     const { zoom } = extractZoom(_zoom);
 
@@ -177,9 +171,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
     },
     map && (
       <MapContextProvider map={map}>
-        <MapData>
-          {children}
-        </MapData>
+        <MapData>{children}</MapData>
       </MapContextProvider>
     )
   );
@@ -187,11 +179,9 @@ const MapContainer: React.FC<MapContainerProps> = ({
 
 export default MapContainer;
 
-
 function eventHandler(type: string, eventListeners: any, data: any) {
   eventListeners[`on${type}`](data);
 }
-
 
 export interface MapContainerProps {
   /**
@@ -388,7 +378,9 @@ export interface MapContainerProps {
   /**
    * Fired when a "drag to rotate" interaction starts.
    */
-  onRotatestart?: (data: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent) => void;
+  onRotatestart?: (
+    data: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent
+  ) => void;
   /**
    * Fired when one of the map's sources loads or changes, including if a tile
    * belonging to a source loads or changes.

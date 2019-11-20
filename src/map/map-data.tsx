@@ -1,6 +1,5 @@
 import React from "react";
 
-
 /**
  * Gather information when both the context provider and the map have to exist.
  */
@@ -10,22 +9,19 @@ const MapData: React.FC = ({ children }): JSX.Element => {
   // over all the children and determines the layers' order, it passes a
   // "beforeId" prop to each layer clone so the clone knows where it belongs in
   // the map object and can update its position if needed.
-  const clones = React.Children
-    .toArray(children)
-    .map((child, i, arr) => {
-      if ("isRemapGLLayer" in (child as any).type) {
-        const beforeId = nextBeforeLayerId(i, arr);
-        return React.cloneElement(child as any, { beforeId });
-      }
+  const clones = React.Children.toArray(children).map((child, i, arr) => {
+    if ("isRemapGLLayer" in (child as any).type) {
+      const beforeId = nextBeforeLayerId(i, arr);
+      return React.cloneElement(child as any, { beforeId });
+    }
 
-      return child;
-    });
+    return child;
+  });
 
   return <>{clones}</>;
 };
 
 export default MapData;
-
 
 /**
  * Find the ID of the layer that is before the current one.

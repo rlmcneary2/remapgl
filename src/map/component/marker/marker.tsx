@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 //   connectMarkerEventListeners,
 //   createMapboxGLMarker
 // } from "./marker-logic";
-import { ListenerProps, MarkerProps } from "./marker-types";
+import { MarkerProps } from "./marker-types";
 import MarkerDefault from "./marker-default";
 import MarkerCustom from "./marker-custom";
 
@@ -86,7 +86,7 @@ export default function Marker({
   // }, [togglePopup, marker]);
 
   // connectMarkerEventListeners(marker, props, eventListeners as MarkerProps);
-  // connectEventListeners(marker, props, eventListeners as ListenerProps);
+  // connectEventListeners(marker, props, eventListeners as EventHandler);
 
   // // TODO: this must be an instance of a <Popup /> component. How to type this
   // // properly with TypeScript?
