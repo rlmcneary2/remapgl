@@ -105,7 +105,7 @@ export default function Marker({
   //       )}
   //     {popupComponent &&
   //       React.cloneElement(popupComponent, {
-  //         setMapboxglPopup: setPopup
+  //         onPopupGLChange: setPopup
   //       } as any)}
   //   </>
   // );

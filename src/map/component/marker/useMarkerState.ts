@@ -24,7 +24,8 @@ export default function useMarkerState({
   eventListeners,
   props,
   ...options
-}: HookOptions): [MarkerGL, MarkerRelease] {
+}: HookOptions): [MarkerGL | null, MarkerRelease] {
+  // console.log("useMarkerState: enter.");
   const [markerState, setMarkerState] = useState<MarkerState>(
     MarkerState.initial
   );
@@ -36,6 +37,7 @@ export default function useMarkerState({
 
   /* The MarkerGL instance has been created. */
   useEffect(() => {
+    // console.log("useMarkerState: create.");
     if (markerState !== MarkerState.initial) {
       return;
     }
@@ -52,6 +54,7 @@ export default function useMarkerState({
 
   /* Once the MarkerGL instance has been created. */
   useEffect(() => {
+    // console.log("useMarkerState: connect.");
     if (markerState !== MarkerState.created) {
       return;
     }
@@ -61,9 +64,11 @@ export default function useMarkerState({
     setMarkerState(MarkerState.connected);
   }, [marker, markerState, props]);
 
+  // console.log("useMarkerState: return.");
   return [
-    marker.current,
+    markerState !== MarkerState.released ? marker.current : null,
     () => {
+      // console.log("useMarkerState: release.");
       releaseEventHandlers && releaseEventHandlers();
       release.current && release.current();
       setRelaseEventHandlers(null);
@@ -82,10 +87,10 @@ function connectMarkerEventListeners(marker: MarkerGL, props: MarkerProps) {
 
     const name = key.substring(2).toLowerCase();
     const func = props[key];
-    console.log(`Listening for ${name}.`);
+    // console.log(`Listening for ${name}.`);
     marker.on(name, func);
     remove.push(() => {
-      console.log(`Removing listener for ${name}.`);
+      // console.log(`Removing listener for ${name}.`);
       marker.off(name, func);
     });
   }

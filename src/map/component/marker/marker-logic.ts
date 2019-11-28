@@ -5,7 +5,7 @@ export function createMapboxGLMarker(
   map: MapGL,
   { anchor, color, draggable, offset }: MarkerProps,
   markerElement?: HTMLElement
-): [MarkerGL, () => {}] {
+): [MarkerGL, () => void] {
   const options: mapboxgl.MarkerOptions = {
     anchor,
     color,
@@ -23,5 +23,15 @@ export function createMapboxGLMarker(
   // location is needed because if there is no location when the Marker is
   // added to the map an error will be thrown.
   const marker = new MarkerGL(options).setLngLat([0, 0]).addTo(map);
-  return [marker, () => marker.remove()];
+  return [
+    marker,
+    () => {
+      console.log("removing marker from map");
+      marker.remove();
+      // setTimeout(() => {
+      //   console.log("removing marker from map");
+      //   marker.remove();
+      // }, 1000);
+    }
+  ];
 }

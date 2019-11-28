@@ -74,7 +74,7 @@ export default function MarkerCustom(props: MarkerPropsInternal): JSX.Element {
 
   // TODO: this must be an instance of a <Popup /> component. How to type this
   // properly with TypeScript?
-  const popupComponent = popupGetter && popupGetter();
+  // const popupComponent = popupGetter && popupGetter();
 
   return (
     <>
@@ -87,10 +87,10 @@ export default function MarkerCustom(props: MarkerPropsInternal): JSX.Element {
         },
         children
       )}
-      {popupComponent &&
+      {/*popupComponent &&
         React.cloneElement(popupComponent, {
-          setMapboxglPopup: setPopup
-        } as any)}
+          onPopupGLChange: setPopup
+        } as any)*/}
     </>
   );
 }
