@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Marker as MarkerGL } from "mapbox-gl";
 import { MarkerProps } from "./marker-types";
 
@@ -25,10 +25,10 @@ export default function useMarkerState({
   props,
   ...options
 }: HookOptions): [MarkerGL | null, MarkerRelease] {
-  // console.log("useMarkerState: enter.");
   const [markerState, setMarkerState] = useState<MarkerState>(
     MarkerState.initial
   );
+  console.log(`useMarkerState[${markerState}]: enter.`);
   const [releaseEventHandlers, setRelaseEventHandlers] = useState();
   const marker = useRef<MarkerGL>(null) as React.MutableRefObject<MarkerGL>;
   const release = useRef<MarkerRelease>(null) as React.MutableRefObject<
@@ -37,10 +37,10 @@ export default function useMarkerState({
 
   /* The MarkerGL instance has been created. */
   useEffect(() => {
-    // console.log("useMarkerState: create.");
     if (markerState !== MarkerState.initial) {
       return;
     }
+    console.log(`useMarkerState[${markerState}]: create.`);
 
     const markerElement =
       "markerElement" in options ? options.markerElement : false;
@@ -54,27 +54,31 @@ export default function useMarkerState({
 
   /* Once the MarkerGL instance has been created. */
   useEffect(() => {
-    // console.log("useMarkerState: connect.");
     if (markerState !== MarkerState.created) {
       return;
     }
+    console.log(`useMarkerState[${markerState}]: connect.`);
 
     const release = connectMarkerEventListeners(marker.current, props);
     setRelaseEventHandlers(() => release);
     setMarkerState(MarkerState.connected);
   }, [marker, markerState, props]);
 
-  // console.log("useMarkerState: return.");
+  const markerRelease = useCallback(() => {
+    console.log("useMarkerState: release.");
+    releaseEventHandlers && releaseEventHandlers();
+    release.current && release.current();
+    setRelaseEventHandlers(null);
+    setMarkerState(MarkerState.released);
+    (release.current as any) = null;
+  }, [release, releaseEventHandlers]);
+
+  console.log(
+    `useMarkerState[${markerState}]: return; marker.current=${!!marker.current}`
+  );
   return [
     markerState !== MarkerState.released ? marker.current : null,
-    () => {
-      // console.log("useMarkerState: release.");
-      releaseEventHandlers && releaseEventHandlers();
-      release.current && release.current();
-      setRelaseEventHandlers(null);
-      setMarkerState(MarkerState.released);
-      (release.current as any) = null;
-    }
+    markerRelease
   ];
 }
 

@@ -26,12 +26,12 @@ export function createMapboxGLMarker(
   return [
     marker,
     () => {
-      console.log("removing marker from map");
-      marker.remove();
-      // setTimeout(() => {
-      //   console.log("removing marker from map");
-      //   marker.remove();
-      // }, 1000);
+      // console.log("removing marker from map");
+      // marker.remove();
+      setTimeout(() => {
+        console.log("removing marker from map");
+        marker.remove();
+      }, 1000);
     }
   ];
 }

@@ -1,6 +1,6 @@
 import { AnchorType } from "../../../types/ui";
-import { LngLat, Point } from "../../../types/location";
-import { Marker as MarkerGL } from "mapbox-gl";
+import { LngLat } from "../../../types/location";
+import { SimplePoint } from "../../../types/data";
 
 export interface MarkerPopupProps {
   /**
@@ -17,7 +17,7 @@ export interface MarkerPopupProps {
    * The offset in pixels to apply relative to the element's center. Negative
    * values indicate left and up.
    */
-  offset?: number | Point;
+  offset?: number | SimplePoint;
 }
 
 export interface PopupProps extends MarkerPopupProps {
@@ -25,8 +25,4 @@ export interface PopupProps extends MarkerPopupProps {
    * Sets the geographical location of the popup's anchor, and moves the popup to it.
    */
   location: LngLat;
-}
-
-export interface InternalPopupProps extends PopupProps {
-  marker?: MarkerGL;
 }

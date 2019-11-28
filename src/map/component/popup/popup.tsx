@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useRef } from "react";
 import { Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
 import { useMap } from "../../map-context";
-import { InternalPopupProps, PopupProps } from "./popup-types";
+import { PopupProps } from "./popup-types";
 
 export default forwardRef<HTMLDivElement, PopupProps>(function Popup(
   { anchor, children, closeButton = true, offset, ...props },
@@ -13,7 +13,8 @@ export default forwardRef<HTMLDivElement, PopupProps>(function Popup(
   const popup = useRef<PopupGL | null>(null);
   const map = useMap();
 
-  const { location, marker } = props as InternalPopupProps;
+  const { location, marker, onPopupAttached } = props as any;
+  console.log(`Popup: marker=${!!marker}`);
 
   useEffect(() => {
     if (!ref.current) {
@@ -26,20 +27,40 @@ export default forwardRef<HTMLDivElement, PopupProps>(function Popup(
       offset
     }).setDOMContent(ref.current);
 
+    if (onPopupAttached) {
+      console.log("Popup: onPopupAttached.");
+      onPopupAttached(popupNext);
+      return;
+    }
+
     if (marker) {
+      console.log("Popup: set popup on marker.");
       (marker as MarkerGL).setPopup(popupNext);
     } else {
+      console.log("Popup: add popup to map.");
       popupNext.addTo(map);
       location && popupNext.setLngLat([0, 0]);
     }
 
     popup.current = popupNext;
 
+    onPopupAttached && onPopupAttached(true);
+
     return () => {
       !marker ? popupNext.remove() : marker.setPopup();
       popup.current = null;
+      onPopupAttached && onPopupAttached(false);
     };
-  }, [anchor, closeButton, location, map, marker, offset, ref]);
+  }, [
+    anchor,
+    closeButton,
+    location,
+    map,
+    marker,
+    offset,
+    onPopupAttached,
+    ref
+  ]);
 
   useEffect(() => {
     if (!marker && location && popup.current) {
@@ -47,15 +68,5 @@ export default forwardRef<HTMLDivElement, PopupProps>(function Popup(
     }
   }, [location, marker]);
 
-  return (
-    <div
-      ref={div => {
-        ref.current = div;
-        forwardedRef &&
-          ((forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = div);
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div ref={ref}>{children}</div>;
 });

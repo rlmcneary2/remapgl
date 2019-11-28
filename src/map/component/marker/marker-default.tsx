@@ -3,14 +3,16 @@ import React, {
   useRef,
   useState,
   MutableRefObject,
-  RefObject
+  RefObject,
+  useCallback
 } from "react";
-// import { Popup as PopupGL } from "mapbox-gl";
+import { Popup as PopupGL, Marker as MarkerGL } from "mapbox-gl";
 import { useMap } from "../../map-context";
 import { createMapboxGLMarker } from "./marker-logic";
 import { MarkerProps, MarkerPropsInternal } from "./marker-types";
 import useMarkerState from "./useMarkerState";
 import Popup from "../popup/popup";
+import { PopupProps } from "../popup/popup-types";
 
 /**
  * Creates a marker component.
@@ -27,15 +29,19 @@ export default function MarkerDefault(props: MarkerPropsInternal): JSX.Element {
   } = props;
   console.log(`MarkerDefault[${uid}]: enter.`);
   const map = useMap();
+  const createMarker = useCallback(
+    () => createMapboxGLMarker(map, eventListeners as MarkerProps),
+    [eventListeners, map]
+  );
   const [marker, markerRelease] = useMarkerState({
-    createMarker: () =>
-      createMapboxGLMarker(map, eventListeners as MarkerProps),
+    createMarker,
     eventListeners,
     props
   });
   const [, setComponentCreated] = useState(false);
-  const popupRef = useRef(null) as MutableRefObject<HTMLElement | null>;
-  const [popupElement, setPopupElement] = useState();
+  const [popupAttached, setPopupAttached] = useState(false);
+  // const popupRef = useRef(null) as MutableRefObject<HTMLElement | null>;
+  // const [popupElement, setPopupElement] = useState();
   const popupDisplayed = useRef(false);
 
   // After the component returns nothing will happen because the props do not change.
@@ -59,14 +65,12 @@ export default function MarkerDefault(props: MarkerPropsInternal): JSX.Element {
 
   // Update the marker location.
   useEffect(() => {
-    console.log("MarkerDefault: location.");
     if (marker) {
       marker.setLngLat(location);
     }
   }, [location, marker]);
 
   useEffect(() => {
-    console.log("MarkerDefault: toggle popup.");
     if (marker) {
       if (togglePopup && !popupDisplayed.current) {
         popupDisplayed.current = true;
@@ -79,20 +83,35 @@ export default function MarkerDefault(props: MarkerPropsInternal): JSX.Element {
     }
   }, [togglePopup, marker]);
 
-  useEffect(() => {
-    console.log(
-      `MarkerDefault: useEffect; popup=${!!popup}\r\npopupElement=${!!popupElement}\r\npopupRef.current=${!!popupRef.current}`
-    );
+  // useEffect(() => {
+  //   console.log(
+  //     `MarkerDefault: useEffect; popup=${!!popup}\r\npopupElement=${!!popupElement}\r\npopupRef.current=${!!popupRef.current}`
+  //   );
 
-    if (!popup || popupElement) {
+  //   if (!popup || popupElement) {
+  //     return;
+  //   }
+
+  //   if (popupRef.current) {
+  //     setPopupElement(popupRef.current);
+  //     popupRef.current = null;
+  //   }
+  // }, [popup, popupElement, popupRef]);
+
+  useEffect(() => {
+    if (!marker) {
       return;
     }
 
-    if (popupRef.current) {
-      setPopupElement(popupRef.current);
-      popupRef.current = null;
+    console.log(
+      `MarkerDefault: marker.getPopup()=${!marker.getPopup()}, popupAttached=${!!popupAttached}`
+    );
+    if (!marker.getPopup() && popupAttached) {
+      console.log("MarkerDefault: setting popup.");
+      marker.setPopup(popupAttached as any);
+      marker.togglePopup();
     }
-  }, [popup, popupElement, popupRef]);
+  });
 
   // useEffect(() => {
   //   console.log(
@@ -121,25 +140,32 @@ export default function MarkerDefault(props: MarkerPropsInternal): JSX.Element {
   //   };
   // }, [location, map, marker, popupElement, popupRef]);
 
-  // const mountPopup = popup && !popupElement;
-  // const popupProps: any = {
-  //   ...popup,
-  //   ref: popupRef
-  // };
+  // const mountPopup =
+  //   !!popup && !popupRef.current && !popupElement && !popupAttached && !!marker;
+  const mountPopup = !!popup && !popupAttached;
 
-  // console.log(
-  //   `MarkerDefault: render; popupElement=${!!popupElement}, mountPopup=${mountPopup}`
-  // );
+  const popupProps: any = {
+    ...popup
+  };
+
+  if (!popupAttached) {
+    popupProps.onPopupAttached = setPopupAttached;
+  }
+
+  console.log(
+    `MarkerDefault: render; mountPopup=${mountPopup}, popup=${!!popup}, popupAttached=${!!popupAttached}`
+  );
 
   return (
     <>
       {React.createElement(React.Fragment, {
         key: uid
       })}
-      {popup && (
-        <Popup {...props} ref={popupRef as RefObject<HTMLDivElement>}>
-          Marker Popup!
-        </Popup>
+      {/* Do NOT remove these wrapping div tags! They allow the mapbox-gl code to take ownership of the Popup DOM elements
+      that were created by React. */ mountPopup && (
+        <div>
+          <Popup {...(popupProps as PopupProps)}>Marker Popup!</Popup>
+        </div>
       )}
     </>
   );
