@@ -1,9 +1,10 @@
 import { Map as MapGL, Marker as MarkerGL, Point as PointGL } from "mapbox-gl";
-import { MarkerProps } from "./marker-types";
+import { Point } from "../../../types/location";
+import { AnchorType } from "../../../types/ui";
 
 export function createMapboxGLMarker(
   map: MapGL,
-  { anchor, color, draggable, offset }: MarkerProps,
+  { anchor, color, draggable, offset }: Options,
   markerElement?: HTMLElement
 ): [MarkerGL, () => void] {
   const options: mapboxgl.MarkerOptions = {
@@ -23,15 +24,12 @@ export function createMapboxGLMarker(
   // location is needed because if there is no location when the Marker is
   // added to the map an error will be thrown.
   const marker = new MarkerGL(options).setLngLat([0, 0]).addTo(map);
-  return [
-    marker,
-    () => {
-      // console.log("removing marker from map");
-      // marker.remove();
-      setTimeout(() => {
-        console.log("removing marker from map");
-        marker.remove();
-      }, 1000);
-    }
-  ];
+  return [marker, () => marker.remove()];
+}
+
+export interface Options {
+  anchor?: AnchorType;
+  color?: string;
+  draggable?: boolean;
+  offset?: Point;
 }

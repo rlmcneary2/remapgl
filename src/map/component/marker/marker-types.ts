@@ -1,21 +1,10 @@
-import { MarkerPopupProps } from "../popup/popup-types";
+import { PopupProps } from "../popup/popup-types";
 import { LngLat, Point } from "../../../types/location";
 import { AnchorType } from "../../../types/ui";
 
 type DragHandler = (data: LngLat) => void;
 
 type EventHandler = (event: any) => void;
-
-// export interface ListenerProps {
-//   [key: string]: ListenerProp | undefined;
-// }
-
-export interface MarkerPropsInternal extends MarkerProps {
-  /**
-   * A unique identifier for the marker.
-   */
-  uid: string;
-}
 
 export interface MarkerProps {
   /**
@@ -49,7 +38,7 @@ export interface MarkerProps {
   /**
    * Set the marker's geographical position and move it.
    */
-  location: LngLat;
+  location?: LngLat;
   /**
    * The offset in pixels to apply relative to the element's center. Negative
    * values indicate left and up.
@@ -82,7 +71,7 @@ export interface MarkerProps {
   /**
    * A Popup component with content for this marker.
    */
-  popup?: MarkerPopupProps;
+  popup?: React.ReactElement<PopupProps>;
   /**
    * If true the popup will be shown.
    */

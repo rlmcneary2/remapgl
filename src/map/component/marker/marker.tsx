@@ -1,14 +1,8 @@
-// import { Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
-import React, { useEffect, useRef, useState } from "react";
-// import { useMap } from "../map/map-context";
-// import {
-//   connectEventListeners,
-//   connectMarkerEventListeners,
-//   createMapboxGLMarker
-// } from "./marker-logic";
+import React, { useRef } from "react";
 import { MarkerProps } from "./marker-types";
 import MarkerDefault from "./marker-default";
 import MarkerCustom from "./marker-custom";
+import { useMap } from "../../map-context";
 
 let moduleUid = Date.now();
 
@@ -19,99 +13,18 @@ export default function Marker({
   children,
   ...props
 }: MarkerProps): JSX.Element {
-  // const {
-  //   as = "div",
-  //   children,
-  //   className,
-  //   location,
-  //   popup: popupGetter,
-  //   togglePopup,
-  //   ...eventListeners
-  // } = props;
+  const map = useMap();
   const uid = useRef(`${moduleUid++}`);
-  // const markerElement = useRef<HTMLElement | null>(null);
-  // const [marker, setMarker] = useState<MarkerGL | null>(null);
-  // const [popup, setPopup] = useState<PopupGL>();
-  // const popupDisplayed = useRef(false);
-  // const map = useMap();
 
-  const hasChildren = 0 < React.Children.count(children);
+  const markerProps = {
+    ...props,
+    map,
+    uid: uid.current
+  };
 
-  // useEffect(() => {
-  //   if (marker) {
-  //     return;
-  //   }
-
-  //   const nextMarker = createMapboxGLMarker(map, markerElement.current, props);
-  //   if (nextMarker) {
-  //     setMarker(nextMarker);
-  //     return () => {
-  //       nextMarker.remove();
-  //       setMarker(null);
-  //     };
-  //   }
-  // }, [map]);
-
-  // // Update the marker location.
-  // useEffect(() => {
-  //   if (marker) {
-  //     marker.setLngLat(location);
-  //   }
-  // }, [location, marker]);
-
-  // // Setup the Marker's popup (if it exists).
-  // useEffect(() => {
-  //   if (marker && popup) {
-  //     marker.setPopup(popup);
-  //     popupDisplayed.current = true;
-  //   }
-
-  //   // tslint:disable-next-line no-unused-expression
-  //   return () => {
-  //     marker && marker.setPopup();
-  //   };
-  // }, [marker, popup]);
-
-  // useEffect(() => {
-  //   if (marker) {
-  //     if (togglePopup && !popupDisplayed.current) {
-  //       popupDisplayed.current = true;
-  //       marker.togglePopup();
-  //     }
-  //     if (!togglePopup && popupDisplayed.current) {
-  //       popupDisplayed.current = false;
-  //       marker.togglePopup();
-  //     }
-  //   }
-  // }, [togglePopup, marker]);
-
-  // connectMarkerEventListeners(marker, props, eventListeners as MarkerProps);
-  // connectEventListeners(marker, props, eventListeners as EventHandler);
-
-  // // TODO: this must be an instance of a <Popup /> component. How to type this
-  // // properly with TypeScript?
-  // const popupComponent = popupGetter && popupGetter();
-
-  // return (
-  //   <>
-  //     {hasChildren &&
-  //       React.createElement(
-  //         as,
-  //         {
-  //           className,
-  //           ref: markerElement
-  //         },
-  //         children
-  //       )}
-  //     {popupComponent &&
-  //       React.cloneElement(popupComponent, {
-  //         onPopupGLChange: setPopup
-  //       } as any)}
-  //   </>
-  // );
-  return hasChildren ? (
-    <MarkerCustom {...{ ...props, uid: uid.current }}>{children}</MarkerCustom>
+  return 0 < React.Children.count(children) ? (
+    <MarkerCustom {...markerProps}>{children}</MarkerCustom>
   ) : (
-    <MarkerDefault {...{ ...props, uid: uid.current }} />
+    <MarkerDefault {...markerProps} />
   );
 }

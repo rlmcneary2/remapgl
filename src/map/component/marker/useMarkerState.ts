@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Marker as MarkerGL } from "mapbox-gl";
 import { MarkerProps } from "./marker-types";
 
+/** A function that returns a mapbox-gl Marker instance, optionally using a
+ * provided Marker element (a ref to a React component's DOM element). */
 export type MarkerCreator = (element?: HTMLElement) => MarkerCreatorResult;
 export type MarkerCreatorResult = [MarkerGL, MarkerRelease];
 export type MarkerRelease = () => void;
@@ -13,12 +15,15 @@ export enum MarkerState {
 }
 
 interface HookOptions {
-  createMarker: MarkerCreator;
+  createMarker?: MarkerCreator;
   eventListeners: any;
   props: MarkerProps;
   markerElement?: HTMLElement | null;
 }
 
+/**
+ * Manages the lifecycle of a mapbox-gl Marker object for React components.
+ */
 export default function useMarkerState({
   createMarker,
   eventListeners,
@@ -28,20 +33,18 @@ export default function useMarkerState({
   const [markerState, setMarkerState] = useState<MarkerState>(
     MarkerState.initial
   );
-  console.log(`useMarkerState[${markerState}]: enter.`);
   const [releaseEventHandlers, setRelaseEventHandlers] = useState();
   const marker = useRef<MarkerGL>(null) as React.MutableRefObject<MarkerGL>;
   const release = useRef<MarkerRelease>(null) as React.MutableRefObject<
     MarkerRelease
   >;
 
-  /* The MarkerGL instance has been created. */
   useEffect(() => {
-    if (markerState !== MarkerState.initial) {
+    if (markerState !== MarkerState.initial || !createMarker) {
       return;
     }
-    console.log(`useMarkerState[${markerState}]: create.`);
 
+    // The MarkerGL instance does not exist yet, create it.
     const markerElement =
       "markerElement" in options ? options.markerElement : false;
 
@@ -52,20 +55,20 @@ export default function useMarkerState({
     setMarkerState(MarkerState.created);
   }, [createMarker, marker, release, markerState, options]);
 
-  /* Once the MarkerGL instance has been created. */
   useEffect(() => {
     if (markerState !== MarkerState.created) {
       return;
     }
-    console.log(`useMarkerState[${markerState}]: connect.`);
 
+    // The MarkerGL instance has been created; set the event listeners.
     const release = connectMarkerEventListeners(marker.current, props);
     setRelaseEventHandlers(() => release);
     setMarkerState(MarkerState.connected);
   }, [marker, markerState, props]);
 
+  // The client must invoke this callback when the marker is removed from the
+  // map to release the MarkerGL event listeners.
   const markerRelease = useCallback(() => {
-    console.log("useMarkerState: release.");
     releaseEventHandlers && releaseEventHandlers();
     release.current && release.current();
     setRelaseEventHandlers(null);
@@ -73,9 +76,6 @@ export default function useMarkerState({
     (release.current as any) = null;
   }, [release, releaseEventHandlers]);
 
-  console.log(
-    `useMarkerState[${markerState}]: return; marker.current=${!!marker.current}`
-  );
   return [
     markerState !== MarkerState.released ? marker.current : null,
     markerRelease
@@ -91,10 +91,8 @@ function connectMarkerEventListeners(marker: MarkerGL, props: MarkerProps) {
 
     const name = key.substring(2).toLowerCase();
     const func = props[key];
-    // console.log(`Listening for ${name}.`);
     marker.on(name, func);
     remove.push(() => {
-      // console.log(`Removing listener for ${name}.`);
       marker.off(name, func);
     });
   }
