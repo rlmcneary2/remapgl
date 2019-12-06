@@ -1,4 +1,4 @@
-import { PopupProps } from "../popup/popup-types";
+import { MarkerPopupProps } from "../popup/popup-types";
 import { LngLat, Point } from "../../../types/location";
 import { AnchorType } from "../../../types/ui";
 
@@ -71,7 +71,7 @@ export interface MarkerProps {
   /**
    * A Popup component with content for this marker.
    */
-  popup?: React.ReactElement<PopupProps>;
+  popup?: React.ReactElement<MarkerPopupProps>;
   /**
    * If true the popup will be shown.
    */
