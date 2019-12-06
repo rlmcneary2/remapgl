@@ -1,20 +1,23 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
 import { useMap } from "../../map-context";
 import { PopupProps } from "./popup-types";
 
-export default forwardRef<HTMLDivElement, PopupProps>(function Popup(
-  { anchor, children, closeButton = true, offset, ...props },
-  forwardedRef
-): JSX.Element {
+export default function Popup({
+  anchor,
+  children,
+  closeButton = true,
+  location,
+  offset,
+  ...props
+}: PopupProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(
     null
   ) as React.MutableRefObject<HTMLDivElement | null>;
   const popup = useRef<PopupGL | null>(null);
   const map = useMap();
 
-  const { location, marker, onPopupAttached } = props as any;
-  console.log(`Popup: marker=${!!marker}`);
+  const { marker, onPopupAttached } = props as any;
 
   useEffect(() => {
     if (!ref.current) {
@@ -28,16 +31,13 @@ export default forwardRef<HTMLDivElement, PopupProps>(function Popup(
     }).setDOMContent(ref.current);
 
     if (onPopupAttached) {
-      console.log("Popup: onPopupAttached.");
       onPopupAttached(popupNext);
       return;
     }
 
     if (marker) {
-      console.log("Popup: set popup on marker.");
       (marker as MarkerGL).setPopup(popupNext);
     } else {
-      console.log("Popup: add popup to map.");
       popupNext.addTo(map);
       location && popupNext.setLngLat([0, 0]);
     }
@@ -69,4 +69,4 @@ export default forwardRef<HTMLDivElement, PopupProps>(function Popup(
   }, [location, marker]);
 
   return <div ref={ref}>{children}</div>;
-});
+}
