@@ -7,22 +7,12 @@ import useMarkerState from "./useMarkerState";
  * Both Custom and Default use this to create a marker on the map.
  */
 export default function MarkerCommon(props: MarkerCommonProps): JSX.Element {
-  const {
-    as,
-    className,
-    createElement,
-    createMarker,
-    location,
-    popup,
-    togglePopup,
-    ...eventListeners
-  } = props;
+  const { createElement, createMarker, location, popup, togglePopup } = props;
   const [popupGL, setPopupGL] = useState<PopupGL>();
   const popupDisplayed = useRef(false);
 
   const [marker, markerRelease] = useMarkerState({
     createMarker,
-    eventListeners,
     props
   });
 

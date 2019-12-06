@@ -7,6 +7,9 @@ import MarkerCommon from "./marker-common";
  * Marker component with custom content.
  */
 export default function MarkerCustom({
+  as: createAs = "div",
+  children,
+  className,
   map,
   ...props
 }: MarkerCustomProps): JSX.Element {
@@ -20,17 +23,17 @@ export default function MarkerCustom({
     () => (
       <div>
         {React.createElement(
-          props.as || "div",
+          createAs,
           {
-            className: props.className,
+            className,
             key: props.uid,
-            ref: elem => setElement(elem as any)
+            ref: (elem: HTMLElement) => setElement(elem)
           },
-          props.children
+          children
         )}
       </div>
     ),
-    [props.as, props.children, props.className, props.uid]
+    [children, className, createAs, props.uid]
   );
 
   useEffect(() => {

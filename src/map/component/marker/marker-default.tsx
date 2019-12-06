@@ -7,17 +7,16 @@ import MarkerCommon from "./marker-common";
  * Marker component with the default mapboxgl appearance.
  */
 export default function MarkerDefault({
+  as: createAs,
   map,
   ...props
 }: MarkerDefaultProps): JSX.Element {
-  console.log(`MarkerDefault[${props.uid}]: enter.`);
-
   const createElement = useCallback(
     () =>
-      React.createElement(React.Fragment, {
+      React.createElement(createAs || React.Fragment, {
         key: props.uid
       }),
-    [props.uid]
+    [createAs, props.uid]
   );
 
   const createMarker = useCallback(
