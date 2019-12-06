@@ -28,11 +28,7 @@
     "clean": "rimraf ./dist ./.rts2_cache_* ./pkg",
     "docz:build": "yarn docz:clean && docz build",
     "docz:clean": "rimraf ./.docz ./docs",
-    "docz:dev": "docz dev",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "bundle": "yarn clean && microbundle --name=remapgl --globals mapbox-gl=mapboxgl",
-    "bundle-dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl"
+    "docz:dev": "docz dev"
   },
   "browserslist": {
     "production": [
@@ -55,7 +51,8 @@
     "@types/jest": "24.0.18",
     "@types/mapbox-gl": "^1.5.2",
     "@types/node": "^12.7.2",
-    "@types/react": "^16.9.2",
+    "@types/react": "^16.9.4",
+    "@types/react-dom": "^16.9.4",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "babel-eslint": "^10.0.3",
@@ -78,9 +75,6 @@
     "react-scripts": "3.2.0",
     "rimraf": "^3.0.0",
     "typescript": "^3.6.2"
-  },
-  "peerDependencies": {
-    "react": "16.9.0"
   },
   "files": [
     "dist"

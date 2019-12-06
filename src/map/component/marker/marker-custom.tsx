@@ -1,96 +1,70 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Popup as PopupGL } from "mapbox-gl";
-import { useMap } from "../../map-context";
+import React, { useEffect, useState, useCallback } from "react";
 import { createMapboxGLMarker } from "./marker-logic";
-import { MarkerProps, MarkerPropsInternal } from "./marker-types";
-import useMarkerState from "./useMarkerState";
+import { MarkerProps } from "./marker-types";
+import MarkerCommon from "./marker-common";
 
 /**
- * Creates a marker component.
+ * Marker component with custom content.
  */
-export default function MarkerCustom(props: MarkerPropsInternal): JSX.Element {
-  const {
-    as = "div",
-    children,
-    className,
-    location,
-    popup: popupGetter,
-    togglePopup,
-    uid,
-    ...eventListeners
-  } = props;
-  const map = useMap();
-  const markerElement = useRef<HTMLElement | null>(null);
-  const [marker, markerRelease] = useMarkerState({
-    createMarker: element =>
-      createMapboxGLMarker(map, eventListeners as MarkerProps, element),
-    eventListeners,
-    markerElement: markerElement.current,
-    props
-  });
-  const [, setComponentCreated] = useState(false);
-  const [popup, setPopup] = useState<PopupGL>();
-  const popupDisplayed = useRef(false);
+export default function MarkerCustom({
+  as: createAs = "div",
+  children,
+  className,
+  map,
+  ...props
+}: MarkerCustomProps): JSX.Element {
+  const [element, setElement] = useState<HTMLElement>();
+  const [createMarker, setCreateMarker] = useState();
+
+  const createElement = useCallback(
+    // Do NOT remove these wrapping div tags! They allow the mapbox-gl code to
+    // take ownership of the custom Marker DOM elements that were created by
+    // React.
+    () => (
+      <div>
+        {React.createElement(
+          createAs,
+          {
+            className,
+            key: props.uid,
+            ref: (elem: HTMLElement) => setElement(elem)
+          },
+          children
+        )}
+      </div>
+    ),
+    [children, className, createAs, props.uid]
+  );
 
   useEffect(() => {
-    setComponentCreated(true);
-    return () => {
-      console.warn(`MarkerCustom[${uid}]: removed.`);
-      markerRelease();
-    };
-  }, [markerRelease, uid]);
-
-  // Update the marker location.
-  useEffect(() => {
-    if (marker) {
-      marker.setLngLat(location);
-    }
-  }, [location, marker]);
-
-  // Setup the Marker's popup (if it exists).
-  useEffect(() => {
-    if (marker && popup) {
-      marker.setPopup(popup);
-      popupDisplayed.current = true;
+    if (!element) {
+      return;
     }
 
-    return () => {
-      marker && marker.setPopup();
-    };
-  }, [marker, popup]);
-
-  useEffect(() => {
-    if (marker) {
-      if (togglePopup && !popupDisplayed.current) {
-        popupDisplayed.current = true;
-        marker.togglePopup();
-      }
-      if (!togglePopup && popupDisplayed.current) {
-        popupDisplayed.current = false;
-        marker.togglePopup();
-      }
-    }
-  }, [togglePopup, marker]);
-
-  // TODO: this must be an instance of a <Popup /> component. How to type this
-  // properly with TypeScript?
-  const popupComponent = popupGetter && popupGetter();
+    setCreateMarker(() => () =>
+      createMapboxGLMarker(
+        map,
+        {
+          anchor: props.anchor,
+          color: props.color,
+          draggable: props.draggable,
+          offset: props.offset
+        },
+        element
+      )
+    );
+  }, [element, map, props.anchor, props.color, props.draggable, props.offset]);
 
   return (
-    <>
-      {React.createElement(
-        as,
-        {
-          className,
-          key: uid,
-          ref: markerElement
-        },
-        children
-      )}
-      {popupComponent &&
-        React.cloneElement(popupComponent, {
-          setMapboxglPopup: setPopup
-        } as any)}
-    </>
+    <MarkerCommon
+      {...props}
+      createElement={createElement}
+      createMarker={createMarker}
+    />
   );
+}
+
+export interface MarkerCustomProps extends MarkerProps {
+  map: mapboxgl.Map;
+  uid: string;
 }
