@@ -15,7 +15,7 @@ name: Getting Started
 
 function insertApiTitles(text) {
   return text.replace(
-    /## API\s[\w :/.]*/m,
+    /## API\s[\w :/.[\]()]*/m,
     `## API
 You probably want to start with the [Map](/map) component.
 
