@@ -1,6 +1,6 @@
 {
   "name": "remapgl",
-  "version": "0.9.1",
+  "version": "0.10.3",
   "author": "Richard L. McNeary II <rich@limnous.com> (https://limnous.com/)",
   "bugs": {
     "url": "https://github.com/rlmcneary2/remapgl/issues"
@@ -25,7 +25,7 @@
     "url": "https://github.com/rlmcneary2/remapgl.git"
   },
   "scripts": {
-    "clean": "rimraf ./dist ./.rts2_cache_* ./pkg",
+    "clean": "rimraf ./build ./dist ./.rts2_cache_* ./pkg && yarn docz:clean",
     "docz:build": "yarn docz:clean && docz build",
     "docz:clean": "rimraf ./.docz ./docs",
     "docz:dev": "docz dev"
@@ -45,36 +45,36 @@
   "dependencies": {
     "@mapbox/togeojson": "0.16.0",
     "@turf/bbox": "6.0.1",
-    "mapbox-gl": "^1.5.0"
+    "mapbox-gl": "1.6.0"
   },
   "devDependencies": {
     "@types/jest": "24.0.18",
-    "@types/mapbox-gl": "^1.5.2",
-    "@types/node": "^12.7.2",
-    "@types/react": "^16.9.4",
-    "@types/react-dom": "^16.9.4",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
-    "@typescript-eslint/parser": "^2.6.1",
-    "babel-eslint": "^10.0.3",
-    "docz": "^2.1.1",
+    "@types/mapbox-gl": "1.6.0",
+    "@types/node": "12.12.14",
+    "@types/react": "16.9.0",
+    "@types/react-dom": "16.9.0",
+    "@typescript-eslint/eslint-plugin": "2.10.0",
+    "@typescript-eslint/parser": "2.10.0",
+    "babel-eslint": "10.0.3",
+    "docz": "2.1.1",
     "eslint": "5.16.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-config-react-app": "^5.0.2",
-    "eslint-plugin-flowtype": "^4.3.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-react": "^7.16.0",
-    "eslint-plugin-react-hooks": "^2.2.0",
-    "microbundle": "^0.11.0",
-    "np": "^5.0.3",
+    "eslint-config-prettier": "6.5.0",
+    "eslint-config-react-app": "5.0.2",
+    "eslint-plugin-flowtype": "4.3.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-prettier": "3.1.1",
+    "eslint-plugin-react": "7.16.0",
+    "eslint-plugin-react-hooks": "2.2.0",
+    "microbundle": "0.11.0",
+    "np": "5.2.1",
     "prettier": "1.18.2",
-    "prettier-eslint": "^9.0.0",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "prettier-eslint": "9.0.0",
+    "react": "16.11.0",
+    "react-dom": "16.11.0",
     "react-scripts": "3.2.0",
-    "rimraf": "^3.0.0",
-    "typescript": "^3.6.2"
+    "rimraf": "3.0.0",
+    "typescript": "3.6.2"
   },
   "files": [
     "dist"
