@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useMap } from "../../map/map-context";
 import { LayerProps } from "./layer-types";
 
-
 /**
  * A layer in a map.
  */
@@ -36,7 +35,7 @@ const Layer: React.FC<LayerProps> = (props): null => {
     }
 
     map.moveLayer(...args);
-  }, [beforeId, id]);
+  }, [beforeId, id, map]);
 
   // Create the layer in the map.
   useEffect(() => {
@@ -99,7 +98,20 @@ const Layer: React.FC<LayerProps> = (props): null => {
       map.removeLayer(id);
       map.removeSource(id);
     };
-  }, [id, map, paint, source, type]);
+  }, [
+    beforeId,
+    filter,
+    id,
+    layout,
+    map,
+    maxZoom,
+    metadata,
+    minZoom,
+    paint,
+    source,
+    sourceLayer,
+    type
+  ]);
 
   // Connect layer events.
   useEffect(() => {
@@ -126,8 +138,7 @@ const Layer: React.FC<LayerProps> = (props): null => {
         map.off(eventType.toLowerCase() as any, id, listeners[eventType]);
       }
     };
-  }, [eventListeners]);
-
+  }, [eventListeners, id, map]);
 
   return null;
 };
@@ -139,11 +150,9 @@ const Layer: React.FC<LayerProps> = (props): null => {
 
 export default Layer;
 
-
 function eventHandler(type: string, eventListeners: any, data: any) {
   eventListeners[`on${type}`](data);
 }
-
 
 interface InternalLayerProps extends LayerProps {
   /**
