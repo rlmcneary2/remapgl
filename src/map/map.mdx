@@ -1,7 +1,7 @@
 ---
 menu: Components
 name: Map
-route: /src/map/map.mdx
+route: /map
 ---
 
 import { Props } from "docz";
@@ -10,7 +10,7 @@ import Map from "./map";
 # Map
 The `<Map/>` component creates and displays a map. The Map can be controlled and interacted with via its props. The only required prop is `accessToken`. This is [a string token provided by Mapbox](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/), you will need to create a Mapbox account to get one.
 
-A Map component can accept a number of other components as children. Data at a specific point is displayed on a map using a [Marker](/src/marker/marker.mdx). Information that applies to paths or regions on a map can be applied by [Layer](/src/layer/mapboxgl/layer.mdx) components.
+A Map component can accept a number of other components as children. Data at a specific point is displayed on a map using a [Marker](/marker). Information that applies to paths or regions on a map can be applied by [Layer](/layer) components.
 
 ## Props
 
