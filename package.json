@@ -6,7 +6,7 @@
     "url": "https://github.com/rlmcneary2/remapgl/issues"
   },
   "description": "Quickly and easily create MapboxGL-based maps. Add Markers, Layers, Popups, and other controls to a map using remapgl's React components and props.",
-  "homepage": "https://github.com/rlmcneary2/remapgl",
+  "homepage": "https://limnous.com/remapgl/docs/",
   "keywords": [
     "map",
     "react",
