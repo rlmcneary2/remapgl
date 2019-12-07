@@ -19,22 +19,22 @@ function insertApiTitles(text) {
     `## API
 You probably want to start with the [Map](/map) component.
 
-### [Attribution](attribution)
+### [Attribution](/attribution)
 An AttributionControl control presents the map's attribution information.
 
-### [Layer](layer)
+### [Layer](/layer)
 Display a set of information on a map.
 
-### [Map](map)
+### [Map](/map)
 The root component of remapgl; creates and displays a map.
 
-### [Marker](marker)
+### [Marker](/marker)
 Creates a marker component.
 
-### [Navigation](navigation)
+### [Navigation](/navigation)
 Creates the navigation control in the map that contains zoom buttons and a compass.
 
-### [Popup](popup)
+### [Popup](/popup)
 Provides information when the user manipulates a control.`
   );
 }
