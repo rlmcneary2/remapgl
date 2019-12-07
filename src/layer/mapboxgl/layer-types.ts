@@ -14,12 +14,13 @@ import {
   HillshadePaint,
   LineLayout,
   LinePaint,
+  MapMouseEvent,
+  MapTouchEvent,
   RasterLayout,
   RasterPaint,
   SymbolLayout,
   SymbolPaint
 } from "mapbox-gl";
-
 
 /**
  * Props for the Layer component.
@@ -40,15 +41,15 @@ export interface LayerProps {
    * Layout properties for the layer.
    */
   layout?:
-    BackgroundLayout |
-    CircleLayout |
-    FillLayout |
-    FillExtrusionLayout |
-    HeatmapLayout |
-    HillshadeLayout |
-    LineLayout |
-    RasterLayout |
-    SymbolLayout;
+    | BackgroundLayout
+    | CircleLayout
+    | FillLayout
+    | FillExtrusionLayout
+    | HeatmapLayout
+    | HillshadeLayout
+    | LineLayout
+    | RasterLayout
+    | SymbolLayout;
   /**
    * The maximum zoom level (0 - 24) for the layer. At zoom levels equal to or
    * greater than the maxzoom, the layer will be hidden.
@@ -69,62 +70,62 @@ export interface LayerProps {
    * Fired when a pointing device (usually a mouse) is pressed and released at
    * the same point on the layer.
    */
-  onClick?: (data: mapboxgl.MapMouseEvent) => void;
+  onClick?: (data: MapMouseEvent) => void;
   /**
    * Fired when the right button of the mouse is clicked or the context menu key
    * is pressed within the layer.
    */
-  onContextmenu?: (data: mapboxgl.MapMouseEvent) => void;
+  onContextmenu?: (data: MapMouseEvent) => void;
   /**
    * Fired when a pointing device (usually a mouse) is clicked twice at the same
    * point on the layer.
    */
-  onDblclick?: (data: mapboxgl.MapMouseEvent) => void;
+  onDblclick?: (data: MapMouseEvent) => void;
   /**
    * Fired when a pointing device (usually a mouse) is pressed within the layer.
    */
-  onMousedown?: (data: mapboxgl.MapMouseEvent) => void;
+  onMousedown?: (data: MapMouseEvent) => void;
   /**
    * Fired when a pointing device (usually a mouse) is moved within the layer.
    */
-  onMousemove?: (data: mapboxgl.MapMouseEvent) => void;
+  onMousemove?: (data: MapMouseEvent) => void;
   /**
    * Fired when a point device (usually a mouse) leaves the layer.
    */
-  onMouseout?: (data: mapboxgl.MapMouseEvent) => void;
+  onMouseout?: (data: MapMouseEvent) => void;
   /**
    * Fired when a pointing device (usually a mouse) is moved within the layer.
    */
-  onMouseover?: (data: mapboxgl.MapMouseEvent) => void;
+  onMouseover?: (data: MapMouseEvent) => void;
   /**
    * Fired when a pointing device (usually a mouse) is released within the layer.
    */
-  onMouseup?: (data: mapboxgl.MapMouseEvent) => void;
+  onMouseup?: (data: MapMouseEvent) => void;
   /**
    * Fired when a touchcancel event occurs within the layer.
    */
-  onTouchcancel?: (data: mapboxgl.MapTouchEvent) => void;
+  onTouchcancel?: (data: MapTouchEvent) => void;
   /**
    * Fired when a touchend event occurs within the layer.
    */
-  onTouchend?: (data: mapboxgl.MapTouchEvent) => void;
+  onTouchend?: (data: MapTouchEvent) => void;
   /**
    * Fired when a touchstart event occurs within the layer.
    */
-  onTouchstart?: (data: mapboxgl.MapTouchEvent) => void;
+  onTouchstart?: (data: MapTouchEvent) => void;
   /**
    * Default paint properties for this layer.
    */
   paint?:
-    BackgroundPaint |
-    FillPaint |
-    FillExtrusionPaint |
-    LinePaint |
-    SymbolPaint |
-    RasterPaint |
-    CirclePaint |
-    HeatmapPaint |
-    HillshadePaint;
+    | BackgroundPaint
+    | FillPaint
+    | FillExtrusionPaint
+    | LinePaint
+    | SymbolPaint
+    | RasterPaint
+    | CirclePaint
+    | HeatmapPaint
+    | HillshadePaint;
   /**
    * Name of a source description to be used for this layer. Required for all
    * RenderingTypes except "background".
@@ -139,13 +140,13 @@ export interface LayerProps {
    * Rendering type of this layer.
    */
   type?:
-    "fill" |
-    "line" |
-    "symbol" |
-    "circle" |
-    "fill-extrusion" |
-    "raster" |
-    "background" |
-    "heatmap" |
-    "hillshade";
+    | "fill"
+    | "line"
+    | "symbol"
+    | "circle"
+    | "fill-extrusion"
+    | "raster"
+    | "background"
+    | "heatmap"
+    | "hillshade";
 }
