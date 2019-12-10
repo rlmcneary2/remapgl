@@ -30,7 +30,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "bundle": "yarn clean && microbundle --name=remapgl --globals mapbox-gl=mapboxgl",
-    "bundle-dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl"
+    "bundle:dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl"
   },
   "browserslist": {
     "production": [
