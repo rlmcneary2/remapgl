@@ -460,9 +460,9 @@ export interface MapContainerProps {
   onZoomstart?: (data: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent) => void;
   /**
    * An Object with properties to set styles on the element that contains the
-   * map. Per React documentation customizing the appearance of React
-   * components using "style" is not reccommended.
-   * @see https://reactjs.org/docs/dom-elements.html#style
+   * map. Per React documentation customizing the appearance of React components
+   * using "style" is not recommended. See:
+   * https://reactjs.org/docs/dom-elements.html#style
    */
   style?: { [key: string]: string | number };
   /**
