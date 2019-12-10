@@ -6,7 +6,7 @@
     "url": "https://github.com/rlmcneary2/remapgl/issues"
   },
   "description": "Quickly and easily create MapboxGL-based maps. Add Markers, Layers, Popups, and other controls to a map using remapgl's React components and props.",
-  "homepage": "https://github.com/rlmcneary2/remapgl",
+  "homepage": "https://limnous.com/remapgl/docs/",
   "keywords": [
     "map",
     "react",
@@ -28,7 +28,8 @@
     "clean": "rimraf ./build ./dist ./.rts2_cache_* ./pkg && yarn docz:clean",
     "docz:build": "yarn docz:clean && docz build",
     "docz:clean": "rimraf ./.docz ./docs",
-    "docz:dev": "docz dev"
+    "docz:dev": "docz dev",
+    "build": "react-scripts build"
   },
   "browserslist": {
     "production": [
@@ -59,13 +60,13 @@
     "docz": "^2.2.0-alpha.8",
     "eslint": "5.16.0",
     "eslint-config-prettier": "6.5.0",
-    "eslint-config-react-app": "^5.0.2",
-    "eslint-plugin-flowtype": "^4.3.0",
+    "eslint-config-react-app": "5.0.2",
+    "eslint-plugin-flowtype": "4.3.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-prettier": "3.1.1",
     "eslint-plugin-react": "7.16.0",
-    "eslint-plugin-react-hooks": "^2.2.0",
+    "eslint-plugin-react-hooks": "2.2.0",
     "microbundle": "0.11.0",
     "np": "5.2.1",
     "prettier": "1.18.2",
@@ -75,6 +76,8 @@
     "react-scripts": "3.2.0",
     "rimraf": "3.0.0",
     "typescript": "3.6.2"
+  },
+  "peerDependencies": {
   },
   "files": [
     "dist"
