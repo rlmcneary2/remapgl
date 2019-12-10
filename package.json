@@ -26,7 +26,7 @@
   },
   "scripts": {
     "clean": "rimraf ./build ./dist ./.rts2_cache_* ./pkg && yarn docz:clean",
-    "docz:clean": "rimraf ./.docz",
+    "docz:clean": "rimraf ./.docz ./docs",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "bundle": "yarn clean && microbundle --name=remapgl --globals mapbox-gl=mapboxgl",
