@@ -10,7 +10,7 @@ const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css";
 export default function Map({
   children,
   cssFile = MAPBOXGL_CSS,
-  ..._props
+  ...props
 }: React.PropsWithChildren<MapProps>): JSX.Element | null {
   const [cssAdded, setCssAdded] = useState(false);
 
@@ -51,9 +51,9 @@ export default function Map({
       cssLink.removeEventListener("load", handleLoad);
       cssLink.removeEventListener("error", handleLoad);
     };
-  }, [cssAdded, setCssAdded]);
+  }, [cssAdded, cssFile, setCssAdded]);
 
-  return cssAdded ? <MapContainer {..._props}>{children}</MapContainer> : null;
+  return cssAdded ? <MapContainer {...props}>{children}</MapContainer> : null;
 }
 
 export interface MapProps extends MapContainerProps {

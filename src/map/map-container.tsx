@@ -1,4 +1,4 @@
-import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
+import mapboxgl, { Map as MapGL } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
 import { useMapView } from "../hook/useMapView/useMapView";
 import { EventData } from "../types/event";
@@ -36,11 +36,12 @@ const MapContainer: React.FC<MapContainerProps> = ({
   maxZoom,
   minZoom,
   motionType,
-  style = "mapbox://styles/mapbox/outdoors-v10",
+  mapboxStyle = "mapbox://styles/mapbox/outdoors-v10",
+  style,
   zoom: _zoom = { zoom: 9.5 },
   ...eventListeners
 }: React.PropsWithChildren<MapContainerProps>): JSX.Element => {
-  const [map, setMap] = useState<MapboxMap>();
+  const [map, setMap] = useState<MapGL>();
   const mapElement = useRef<HTMLElement>();
   useMapView(map, animationOptions, motionType, _bounds, _center, _zoom);
 
@@ -68,7 +69,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
     const { center } = extractCenter(_center);
     const { zoom } = extractZoom(_zoom);
 
-    const nextMap = new MapboxMap({
+    const nextMap = new MapGL({
       ...defaultOptions,
       bounds,
       center,
@@ -78,7 +79,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
       maxBounds,
       maxZoom,
       minZoom,
-      style,
+      style: mapboxStyle,
       zoom
     });
 
@@ -99,8 +100,8 @@ const MapContainer: React.FC<MapContainerProps> = ({
     maxZoom,
     minZoom,
     setMap,
-    style,
-    _zoom
+    _zoom,
+    mapboxStyle
   ]);
 
   useEffect(() => {
@@ -117,25 +118,25 @@ const MapContainer: React.FC<MapContainerProps> = ({
     if (map && maxBounds) {
       map.setMaxBounds(maxBounds);
     }
-  }, [maxBounds]);
+  }, [map, maxBounds]);
 
   useEffect(() => {
     if (map && typeof maxZoom === "number") {
       map.setMaxZoom(maxZoom);
     }
-  }, [maxZoom]);
+  }, [map, maxZoom]);
 
   useEffect(() => {
     if (map && typeof minZoom === "number") {
       map.setMinZoom(minZoom);
     }
-  }, [minZoom]);
+  }, [map, minZoom]);
 
   useEffect(() => {
-    if (map && style) {
-      map.setStyle(style);
+    if (map && mapboxStyle) {
+      map.setStyle(mapboxStyle);
     }
-  }, [style]);
+  }, [map, mapboxStyle]);
 
   useEffect(() => {
     if (!map) {
@@ -161,13 +162,14 @@ const MapContainer: React.FC<MapContainerProps> = ({
         map.off(type.toLowerCase(), listeners[type]);
       }
     };
-  }, [eventListeners]);
+  }, [eventListeners, map]);
 
   return React.createElement(
     as,
     {
       className,
-      ref: mapElement
+      ref: mapElement,
+      style
     },
     map && (
       <MapContextProvider map={map}>
@@ -218,6 +220,11 @@ export interface MapContainerProps {
    * collisions, in milliseconds.
    */
   fadeDuration?: number;
+  /**
+   * The map's Mapbox style. This must be an a JSON object conforming to the
+   * schema described in the Mapbox Style Specification, or a URL to such JSON.
+   */
+  mapboxStyle?: string;
   /**
    * The map will be constrained to the given bounds.
    */
@@ -452,10 +459,12 @@ export interface MapContainerProps {
    */
   onZoomstart?: (data: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent) => void;
   /**
-   * The map's Mapbox style. This must be an a JSON object conforming to the
-   * schema described in the Mapbox Style Specification, or a URL to such JSON.
+   * An Object with properties to set styles on the element that contains the
+   * map. Per React documentation customizing the appearance of React
+   * components using "style" is not reccommended.
+   * @see https://reactjs.org/docs/dom-elements.html#style
    */
-  style?: string;
+  style?: { [key: string]: string | number };
   /**
    * The zoom level of the map. The appearance of the transition can be
    * controlled through animationOptions and motionType.
