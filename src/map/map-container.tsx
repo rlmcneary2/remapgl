@@ -51,6 +51,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
 
   // Create the one and only MapboxGL map object.
   useEffect(() => {
+    console.log(`MapContainer: useEffect; map=${!!map}, mapElement=${!!mapElement.current}.`);
     // Once the map exists there is nothing else for this hook to do.
     if (map || !mapElement.current) {
       return;
@@ -58,7 +59,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
 
     if (!(mapboxgl.accessToken as any)) {
       (mapboxgl.accessToken as any) = accessToken;
-    } else if (isDev) {
+    } else if (isDev && mapboxgl.accessToken !== accessToken) {
       // tslint:disable-next-line: no-console
       console.warn("The accessToken has already been set.");
     }
@@ -69,6 +70,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
     const { center } = extractCenter(_center);
     const { zoom } = extractZoom(_zoom);
 
+    console.log("MapContainer: creating map.");
     const nextMap = new MapGL({
       ...defaultOptions,
       bounds,
@@ -83,12 +85,29 @@ const MapContainer: React.FC<MapContainerProps> = ({
       zoom
     });
 
-    function styleLoadHandler() {
-      nextMap.off("styledata", styleLoadHandler);
-      setMap(nextMap);
+    let handlerCount = 0;
+    function mapSetter() {
+      handlerCount++;
+      if (handlerCount === 2) {
+        nextMap.resize();
+        setMap(nextMap);
+      }
     }
 
-    nextMap.on("styledata", styleLoadHandler);
+    function handleStyleLoad() {
+      nextMap.off("styledata", handleStyleLoad);
+      console.log("MapContainer: style load.");
+      mapSetter();
+    }
+
+    function handleLoad() {
+      nextMap.off("load", handleLoad);
+      console.log("MapContainer: load.");
+      mapSetter();
+    }
+
+    nextMap.on("styledata", handleStyleLoad);
+    nextMap.on("load", handleLoad);
   }, [
     accessToken,
     _bounds,
@@ -164,6 +183,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
     };
   }, [eventListeners, map]);
 
+  console.log(`MapContainer: calc; map=${!!map}, mapElement=${!!mapElement.current}.`);
   return React.createElement(
     as,
     {
