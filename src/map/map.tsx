@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import isDev from "../util/is-dev/is-dev";
-import MapContainer, { MapContainerProps } from "./map-container";
+import React, { useState } from "react";
+import MapContainer from "./map-container";
+import { MapContainerProps } from "./map-types";
 
 const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css";
+const STATE_CSS_IN_PROGRESS = "css-in-progress";
+const STATE_CSS_COMPLETED = "css-completed";
 
 /**
  * Add a map to an HTML document.
@@ -12,48 +14,50 @@ export default function Map({
   cssFile = MAPBOXGL_CSS,
   ...props
 }: React.PropsWithChildren<MapProps>): JSX.Element | null {
-  const [cssAdded, setCssAdded] = useState(false);
+  const statesHookResult = useState<string[]>([]);
 
-  // Add the MapboxGL CSS to the document.
-  useEffect(() => {
-    if (cssAdded) {
+  updateCss(statesHookResult, cssFile);
+
+  return statesHookResult[0].includes(STATE_CSS_COMPLETED) ? (
+    <MapContainer {...props}>{children}</MapContainer>
+  ) : null;
+}
+
+function updateCss(
+  [states, setStates]: [
+    string[],
+    React.Dispatch<React.SetStateAction<string[]>>
+  ],
+  cssFile: string
+) {
+  if (
+    states.includes(STATE_CSS_COMPLETED) ||
+    states.includes(STATE_CSS_IN_PROGRESS)
+  ) {
+    return;
+  }
+
+  setStates(current => [...current, STATE_CSS_IN_PROGRESS]);
+
+  let set = false;
+  function handleLoad(evt: Event, error = false) {
+    if (set) {
       return;
     }
 
-    const links = document.getElementsByTagName("link");
-    let link: HTMLLinkElement;
-    for (let i = 0; i < links.length; i++) {
-      link = links[i];
-      if (link.href.endsWith("mapbox-gl.css")) {
-        setCssAdded(true);
-        if (isDev) {
-          // tslint:disable-next-line: no-console
-          console.warn("The cssFile can not be changed once it has been set.");
-        }
-        return;
-      }
-    }
+    set = true;
+    setStates(current => [...current, STATE_CSS_COMPLETED]);
+    cssLink.removeEventListener("load", handleLoad);
+    cssLink.removeEventListener("error", handleLoad);
+  }
 
-    function handleLoad() {
-      setCssAdded(true);
-    }
-
-    const cssLink = document.createElement("link");
-    cssLink.href = cssFile;
-    cssLink.rel = "stylesheet";
-    cssLink.addEventListener("load", handleLoad);
-    cssLink.addEventListener("error", handleLoad);
-
-    const head = document.getElementsByTagName("head")[0];
-    head.appendChild(cssLink);
-
-    return () => {
-      cssLink.removeEventListener("load", handleLoad);
-      cssLink.removeEventListener("error", handleLoad);
-    };
-  }, [cssAdded, cssFile, setCssAdded]);
-
-  return cssAdded ? <MapContainer {...props}>{children}</MapContainer> : null;
+  const cssLink = document.createElement("link");
+  cssLink.href = cssFile;
+  cssLink.rel = "stylesheet";
+  cssLink.addEventListener("load", handleLoad);
+  cssLink.addEventListener("error", evt => handleLoad(evt, true));
+  const head = document.getElementsByTagName("head")[0];
+  head.appendChild(cssLink);
 }
 
 export interface MapProps extends MapContainerProps {

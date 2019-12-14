@@ -3,27 +3,23 @@ import React from "react";
 /**
  * Gather information when both the context provider and the map have to exist.
  */
-const MapData: React.FC = ({ children }): JSX.Element => {
-  console.log("MapData: calc.");
-  // // This code is part of the synchronization of the order of the layers in the
-  // // map-container component with the layers in the mapboxgl map. It iterates
-  // // over all the children and determines the layers' order, it passes a
-  // // "beforeId" prop to each layer clone so the clone knows where it belongs in
-  // // the map object and can update its position if needed.
-  // const clones = React.Children.toArray(children).map((child, i, arr) => {
-  //   if ("isRemapGLLayer" in (child as any).type) {
-  //     const beforeId = nextBeforeLayerId(i, arr);
-  //     return React.cloneElement(child as any, { beforeId });
-  //   }
+export default function MapData({ children }): JSX.Element {
+  // This code is part of the synchronization of the order of the layers in the
+  // map-container component with the layers in the mapboxgl map. It iterates
+  // over all the children and determines the layers' order, it passes a
+  // "beforeId" prop to each layer clone so the clone knows where it belongs in
+  // the map object and can update its position if needed.
+  const clones = React.Children.toArray(children).map((child, i, arr) => {
+    if ("isRemapGLLayer" in (child as any).type) {
+      const beforeId = nextBeforeLayerId(i, arr);
+      return React.cloneElement(child as any, { beforeId });
+    }
 
-  //   return child;
-  // });
+    return child;
+  });
 
-  // return <>{clones}</>;
-  return <>{children}</>;
-};
-
-export default MapData;
+  return <>{clones}</>;
+}
 
 /**
  * Find the ID of the layer that is before the current one.
