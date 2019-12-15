@@ -1,5 +1,5 @@
-import mapboxgl, { Map as MapMbx } from "mapbox-gl";
 import React, { useEffect, useRef, useState } from "react";
+import mapboxgl, { Map as MapMbx } from "mapbox-gl";
 import { useMapView } from "../hook/useMapView/useMapView";
 import {
   BoundsOptions,
@@ -13,9 +13,9 @@ import {
   extractZoom
 } from "../util/extractors/extractors";
 import MapContextProvider from "./map-context";
-import MapData from "./map-data";
+import MapContent from "./map-content";
 import { MapContainerProps } from "./map-types";
-import logger from "../util/logger/logger";
+import { debug } from "../util/logger/logger";
 
 const STATE_MAP_CREATE_IN_PROGRESS = "map-create-in-progress";
 const STATE_MAP_CREATED = "map-created";
@@ -23,19 +23,19 @@ const STATE_MAP_CREATED = "map-created";
 /**
  * Creates the HTML object for the map and a MaboxGL Map object.
  */
-const MapContainer: React.FC<MapContainerProps> = ({
+export default function MapContainer({
   as = "div",
   center = { center: [-68.2954881, 44.3420759] },
   children,
   zoom = { zoom: 9.5 },
   ...props
-}: React.PropsWithChildren<MapContainerProps>): JSX.Element => {
+}: React.PropsWithChildren<MapContainerProps>): JSX.Element {
   const statesHookResult = useState<string[]>([]);
   const [map, setMap] = useState<MapMbx>();
   const mapElement = useRef<HTMLElement>();
   useMapView(map, { ...props, center, zoom });
 
-  logger.debug("MapContainer", () => "MapContainer: enter.");
+  debug("MapContainer", () => "MapContainer: enter.");
 
   useEffect(() => {
     // createMap is placed inside useEffect so it is invoked AFTER the initial
@@ -104,7 +104,7 @@ const MapContainer: React.FC<MapContainerProps> = ({
     };
   }, [map, props]);
 
-  logger.debug(
+  debug(
     "MapContainer",
     () =>
       `MapContainer: calc; map=${!!map}, mapElement=${!!mapElement.current}.`
@@ -118,11 +118,11 @@ const MapContainer: React.FC<MapContainerProps> = ({
     },
     map && (
       <MapContextProvider map={map}>
-        <MapData>{children}</MapData>
+        <MapContent>{children}</MapContent>
       </MapContextProvider>
     )
   );
-};
+}
 
 async function createMap(
   map: MapMbx | undefined,
@@ -152,15 +152,12 @@ async function createMap(
   }
 ) {
   const [states, setStates] = statesHookResult;
-  logger.debug("MapContainer", () => [
-    "MapContainer createMap: states=",
-    [states]
-  ]);
+  debug("MapContainer", () => ["MapContainer createMap: states=", [states]]);
   if (map || !mapElement || states.includes(STATE_MAP_CREATE_IN_PROGRESS)) {
     return;
   }
 
-  logger.debug("MapContainer", () => "MapContainer createMap: creating map.");
+  debug("MapContainer", () => "MapContainer createMap: creating map.");
 
   // The remaining code in this function will only ever be called once in the
   // life of a MapContainer.
@@ -211,8 +208,6 @@ async function createMap(
   setMap(nextMap);
   setStates(current => [...current, STATE_MAP_CREATED]);
 }
-
-export default MapContainer;
 
 function eventHandler(type: string, eventListeners: any, data: any) {
   eventListeners[`on${type}`](data);

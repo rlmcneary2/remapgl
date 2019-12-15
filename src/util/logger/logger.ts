@@ -1,10 +1,8 @@
 // import isDev from "../is-dev/is-dev";
 
-export default Object.freeze({
-  debug: (category: string, callback: ConsoleArgsCallback) => {
-    logMessage("debug", category, callback);
-  }
-});
+export function debug(category: string, callback: ConsoleArgsCallback) {
+  logMessage("debug", category, callback);
+}
 
 type ConsoleArgsCallback = (category: string) => string | [string, any[]];
 

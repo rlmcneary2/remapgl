@@ -3,7 +3,7 @@ import React from "react";
 /**
  * Gather information when both the context provider and the map have to exist.
  */
-export default function MapData({ children }): JSX.Element {
+export default function MapContent({ children }): JSX.Element {
   // This code is part of the synchronization of the order of the layers in the
   // map-container component with the layers in the mapboxgl map. It iterates
   // over all the children and determines the layers' order, it passes a
@@ -27,9 +27,7 @@ export default function MapData({ children }): JSX.Element {
  * @param children All the children of this component.
  */
 function nextBeforeLayerId(currentIndex: number, children: any[]) {
-  // The map's layers are the reverse of how the layers appear in the component
-  // as children.
-  for (let i = currentIndex - 1; -1 < i; i--) {
+  for (let i = currentIndex + 1; i < children.length; i++) {
     if ("isRemapGLLayer" in (children[i] as any).type) {
       return children[i].props.id;
     }
