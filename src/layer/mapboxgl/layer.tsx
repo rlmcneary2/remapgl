@@ -1,163 +1,129 @@
-import { Layer as LayerGL } from "mapbox-gl";
 import React, { useEffect } from "react";
+import { Layer as LayerMbx, Map as MapMbx } from "mapbox-gl";
 import { useMap } from "../../map/map-context";
-import { LayerProps } from "./layer-types";
+import { InternalLayerProps, LayerProps } from "./layer-types";
+import { debug } from "../../util/logger/logger";
 
 /**
  * A layer in a map.
  */
-const Layer: React.FC<LayerProps> = (props): null => {
-  const {
-    beforeId,
-    filter,
-    id,
-    layout,
-    maxZoom,
-    metadata,
-    minZoom,
-    paint,
-    source,
-    "source-layer": sourceLayer,
-    type,
-    ...eventListeners
-  } = props as InternalLayerProps;
+export default function Layer(props: LayerProps): JSX.Element {
   const map = useMap();
-
-  // Update layer position based on beforeId.
-  useEffect(() => {
-    if (!map.getLayer(id)) {
-      return;
-    }
-
-    const args: [string] = [id];
-    if (beforeId) {
-      args.push(beforeId);
-    }
-
-    map.moveLayer(...args);
-  }, [beforeId, id, map]);
+  const { id } = props;
 
   // Create the layer in the map.
   useEffect(() => {
-    if (map.getLayer(id)) {
-      map.removeLayer(id);
-      map.removeSource(id);
-    }
-
-    // tslint:disable: object-literal-key-quotes
-    const layerData: LayerGL = {
-      id
-    };
-
-    if (filter) {
-      layerData.filter = filter;
-    }
-
-    if (layout) {
-      layerData.layout = layout;
-    }
-
-    if (maxZoom) {
-      layerData.maxzoom = maxZoom;
-    }
-
-    if (metadata) {
-      layerData.metadata = metadata;
-    }
-
-    if (minZoom) {
-      layerData.minzoom = minZoom;
-    }
-
-    if (paint) {
-      layerData.paint = paint;
-    }
-
-    if (source) {
-      layerData.source = source;
-    }
-
-    if (sourceLayer) {
-      layerData["source-layer"] = sourceLayer;
-    }
-
-    if (type) {
-      layerData.type = type;
-    }
-
-    const args: [LayerGL, string?] = [layerData];
-    // tslint:enable: object-literal-key-quotes
-
-    if (beforeId && map.getLayer(beforeId)) {
-      args.push(beforeId);
-    }
-
-    map.addLayer(...args);
-
     return () => {
-      map.removeLayer(id);
-      map.removeSource(id);
+      debug("Layer", () => `Layer: "${id}" is being removed.`);
+      map.getLayer(id) && map.removeLayer(id);
+      map.getSource(id) && map.removeSource(id);
     };
-  }, [
+  }, [id, map]);
+
+  if (!addLayer(map, props as InternalLayerProps)) {
+    // Update layer position based on beforeId.
+    updateLayerPosition(map, props as InternalLayerProps);
+  }
+
+  return <></>;
+}
+
+// Set this flag so that we can find a map's children that are Layers. This is
+// necessary to tie their position in children to their position in the map's
+// layers.
+(Layer as any).isRemapGLLayer = true;
+
+function addLayer(
+  map: MapMbx,
+  {
     beforeId,
     filter,
     id,
     layout,
-    map,
     maxZoom,
     metadata,
     minZoom,
     paint,
     source,
-    sourceLayer,
-    type
-  ]);
+    type,
+    ...props
+  }: InternalLayerProps
+): boolean {
+  if (map.getLayer(id)) {
+    return false;
+  }
 
-  // Connect layer events.
-  useEffect(() => {
-    if (!map) {
-      return;
-    }
+  const layerData: LayerMbx = {
+    id
+  };
 
-    function handlerFactory(eventType: string) {
-      return (data: any) => eventHandler(eventType, eventListeners, data);
-    }
+  // If these properties have a value of undefined mapboxgl will error with a
+  // red herring error message; so only add them if they have a value.
+  if (Array.isArray(filter)) {
+    layerData.filter = filter;
+  }
 
-    const listeners = {};
-    for (const prop in eventListeners) {
-      if (prop.startsWith("on") && typeof eventListeners[prop] === "function") {
-        const eventType = prop.substr(2);
-        listeners[eventType] = handlerFactory(eventType);
-        map.on(eventType.toLowerCase() as any, id, listeners[eventType]);
-      }
-    }
+  if (layout !== null && typeof layout !== "undefined") {
+    layerData.layout = layout;
+  }
 
-    return () => {
-      // tslint:disable-next-line: forin
-      for (const eventType in listeners) {
-        map.off(eventType.toLowerCase() as any, id, listeners[eventType]);
-      }
-    };
-  }, [eventListeners, id, map]);
+  if (typeof maxZoom === "number") {
+    layerData.maxzoom = maxZoom;
+  }
 
-  return null;
-};
+  if (metadata !== null && typeof metadata !== "undefined") {
+    layerData.metadata = metadata;
+  }
 
-// Set this flag so that we can find a map's children that are Layers. This is
-// necessary to tie their position in children to their position in the map
-// layers.
-(Layer as any).isRemapGLLayer = true;
+  if (typeof minZoom === "number") {
+    layerData.minzoom = minZoom;
+  }
 
-export default Layer;
+  if (paint !== null && typeof paint !== "undefined") {
+    layerData.paint = paint;
+  }
 
-function eventHandler(type: string, eventListeners: any, data: any) {
-  eventListeners[`on${type}`](data);
+  if (typeof props["source-layer"] === "string") {
+    layerData["source-layer"] = props["source-layer"];
+  }
+
+  if (source !== null && typeof source !== "undefined") {
+    layerData.source = source;
+  }
+
+  if (type !== null && typeof type !== "undefined") {
+    layerData.type = type;
+  }
+
+  const args: [LayerMbx, string?] = [layerData];
+
+  if (beforeId && map.getLayer(beforeId)) {
+    args.push(beforeId);
+  }
+
+  map.addLayer(...args);
+  debug("Layer", () => [`Layer: '${id}' added to map; args=`, args]);
+  return true;
 }
 
-interface InternalLayerProps extends LayerProps {
-  /**
-   * This is a "secret" prop added by map-data to let us know which layer, if
-   * any, this layer goes before.
-   */
-  beforeId: string;
+function updateLayerPosition(
+  map: MapMbx,
+  { beforeId, id }: InternalLayerProps
+) {
+  if (!map.getLayer(id)) {
+    return;
+  }
+
+  debug(
+    "Layer",
+    () =>
+      `Layer updateLayerPosition: '${id}' is before (but visually below) '${beforeId}'.`
+  );
+
+  const args: [string] = [id];
+  if (beforeId && map.getLayer(beforeId)) {
+    args.push(beforeId);
+  }
+
+  map.moveLayer(...args);
 }

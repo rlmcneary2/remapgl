@@ -1,8 +1,18 @@
-import { CameraOptions, Map as MapboxMap } from "mapbox-gl";
+import { CameraOptions, Map as MapMbx } from "mapbox-gl";
 import { useEffect } from "react";
-import { AnimationOptions, BoundsOptions, CenterOptions, FitBoundsOptions, LngLat, LngLatBounds, MotionType, ZoomOptions } from "../../types/location";
-import { extractBounds, extractCenter, extractZoom } from "../../util/extractors/extractors";
-
+import {
+  extractBounds,
+  extractCenter,
+  extractZoom
+} from "../../util/extractors/extractors";
+import {
+  AnimationOptions,
+  BoundsOptions,
+  CenterOptions,
+  LngLatBounds,
+  MotionType,
+  ZoomOptions
+} from "../../types/location";
 
 /**
  * A hook that updates the camera's view of the map when bounds, center, or zoom
@@ -10,12 +20,20 @@ import { extractBounds, extractCenter, extractZoom } from "../../util/extractors
  * there.
  */
 export function useMapView(
-  map: MapboxMap | undefined,
-  animationOptions: AnimationOptions | undefined,
-  motionType: MotionType | undefined,
-  bounds: Bounds,
-  center: Center,
-  zoom: Zoom
+  map: MapMbx | undefined,
+  {
+    animationOptions,
+    motionType,
+    bounds,
+    center,
+    zoom
+  }: {
+    animationOptions?: AnimationOptions;
+    motionType?: MotionType;
+    bounds?: LngLatBounds | BoundsOptions;
+    center: CenterOptions | [number, number] | { lng: number; lat: number };
+    zoom: ZoomOptions | number;
+  }
 ) {
   useEffect(() => {
     if (!map || !bounds) {
@@ -31,14 +49,16 @@ export function useMapView(
         : undefined,
       eventData
     );
-  }, [bounds]);
+  }, [animationOptions, bounds, map, motionType]);
 
   useEffect(() => {
     if (!map) {
       return;
     }
 
-    const { center: nextCenter, eventData: centerEventData } = extractCenter(center);
+    const { center: nextCenter, eventData: centerEventData } = extractCenter(
+      center
+    );
     const { zoom: nextZoom, eventData: zoomEventData } = extractZoom(zoom);
 
     const options: Partial<CameraOptions> = {};
@@ -54,10 +74,5 @@ export function useMapView(
     }
 
     map[`${motionType || "jump"}To`](options, eventData);
-  }, [center, zoom]);
+  }, [center, map, motionType, zoom]);
 }
-
-
-type Bounds = LngLatBounds | BoundsOptions | undefined;
-type Center = LngLat | CenterOptions;
-type Zoom = number | ZoomOptions;

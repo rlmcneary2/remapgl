@@ -33,6 +33,10 @@
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "prettier/prettier": "error",
+      "linebreak-style": [
+          "error",
+          "windows"
+      ],
       "no-console": [
           0
       ],

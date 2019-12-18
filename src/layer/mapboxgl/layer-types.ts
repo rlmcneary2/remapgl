@@ -14,8 +14,6 @@ import {
   HillshadePaint,
   LineLayout,
   LinePaint,
-  MapMouseEvent,
-  MapTouchEvent,
   RasterLayout,
   RasterPaint,
   SymbolLayout,
@@ -67,53 +65,6 @@ export interface LayerProps {
    */
   minZoom?: number;
   /**
-   * Fired when a pointing device (usually a mouse) is pressed and released at
-   * the same point on the layer.
-   */
-  onClick?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when the right button of the mouse is clicked or the context menu key
-   * is pressed within the layer.
-   */
-  onContextmenu?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when a pointing device (usually a mouse) is clicked twice at the same
-   * point on the layer.
-   */
-  onDblclick?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when a pointing device (usually a mouse) is pressed within the layer.
-   */
-  onMousedown?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when a pointing device (usually a mouse) is moved within the layer.
-   */
-  onMousemove?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when a point device (usually a mouse) leaves the layer.
-   */
-  onMouseout?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when a pointing device (usually a mouse) is moved within the layer.
-   */
-  onMouseover?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when a pointing device (usually a mouse) is released within the layer.
-   */
-  onMouseup?: (data: MapMouseEvent) => void;
-  /**
-   * Fired when a touchcancel event occurs within the layer.
-   */
-  onTouchcancel?: (data: MapTouchEvent) => void;
-  /**
-   * Fired when a touchend event occurs within the layer.
-   */
-  onTouchend?: (data: MapTouchEvent) => void;
-  /**
-   * Fired when a touchstart event occurs within the layer.
-   */
-  onTouchstart?: (data: MapTouchEvent) => void;
-  /**
    * Default paint properties for this layer.
    */
   paint?:
@@ -149,4 +100,12 @@ export interface LayerProps {
     | "background"
     | "heatmap"
     | "hillshade";
+}
+
+export interface InternalLayerProps extends LayerProps {
+  /**
+   * This is a "secret" prop added by MapContent to let us know which layer, if
+   * any, this layer goes before.
+   */
+  beforeId: string;
 }
