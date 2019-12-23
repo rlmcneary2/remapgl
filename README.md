@@ -1,7 +1,7 @@
 # remapgl
 Declarative MapboxGL bindings <🌎>
 
-Quickly and easily create [MapboxGL](https://docs.mapbox.com/mapbox-gl-js/api/) maps with [React](https://reactjs.org/) components. Create a [Map](/map) then add children like [Marker](/marker), [Layer](/layer), [Popup](/popup), and other remapgl React components. See it [live at codesandbox](https://codesandbox.io/s/remapgl-hfuhl?fontsize=14).
+Quickly and easily create [MapboxGL](https://docs.mapbox.com/mapbox-gl-js/api/) maps with [React](https://reactjs.org/) components. Create a [Map](/map) then add children like [Marker](/marker), [Layer](/layer), [Popup](/popup), and other remapgl React components. See it [live at codesandbox](https://codesandbox.io/dashboard/sandboxes/remapgl).
 
 ## Getting Started
 Add the remapgl package to your application:
