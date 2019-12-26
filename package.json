@@ -28,6 +28,7 @@
     "clean": "rimraf ./build ./dist ./.rts2_cache_* ./pkg && yarn docz:clean",
     "docz:clean": "rimraf ./.docz ./docs",
     "start": "react-scripts start",
+    "test": "",
     "build": "react-scripts build",
     "bundle": "yarn clean && microbundle --name=remapgl --globals mapbox-gl=mapboxgl",
     "bundle:dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl"
