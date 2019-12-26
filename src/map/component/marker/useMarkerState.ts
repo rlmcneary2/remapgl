@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback } from "react";
 import { Marker as MarkerGL } from "mapbox-gl";
 import { MarkerProps } from "./marker-types";
+import { debug } from "../../../util/logger/logger";
 
 /** A function that returns a mapbox-gl Marker instance, optionally using a
  * provided Marker element (a ref to a React component's DOM element). */
@@ -73,6 +74,7 @@ function connectMarkerEventListeners(marker: MarkerGL, props: MarkerProps) {
         marker.off(name, func);
       });
     } else {
+      debug("useMarkerState", () => `useMarkerState: adding event '${name}'.`);
       markerElement.addEventListener(name, func);
       remove.push(() => {
         markerElement.removeEventListener(name, func);
