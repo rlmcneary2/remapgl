@@ -55,8 +55,11 @@ export default function useMarkerState({
   return [release.current ? marker.current : null, markerRelease];
 }
 
+const MARKER_EVENTS = Object.freeze(["drag", "dragend", "dragstart"]);
+
 function connectMarkerEventListeners(marker: MarkerGL, props: MarkerProps) {
   const remove: (() => void)[] = [];
+  const markerElement = marker.getElement();
   for (const key in props) {
     if (!key.startsWith("on") || typeof props[key] !== "function") {
       continue;
@@ -64,10 +67,17 @@ function connectMarkerEventListeners(marker: MarkerGL, props: MarkerProps) {
 
     const name = key.substring(2).toLowerCase();
     const func = props[key];
-    marker.on(name, func);
-    remove.push(() => {
-      marker.off(name, func);
-    });
+    if (MARKER_EVENTS.includes(name)) {
+      marker.on(name, func);
+      remove.push(() => {
+        marker.off(name, func);
+      });
+    } else {
+      markerElement.addEventListener(name, func);
+      remove.push(() => {
+        markerElement.removeEventListener(name, func);
+      });
+    }
   }
 
   return () => remove.forEach(func => func());
