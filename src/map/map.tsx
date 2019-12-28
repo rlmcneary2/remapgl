@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import MapContainer from "./map-container";
 import { MapContainerProps } from "./map-types";
+import { debug } from "../util/logger/logger";
+import { version as versionMbx } from "mapbox-gl";
 
 const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css";
 const STATE_CSS_IN_PROGRESS = "css-in-progress";
@@ -15,6 +17,12 @@ export default function Map({
   ...props
 }: React.PropsWithChildren<MapProps>): JSX.Element | null {
   const statesHookResult = useState<string[]>([]);
+  const versionLogged = useRef(false);
+
+  if (!versionLogged.current) {
+    versionLogged.current = true;
+    debug("Map", () => `MapboxGL llibrary version "${versionMbx}"`);
+  }
 
   updateCss(statesHookResult, cssFile);
 

@@ -7,8 +7,10 @@ const Navigation = (props: NavigationProps): React.ReactElement | null => {
 
   useEffect(() => {
     const navigation = new NavigationControl(props);
-    map.addControl (navigation);
-    return () => { map.removeControl(navigation); };
+    map.addControl(navigation);
+    return () => {
+      map.removeControl(navigation);
+    };
   }, [map, props]);
 
   return null;
