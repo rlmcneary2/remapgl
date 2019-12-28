@@ -1,14 +1,17 @@
 import { NavigationControl } from "mapbox-gl";
 import React, { useEffect } from "react";
 import { useMap } from "../map/map-context";
+import { debug } from "../util/logger/logger";
 
 const Navigation = (props: NavigationProps): React.ReactElement | null => {
   const map = useMap();
 
   useEffect(() => {
+    debug("Navigation", () => ["Creating NavigationControl, props=", [props]]);
     const navigation = new NavigationControl(props);
     map.addControl(navigation);
     return () => {
+      debug("Navigation", () => "Removing NavigationControl");
       map.removeControl(navigation);
     };
   }, [map, props]);
