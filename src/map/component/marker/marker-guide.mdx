@@ -1,0 +1,108 @@
+---
+menu: Guides
+name: Marker
+route: /guides/marker
+---
+
+# Marker
+
+The [Code Sandbox "Map
+Markers"](https://codesandbox.io/embed/map-markers-54jez?fontsize=14&hidenavigation=1&theme=dark)
+is a working example of working with Markers in remapgl.
+
+<iframe
+     src="https://codesandbox.io/embed/map-markers-54jez?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px;
+     overflow:hidden;" title="Map Markers" allow="geolocation; microphone;
+     camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor;
+     encrypted-media; usb" sandbox="allow-modals allow-forms allow-popups
+     allow-scripts allow-same-origin"
+   ></iframe>
+
+## Sample Code
+
+The following code illustrates how an array of objects with information about
+vehicles are being changed into Marker components that are children of a
+[Map](/map) component.
+
+```jsx
+<Map accessToken={accessToken}>
+  {vehicles.map(vehicle => {
+      const { label, ...props } = vehicle;
+      return (
+        <Marker
+          {...props}
+          draggable={false}
+          key={label}
+          popup={
+            <MarkerPopup offset={40}>
+              <p>{`Vehicle: ${label}`}</p>
+            </MarkerPopup>
+          }
+        />
+      );
+    })}
+</Map>
+```
+
+## Custom Markers
+
+A Marker component optionally accepts children. These child components will be
+rendered as DOM objects to determine the appearance of the Marker. If no
+children are provided the default Mapbox GL marker will be displayed. The color
+of the default marker can be changed by setting the `color` prop. If not provided
+the marker will be blue.
+
+The following example sets an SVG image of 30 pixels by 30 pixels as the marker:
+```jsx
+<Marker key={key} location={location}>
+  <div style={{ height: "30px", width: "30px" }}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 11 11"
+    >
+      <g transform="translate(-68.385 -172.48)">
+        <circle cx="73.885" cy="177.98" r="2.86" fill="#fff" id="icon-fill"/>
+        <path style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal" d="M73.885 174.855a3.13 3.13 0 0 0-3.125 3.126 3.129 3.129 0 0 0 3.125 3.125 3.13 3.13 0 0 0 3.125-3.125 3.13 3.13 0 0 0-3.125-3.126zm0 .53a2.592 2.592 0 0 1 2.595 2.596 2.592 2.592 0 0 1-2.595 2.595 2.592 2.592 0 0 1-2.596-2.595 2.592 2.592 0 0 1 2.596-2.596zm-.001.455c-.385 0-.9.11-1.121.202-.22.091-.367.183-.413.412l-.165 1.27v1.752h.285v.275c0 .334.49.334.49 0v-.275h1.848v.275c0 .334.49.334.49 0v-.275h.284v-1.75l-.165-1.272c-.046-.229-.192-.32-.413-.412-.22-.093-.736-.202-1.12-.202zm-.769.281h1.536c.152 0 .152.286 0 .286h-1.535c-.152 0-.152-.285 0-.286zm-.362.454h2.263c.066 0 .122.048.134.111l.134 1.002a.136.136 0 0 1-.13.17h-2.538a.136.136 0 0 1-.13-.17l.135-1.002a.135.135 0 0 1 .132-.11zm-.038 1.858a.259.259 0 0 1 0 .518.259.259 0 1 1 0-.518zm2.345.001a.258.258 0 0 1-.007.517.259.259 0 0 1-.26-.26.258.258 0 0 1 .267-.257z" color="#000" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible" id="icon-path"/>
+      </g>
+    </svg>
+  </div>
+</Marker>
+```
+
+## Events
+
+The events onDrag, onDragstart, and onDragend are special events provided by
+Mapbox GL. [See their marker documentation for
+details](https://docs.mapbox.com/mapbox-gl-js/api/#marker) about the event
+object provided to handlers.
+
+Other event handlers may be attached to Markers using standard React naming
+(e.g. `<Marker onClick={() => {}} />`). The event objects provided as the
+handler parameter will NOT be React SyntheticEvents, they will be standard DOM
+Event objects.
+
+## Popups
+
+Any Marker can have a [MarkerPopup](/markerpopup) component provided through the
+`popup` prop. By default this popup will be shown when the marker is clicked and
+hidden when the marker is clicked again or the optional "close" button is
+tapped. The MarkerPopup accepts children.
+
+```jsx
+<Marker
+  popup={
+    <MarkerPopup offset={40}>
+      Pop!
+    </MarkerPopup>
+  }
+/>
+```
+
+## Style
+
+A custom Marker may be styled using the `className` prop. This means most CSS in
+JS type libraries like [styled-components](https://www.styled-components.com/)
+or [@emotion/styled](https://emotion.sh/docs/styled) can be used to define the
+Marker's appearance. 
+
