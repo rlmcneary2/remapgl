@@ -137,7 +137,7 @@ async function createMap(
     maxBounds,
     maxZoom,
     minZoom,
-    style = "mapbox://styles/mapbox/outdoors-v10",
+    style = "mapbox://styles/mapbox/outdoors-v11",
     zoom
   }: {
     accessToken: string;
@@ -172,19 +172,26 @@ async function createMap(
   const { center: centerExtracted } = extractCenter(center);
   const { zoom: zoomExtracted } = extractZoom(zoom);
 
-  const nextMap = new MapMbx({
+  const mapOptions: mapboxgl.MapboxOptions = {
     attributionControl: false, // This is controlled by the Attribution component.
     bounds: boundsExtracted,
     center: centerExtracted,
     container: mapElement,
-    fadeDuration,
     fitBoundsOptions,
     maxBounds,
     maxZoom,
     minZoom,
     style,
     zoom: zoomExtracted
-  });
+  };
+
+  // This option must have a value to be set. If it is "undefined" and set it
+  // will break the display of labels (like street names) on the map.
+  if (fadeDuration) {
+    mapOptions.fadeDuration = fadeDuration;
+  }
+
+  const nextMap = new MapMbx(mapOptions);
 
   await Promise.all([
     new Promise(resolve => {
