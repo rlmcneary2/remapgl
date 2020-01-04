@@ -2,7 +2,8 @@ export default {
   base: "/remapgl/docs",
   dest: "/docs",
   editBranch: "gh-pages",
-  menu: ["Getting Started", "Components"],
+  files: ["**/*.{md,mdx}"],
+  menu: ["Getting Started", "API", "Guides"],
   src: "./src",
   typescript: true
 };

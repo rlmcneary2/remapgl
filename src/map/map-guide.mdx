@@ -1,0 +1,68 @@
+---
+menu: Guides
+name: Map
+route: /guides/map
+---
+
+# Map
+
+The [Code Sandbox "Simple Map"](https://codesandbox.io/embed/simple-map-rvoiz?fontsize=14&hidenavigation=1&theme=dark) is a working example of adding a Map to a react application.
+
+<iframe
+  src="https://codesandbox.io/embed/simple-map-rvoiz?fontsize=14&hidenavigation=1&theme=dark"
+  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  title="Simple Map"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
+
+## Sample Code
+
+In the following JSX snippet if an `accessToken` prop has been provided to
+`Component` a Map component will be rendered. The only prop required by a Map
+component is `accessToken`.
+
+```jsx
+function Component({ accessToken }) {
+  return accessToken ? (
+    <Map accessToken={accessToken} style={{ height: "100%" }} />
+  ) : (
+    <span>Enter your Mapbox access token above then click "Go."</span>
+  )
+}
+```
+
+## Access Token
+
+Access tokens are provided by Mapbox and are required to access Mapbox resources
+such as tiles. Only one access token can be used per React application (web
+page), this is a restriction of how the mapbox-gl library manages the token.
+
+Multiple maps with different styles can be used in the same web page but they
+will all use the same access token. Once the access token has been set it can
+not be changed without refreshing the page.
+
+## Mapbox CSS
+
+The Mapbox CSS file affects the default appearance of DOM objects like markers,
+popups, and UI controls. The CSS file can be included as a &lt;link&gt; `href`
+in the &lt;head&gt; section of an HTML file or the URL can be passed as the
+value of the Map component's `cssFile` prop.
+
+
+## Mapbox Styles
+
+Mapbox allows different [provided
+styles](https://docs.mapbox.com/api/maps/#mapbox-styles) or [custom
+styles](https://docs.mapbox.com/help/glossary/style-url/) to define the map's
+appearance, in fact a style must be applied to a map for it to be visible. The
+default style "mapbox://styles/mapbox/outdoors-v10" is applied for convenience
+but a specific style can be applied using the `mapboxStyle` prop.
+
+## Style
+
+A Map may be styled using the `className` prop. This means most CSS in JS type
+libraries like [styled-components](https://www.styled-components.com/) or
+[@emotion/styled](https://emotion.sh/docs/styled) can be used to define the
+Map's appearance. 
+
