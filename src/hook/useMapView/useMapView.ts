@@ -23,15 +23,15 @@ export function useMapView(
   map: MapMbx | undefined,
   {
     animationOptions,
-    motionType,
     bounds,
     center,
+    motionType,
     zoom
   }: {
     animationOptions?: AnimationOptions;
-    motionType?: MotionType;
     bounds?: LngLatBounds | BoundsOptions;
     center: CenterOptions | [number, number] | { lng: number; lat: number };
+    motionType?: MotionType;
     zoom: ZoomOptions | number;
   }
 ) {

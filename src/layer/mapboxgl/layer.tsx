@@ -14,13 +14,15 @@ export default function Layer(props: LayerProps): JSX.Element {
   // Create the layer in the map.
   useEffect(() => {
     return () => {
-      debug("Layer", () => `Layer: "${id}" is being removed.`);
-      map.getLayer(id) && map.removeLayer(id);
-      map.getSource(id) && map.removeSource(id);
+      if (map) {
+        debug("Layer", () => `Layer: "${id}" is being removed.`);
+        map.getLayer(id) && map.removeLayer(id);
+        map.getSource(id) && map.removeSource(id);
+      }
     };
   }, [id, map]);
 
-  if (!addLayer(map, props as InternalLayerProps)) {
+  if (map && !addLayer(map, props as InternalLayerProps)) {
     // Update layer position based on beforeId.
     updateLayerPosition(map, props as InternalLayerProps);
   }

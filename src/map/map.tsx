@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import MapContainer from "./map-container";
 import { MapContainerProps } from "./map-types";
 import { debug } from "../util/logger/logger";
@@ -12,22 +12,73 @@ const STATE_CSS_COMPLETED = "css-completed";
  * Add a map to an HTML document.
  */
 export default function Map({
+  accessToken,
+  animationOptions,
+  as,
+  bounds,
+  center,
   children,
+  className,
   cssFile = MAPBOXGL_CSS,
-  ...props
+  fadeDuration,
+  mapboxStyle,
+  maxBounds,
+  maxZoom,
+  minZoom,
+  motionType,
+  style,
+  zoom,
+  ...eventListenerProps
 }: React.PropsWithChildren<MapProps>): JSX.Element | null {
   const statesHookResult = useState<string[]>([]);
   const versionLogged = useRef(false);
 
   if (!versionLogged.current) {
     versionLogged.current = true;
-    debug("Map", () => `MapboxGL llibrary version "${versionMbx}"`);
+    debug("Map", () => `MapboxGL library version "${versionMbx}"`);
   }
 
   updateCss(statesHookResult, cssFile);
 
+  const mapContainerProps = useMemo(
+    () => ({
+      accessToken,
+      animationOptions,
+      as,
+      bounds,
+      center,
+      className,
+      fadeDuration,
+      mapboxStyle,
+      maxBounds,
+      maxZoom,
+      minZoom,
+      motionType,
+      style,
+      zoom
+    }),
+    [
+      accessToken,
+      animationOptions,
+      as,
+      bounds,
+      center,
+      className,
+      fadeDuration,
+      mapboxStyle,
+      maxBounds,
+      maxZoom,
+      minZoom,
+      motionType,
+      style,
+      zoom
+    ]
+  );
+
   return statesHookResult[0].includes(STATE_CSS_COMPLETED) ? (
-    <MapContainer {...props}>{children}</MapContainer>
+    <MapContainer {...mapContainerProps} {...eventListenerProps}>
+      {children}
+    </MapContainer>
   ) : null;
 }
 
