@@ -1,3 +1,23 @@
+/* Copyright (c) 2020 Richard L. McNeary II
+ *
+ * MIT License Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including without
+ * limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom
+ * the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 /**
  * Options common to map movement methods that involve animation.
@@ -23,7 +43,7 @@ export interface BoundsOptions extends FitBoundsOptions {
    * Additional properties to be added to event objects of events triggered by a
    * change.
    */
-  eventData?: {[key: string]: any};
+  eventData?: { [key: string]: any };
 }
 
 export interface CenterOptions {
@@ -36,7 +56,7 @@ export interface CenterOptions {
    * Additional properties to be added to event objects of events triggered by a
    * change.
    */
-  eventData?: {[key: string]: any};
+  eventData?: { [key: string]: any };
 }
 
 /**
@@ -47,7 +67,7 @@ export interface FitBoundsOptions {
    * Options for setting padding in pixels. All properties of this object must
    * be non-negative integers.
    */
-  padding?: { bottom: number; left: number; right: number; top: number; };
+  padding?: { bottom: number; left: number; right: number; top: number };
   /**
    * The maximum zoom level to allow when the map view transitions to the
    * specified bounds.
@@ -60,7 +80,7 @@ export interface FitBoundsOptions {
  * signature the first element is the longitude and the second element is the
  * latitude.
  */
-export type LngLat = [number, number] | { lat: number; lng: number; };
+export type LngLat = [number, number] | { lat: number; lng: number };
 
 /**
  * Represents a geographic rectangle on a map. A tuple; the first element is the
@@ -87,7 +107,7 @@ export interface ZoomOptions {
    * Additional properties to be added to event objects of events triggered by a
    * change.
    */
-  eventData?: {[key: string]: any};
+  eventData?: { [key: string]: any };
   /**
    * The zoom level of the map.
    */
