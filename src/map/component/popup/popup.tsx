@@ -20,7 +20,7 @@ export default function Popup({
   const { marker, onPopupAttached } = props as any;
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref.current || !map) {
       return;
     }
 

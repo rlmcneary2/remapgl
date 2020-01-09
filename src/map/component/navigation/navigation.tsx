@@ -11,6 +11,10 @@ export default function Navigation({
   const map = useMap();
 
   useEffect(() => {
+    if (!map) {
+      return;
+    }
+
     const options = { showCompass, showZoom, visualizePitch };
 
     debug("Navigation", () => [

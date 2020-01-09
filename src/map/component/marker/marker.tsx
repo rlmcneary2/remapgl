@@ -12,9 +12,13 @@ let moduleUid = Date.now();
 export default function Marker({
   children,
   ...props
-}: MarkerProps): JSX.Element {
+}: MarkerProps): JSX.Element | null {
   const map = useMap();
   const uid = useRef(`${moduleUid++}`);
+
+  if (!map) {
+    return null;
+  }
 
   const markerProps = {
     ...props,

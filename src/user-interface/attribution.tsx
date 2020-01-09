@@ -1,15 +1,23 @@
+import { useEffect } from "react";
 import { AttributionControl } from "mapbox-gl";
-import React, { useEffect } from "react";
 import { useMap } from "../map/map-context";
 
-
-export default function Attribution({ compact = false, customAttribution }: AttributionProps): null {
+export default function Attribution({
+  compact = false,
+  customAttribution
+}: AttributionProps): null {
   const map = useMap();
 
   useEffect(() => {
+    if (!map) {
+      return;
+    }
+
     const attribution = new AttributionControl({ compact, customAttribution });
-    map.addControl (attribution);
-    return () => { map.removeControl(attribution); };
+    map.addControl(attribution);
+    return () => {
+      map.removeControl(attribution);
+    };
   }, [map, compact, customAttribution]);
 
   return null;
