@@ -20,25 +20,19 @@
  */
 
 /**
- * A string indicating the part of the Marker that should be positioned closest
- * to the coordinate set by location.
+ * Copies properties from a source object to a new destination object whose
+ * value is not undefined, i.e. if the type of a property value is "undefined"
+ * that property will not be copied to the destination object.
+ * @param source Copy properties from this object.
  */
-export type AnchorType =
-  | "center"
-  | "top"
-  | "bottom"
-  | "left"
-  | "right"
-  | "top-left"
-  | "top-right"
-  | "bottom-left"
-  | "bottom-right";
+export function copyDefinedProperties(source: {
+  [key: string]: any;
+}): { [key: string]: any } {
+  return Object.keys(source).reduce((dest, key) => {
+    if (typeof source[key] !== "undefined") {
+      dest[key] = source[key];
+    }
 
-/**
- * Position on the map to which the control will be added.
- */
-export type ControlPosition =
-  | "top-left"
-  | "top-right"
-  | "bottom-left"
-  | "bottom-right";
+    return dest;
+  }, {});
+}
