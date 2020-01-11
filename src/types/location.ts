@@ -1,3 +1,6 @@
+import { CameraOptions } from "mapbox-gl";
+import { SimplePoint, GeoPoint } from "./data";
+
 /* Copyright (c) 2020 Richard L. McNeary II
  *
  * MIT License Permission is hereby granted, free of charge, to any person
@@ -62,17 +65,28 @@ export interface CenterOptions {
 /**
  * Control how bounds are displayed.
  */
-export interface FitBoundsOptions {
+export interface FitBoundsOptions extends AnimationOptions, CameraOptions {
   /**
-   * Options for setting padding in pixels. All properties of this object must
-   * be non-negative integers.
+   * If true, the map transitions using Map.easeTo(). If false, the map
+   * transitions using Map.flyTo(). See those functions and AnimationOptions for
+   * information about options available.
    */
-  padding?: { bottom: number; left: number; right: number; top: number };
+  linear?: boolean;
   /**
    * The maximum zoom level to allow when the map view transitions to the
    * specified bounds.
    */
   maxZoom?: number;
+  /**
+   * The center of the given bounds relative to the map's center, measured in
+   * pixels.
+   */
+  offset?: SimplePoint;
+  /**
+   * Options for setting padding in pixels. All properties of this object must
+   * be non-negative integers.
+   */
+  padding?: number | PaddingOptions;
 }
 
 /**
@@ -80,7 +94,7 @@ export interface FitBoundsOptions {
  * signature the first element is the longitude and the second element is the
  * latitude.
  */
-export type LngLat = [number, number] | { lat: number; lng: number };
+export type LngLat = GeoPoint | SimplePoint;
 
 /**
  * Represents a geographic rectangle on a map. A tuple; the first element is the
@@ -93,6 +107,17 @@ export type LngLatBounds = [LngLat, LngLat];
  * another.
  */
 export type MotionType = "ease" | "fly" | "jump";
+
+/**
+ * Options for setting padding in pixels. All properties of this object must
+ * be non-negative integers.
+ */
+interface PaddingOptions {
+  bottom: number;
+  left: number;
+  right: number;
+  top: number;
+}
 
 export interface Point {
   x: number;

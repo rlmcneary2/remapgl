@@ -19,6 +19,7 @@
  * SOFTWARE.
  */
 import Attribution from "./user-interface/attribution";
+import Geolocate from "./map/component/geolocate/geolocate";
 import Layer from "./layer/mapboxgl/layer";
 import Map from "./map/map";
 import Marker from "./map/component/marker/marker";
@@ -29,6 +30,7 @@ import Scale from "./map/component/scale/scale";
 
 export {
   Attribution,
+  Geolocate,
   Layer,
   Map,
   Marker,

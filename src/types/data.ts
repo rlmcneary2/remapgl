@@ -18,4 +18,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+/**
+ * Represents a geographic location on the map.
+ */
+export interface GeoPoint {
+  /**
+   * Latitude in decimal.
+   */
+  lat: number;
+  /**
+   * Longitude in decimal.
+   */
+  lng: number;
+}
+
+/**
+ * Represents a geographic location on the map. The first element is the
+ * longitude and the second element is the latitude.
+ */
 export type SimplePoint = [number, number];

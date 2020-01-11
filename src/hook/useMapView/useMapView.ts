@@ -34,6 +34,7 @@ import {
   MotionType,
   ZoomOptions
 } from "../../types/location";
+import { GeoPoint, SimplePoint } from "../../types/data";
 
 /**
  * A hook that updates the camera's view of the map when bounds, center, or zoom
@@ -51,7 +52,7 @@ export function useMapView(
   }: {
     animationOptions?: AnimationOptions;
     bounds?: LngLatBounds | BoundsOptions;
-    center: CenterOptions | [number, number] | { lng: number; lat: number };
+    center: CenterOptions | GeoPoint | SimplePoint;
     motionType?: MotionType;
     zoom: ZoomOptions | number;
   }
