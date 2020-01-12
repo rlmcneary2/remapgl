@@ -31,25 +31,25 @@ const banner = `/* Copyright (c) 2020 Richard L. McNeary II
     input,
     output: {
       banner,
-      file: `./dist/remapgl.esm.js`,
+      file: `./dist/index.mjs`,
       format: "esm",
       sourcemap: true
     },
     plugins: [typescript()]
 };
 const umd = {
-  external: ["react"],
+  external: ["mapbox-gl", "react"],
   input,
   output: {
     banner,
-    file: "./dist/remapgl.min.umd.js",
+    file: "./dist/index.min.js",
     format: "umd",
     globals: { react: "React", "mapbox-gl": "mapboxgl" },
     name: "remapgl",
     plugins: [terser()]
   },
   plugins: [
-    resolve(),
+    /*resolve(),
     commonjs({
       namedExports: {
         "mapbox-gl": [
@@ -64,7 +64,7 @@ const umd = {
           "version"
         ]
       }
-    }),
+    }),*/
     typescript()
   ],
 };
@@ -72,7 +72,7 @@ const umdDebug = {
   ...umd,
   output: {
     ...umd.output,
-    file: "./dist/remapgl.umd.js",
+    file: "./dist/index.js",
     plugins: [],
     sourcemap: true,
   }

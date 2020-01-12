@@ -16,12 +16,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react",
     "noImplicitAny": false,
     "outDir": "dist",
     "sourceMap": true,
-    "types": ["mapbox-gl"]
+    "types": ["mapbox-gl"],
+    "declaration": true,
+    "declarationDir": "dist"
   },
   "exclude": [
     "src/*.tsx",

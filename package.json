@@ -31,7 +31,8 @@
     "build": "react-scripts build",
     "bundle": "yarn clean && microbundle --name=remapgl --globals mapbox-gl=mapboxgl",
     "bundle:dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl",
-    "rollup": "rollup -c"
+    "rollup": "rollup -c",
+    "tsc": "tsc --emitDeclarationOnly"
   },
   "browserslist": {
     "production": [
@@ -88,7 +89,8 @@
     "dist"
   ],
   "source": "src/index.ts",
-  "main": "dist/remapgl.umd.js",
-  "module": "dist/remapgl.esm.js",
-  "unpkg": "dist/remapgl.umd.min.js"
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "type": "dist/index.d.ts",
+  "unpkg": "dist/index.min.js"
 }
