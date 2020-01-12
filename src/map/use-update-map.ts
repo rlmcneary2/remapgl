@@ -1,5 +1,4 @@
-/*
- * Copyright (c) 2020 Richard L. McNeary II
+/* Copyright (c) 2020 Richard L. McNeary II
  *
  * MIT License Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation files (the
@@ -19,44 +18,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { CameraOptions, Map as MapMbx } from "mapbox-gl";
 import { useEffect } from "react";
+import { CameraOptions, Map as MapMbx } from "mapbox-gl";
+import { UseUpdateMapOptions } from "./map-types";
 import {
   extractBounds,
   extractCenter,
   extractZoom
-} from "../../util/extractors/extractors";
-import {
-  AnimationOptions,
-  BoundsOptions,
-  CenterOptions,
-  LngLatBounds,
-  MotionType,
-  ZoomOptions
-} from "../../types/location";
-import { GeoPoint, SimplePoint } from "../../types/data";
+} from "../util/extractors/extractors";
 
-/**
- * A hook that updates the camera's view of the map when bounds, center, or zoom
- * change. Takes options that define the location and the camera motion to get
- * there.
- */
-export function useMapView(
-  map: MapMbx | undefined,
+export default function useUpdateMap(
+  map: MapMbx | null,
   {
     animationOptions,
     bounds,
     center,
+    mapboxStyle,
+    maxBounds,
+    maxZoom,
+    minZoom,
     motionType,
-    zoom
-  }: {
-    animationOptions?: AnimationOptions;
-    bounds?: LngLatBounds | BoundsOptions;
-    center: CenterOptions | GeoPoint | SimplePoint;
-    motionType?: MotionType;
-    zoom: ZoomOptions | number;
-  }
+    zoom,
+    ...eventListenerProps
+  }: UseUpdateMapOptions
 ) {
+  /**
+   * Update the map when props change.
+   */
+  useEffect(() => {
+    if (map && maxBounds) {
+      map.setMaxBounds(maxBounds);
+    }
+  }, [map, maxBounds]);
+
+  useEffect(() => {
+    if (map && typeof maxZoom === "number") {
+      map.setMaxZoom(maxZoom);
+    }
+  }, [map, maxZoom]);
+
+  useEffect(() => {
+    if (map && typeof minZoom === "number") {
+      map.setMinZoom(minZoom);
+    }
+  }, [map, minZoom]);
+
+  useEffect(() => {
+    if (map && mapboxStyle) {
+      map.setStyle(mapboxStyle);
+    }
+  }, [map, mapboxStyle]);
+
   useEffect(() => {
     if (!map || !bounds) {
       return;
@@ -74,7 +86,7 @@ export function useMapView(
   }, [animationOptions, bounds, map, motionType]);
 
   useEffect(() => {
-    if (!map) {
+    if (!map || !center) {
       return;
     }
 
@@ -97,4 +109,34 @@ export function useMapView(
 
     map[`${motionType || "jump"}To`](options, eventData);
   }, [center, map, motionType, zoom]);
+
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    for (const prop in eventListenerProps) {
+      updateMapEventListener(map, prop, eventListenerProps);
+    }
+
+    return () => {
+      for (const prop in eventListenerProps) {
+        updateMapEventListener(map, prop, eventListenerProps, false);
+      }
+    };
+  }, [eventListenerProps, map]);
+}
+
+function updateMapEventListener(
+  map: MapMbx,
+  prop: string,
+  eventListenerProps: { [key: string]: any },
+  add = true
+) {
+  if (prop.startsWith("on") && typeof eventListenerProps[prop] === "function") {
+    map[add ? "on" : "off"](
+      prop.substr(2).toLowerCase(),
+      eventListenerProps[prop]
+    );
+  }
 }

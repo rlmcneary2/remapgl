@@ -1,3 +1,23 @@
+/* Copyright (c) 2020 Richard L. McNeary II
+ *
+ * MIT License Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including without
+ * limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom
+ * the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 import {
   AnimationOptions,
   BoundsOptions,
@@ -295,3 +315,105 @@ export interface MapContainerProps {
    */
   zoom?: number | ZoomOptions;
 }
+
+export interface UseCreateMapOptions {
+  /**
+   * Sets the map's access token.
+   */
+  accessToken: string;
+  /**
+   * Pans and zooms the map to contain its visible area within the specified
+   * geographical bounds. Changing this value will cause the map position/zoom
+   * to change. The appearance of the transition can be controlled through
+   * animationOptions and motionType.
+   */
+  bounds?: LngLatBounds | BoundsOptions;
+  /**
+   * The geographical center point of the map. Changing this value will cause
+   * the map position to change. The appearance of the transition can be
+   * controlled through animationOptions and motionType.
+   */
+  center?: LngLat | CenterOptions;
+  /**
+   * The element where the map will appear.
+   */
+  container?: HTMLElement;
+  /**
+   * Controls the duration of the fade-in/fade-out animation for label
+   * collisions, in milliseconds.
+   */
+  fadeDuration?: number;
+  /**
+   * The map's Mapbox style. This must be an a JSON object conforming to the
+   * schema described in the Mapbox Style Specification, or a URL to such JSON.
+   */
+  mapboxStyle?: string;
+  /**
+   * The map will be constrained to the given bounds.
+   */
+  maxBounds?: LngLatBounds;
+  /**
+   * The maximum zoom level of the map (0-24).
+   */
+  maxZoom?: number;
+  /**
+   * The minimum zoom level of the map (0-24).
+   */
+  minZoom?: number;
+  /**
+   * The zoom level of the map. The appearance of the transition can be
+   * controlled through animationOptions and motionType.
+   */
+  zoom?: number | ZoomOptions;
+}
+
+export interface UseUpdateMapOptions {
+  /**
+   * Options common to camera animation through bounds, center, or zoom
+   */
+  animationOptions?: AnimationOptions;
+  /**
+   * Pans and zooms the map to contain its visible area within the specified
+   * geographical bounds. Changing this value will cause the map position/zoom
+   * to change. The appearance of the transition can be controlled through
+   * animationOptions and motionType.
+   */
+  bounds?: LngLatBounds | BoundsOptions;
+  /**
+   * The geographical center point of the map. Changing this value will cause
+   * the map position to change. The appearance of the transition can be
+   * controlled through animationOptions and motionType.
+   */
+  center?: LngLat | CenterOptions;
+  /**
+   * The map's Mapbox style. This must be an a JSON object conforming to the
+   * schema described in the Mapbox Style Specification, or a URL to such JSON.
+   */
+  mapboxStyle?: string;
+  /**
+   * The map will be constrained to the given bounds.
+   */
+  maxBounds?: LngLatBounds;
+  /**
+   * The maximum zoom level of the map (0-24).
+   */
+  maxZoom?: number;
+  /**
+   * The minimum zoom level of the map (0-24).
+   */
+  minZoom?: number;
+  /**
+   * How the camera moves when transitioning from one location to another
+   * through bounds, center, or zoom.
+   */
+  motionType?: MotionType;
+  /**
+   * The zoom level of the map. The appearance of the transition can be
+   * controlled through animationOptions and motionType.
+   */
+  zoom?: number | ZoomOptions;
+}
+
+export interface MapContextProps
+  extends UseCreateMapOptions,
+    UseUpdateMapOptions {}
