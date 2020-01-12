@@ -30,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "bundle": "yarn clean && microbundle --name=remapgl --globals mapbox-gl=mapboxgl",
-    "bundle:dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl"
+    "bundle:dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl",
+    "rollup": "rollup -c"
   },
   "browserslist": {
     "production": [
@@ -50,6 +51,9 @@
     "mapbox-gl": "1.6.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.1",
+    "@rollup/plugin-node-resolve": "^7.0.0",
+    "@rollup/plugin-typescript": "^2.1.0",
     "@types/jest": "24.0.18",
     "@types/mapbox-gl": "1.6.0",
     "@types/node": "12.12.14",
@@ -67,12 +71,14 @@
     "eslint-plugin-prettier": "3.1.1",
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-react-hooks": "2.2.0",
-    "microbundle": "0.11.0",
     "prettier": "1.18.2",
     "prettier-eslint": "9.0.0",
     "react-scripts": "3.2.0",
     "rimraf": "3.0.0",
-    "typescript": "3.6.2"
+    "rollup": "1.29.0",
+    "rollup-plugin-terser": "^5.2.0",
+    "tslib": "^1.10.0",
+    "typescript": "3.7.4"
   },
   "peerDependencies": {
     "react": "16.9.0",
@@ -82,6 +88,7 @@
     "dist"
   ],
   "source": "src/index.ts",
-  "main": "dist/index.js",
-  "unpkg": "dist/index.umd.js"
+  "main": "dist/remapgl.umd.js",
+  "module": "dist/remapgl.esm.js",
+  "unpkg": "dist/remapgl.umd.min.js"
 }

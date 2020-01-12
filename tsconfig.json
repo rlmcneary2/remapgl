@@ -20,7 +20,8 @@
     "jsx": "react",
     "noImplicitAny": false,
     "outDir": "dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["mapbox-gl"]
   },
   "exclude": [
     "src/*.tsx",
