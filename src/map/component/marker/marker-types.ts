@@ -18,8 +18,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { MarkerPopupProps } from "../popup/popup-types";
-import { LngLat, Point } from "../../../types/location";
+import { PointLike, PopupOptions } from "mapbox-gl";
+import { LngLat } from "../../../types/location";
 import { AnchorType } from "../../../types/ui";
 
 type DragHandler = (data: LngLat) => void;
@@ -27,11 +27,6 @@ type DragHandler = (data: LngLat) => void;
 type EventHandler = (event: any) => void;
 
 export interface MarkerProps {
-  /**
-   * The type of HTML element that wraps provided children; defaults to DIV.
-   * Ignored if there are no children.
-   */
-  as?: string;
   /**
    * A string indicating the part of the Marker that should be positioned
    * closest to the coordinate set by location. Can't be changed once set.
@@ -41,11 +36,7 @@ export interface MarkerProps {
    * Defines the appearance of a marker. If not provided the default pin marker
    * will be displayed
    */
-  children?: JSX.Element;
-  /**
-   * A class name to set on the containing DIV element.
-   */
-  className?: string;
+  children?: React.ReactNode;
   /**
    * The color to use for the default marker if children are not provided. The
    * default is light blue. Can't be changed once set.
@@ -63,7 +54,7 @@ export interface MarkerProps {
    * The offset in pixels to apply relative to the element's center. Negative
    * values indicate left and up.
    */
-  offset?: Point;
+  offset?: PointLike;
   /**
    * Fired when the marker is clicked.
    */
@@ -91,9 +82,18 @@ export interface MarkerProps {
   /**
    * A Popup component with content for this marker.
    */
-  popup?: React.ReactElement<MarkerPopupProps>;
+  popup?: MarkerPopup;
   /**
    * If true the popup will be shown.
    */
   togglePopup?: boolean;
+}
+
+export interface MarkerPopup {
+  content: React.ReactNode;
+  options: Omit<PopupOptions, "location">;
+}
+
+export interface MarkerOptions extends mapboxgl.MarkerOptions {
+  location?: LngLat;
 }

@@ -24,62 +24,77 @@ const banner = `/* Copyright (c) 2020 Richard L. McNeary II
  * SOFTWARE.
  */`;
 
- const input = "./src/index.ts";
- const esm = 
-  {
-    external: ["mapbox-gl", "react"],
-    input,
-    output: {
-      banner,
-      file: `./dist/index.mjs`,
-      format: "esm",
-      sourcemap: true
-    },
-    plugins: [typescript()]
-};
-const umd = {
-  external: ["mapbox-gl", "react"],
+const commonjsResult = commonjs({
+  namedExports: {
+    "mapbox-gl": [
+      "AttributionControl",
+      "GeolocateControl",
+      "Map",
+      "Marker",
+      "NavigationControl",
+      "Point",
+      "Popup",
+      "ScaleControl",
+      "version"
+    ]
+  }
+});
+const input = "./src/index.ts";
+const cjs = {
+  external: ["mapbox-gl", "react", "react-dom"],
   input,
   output: {
     banner,
-    file: "./dist/index.min.js",
-    format: "umd",
-    globals: { react: "React", "mapbox-gl": "mapboxgl" },
-    name: "remapgl",
-    plugins: [terser()]
+    file: `./dist/index.cjs.js`,
+    format: "cjs",
+    plugins: [terser()],
+    sourcemap: true
   },
-  plugins: [
-    /*resolve(),
-    commonjs({
-      namedExports: {
-        "mapbox-gl": [
-          "AttributionControl",
-          "GeolocateControl",
-          "Map",
-          "Marker",
-          "NavigationControl",
-          "Point",
-          "Popup",
-          "ScaleControl",
-          "version"
-        ]
-      }
-    }),*/
-    typescript()
-  ],
+  plugins: [typescript(), resolve(), commonjsResult]
 };
-const umdDebug = {
-  ...umd,
+const esm = {
+  external: ["mapbox-gl", "react", "react-dom"],
+  input,
   output: {
-    ...umd.output,
-    file: "./dist/index.js",
-    plugins: [],
-    sourcemap: true,
-  }
+    banner,
+    file: `./dist/index.es.js`,
+    format: "esm",
+    plugins: [terser()],
+    sourcemap: true
+  },
+  plugins: [typescript(), resolve(), commonjsResult]
 };
+const umd = {
+  external: ["mapbox-gl", "react", "react-dom"],
+  input,
+  output: {
+    banner,
+    file: "./dist/index.umd.js",
+    format: "umd",
+    globals: {
+      "mapbox-gl": "mapboxgl",
+      react: "React",
+      "react-dom": "ReactDOM"
+    },
+    name: "remapgl",
+    plugins: [terser()],
+    sourcemap: true
+  },
+  plugins: [typescript(), resolve(), commonjsResult]
+};
+// const umdDebug = {
+//   ...umd,
+//   output: {
+//     ...umd.output,
+//     file: "./dist/index.js",
+//     plugins: [],
+//     sourcemap: true,
+//   }
+// };
 
 export default [
+  cjs,
   esm,
-  umd,
-  umdDebug
+  umd
+  // umdDebug
 ];

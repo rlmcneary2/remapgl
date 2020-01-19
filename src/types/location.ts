@@ -124,6 +124,8 @@ export interface Point {
   y: number;
 }
 
+export type PointLike = Point | [number, number];
+
 /**
  * Zoom from one level to another.
  */

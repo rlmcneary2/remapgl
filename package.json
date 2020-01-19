@@ -32,6 +32,7 @@
     "bundle": "yarn clean && microbundle --name=remapgl --globals mapbox-gl=mapboxgl",
     "bundle:dev": "yarn clean && microbundle watch  --name=remapgl --globals mapbox-gl=mapboxgl",
     "rollup": "rollup -c",
+    "rollup:bundle": "yarn clean && yarn rollup && yarn tsc",
     "tsc": "tsc --emitDeclarationOnly"
   },
   "browserslist": {
@@ -89,8 +90,7 @@
     "dist"
   ],
   "source": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "type": "dist/index.d.ts",
-  "unpkg": "dist/index.min.js"
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts"
 }

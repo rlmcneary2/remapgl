@@ -18,37 +18,74 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
+import { Marker as MarkerGL } from "mapbox-gl";
 import { MarkerProps } from "./marker-types";
-import MarkerDefault from "./marker-default";
-import MarkerCustom from "./marker-custom";
 import { useMap } from "../../map-context";
-
-let moduleUid = Date.now();
+import { connectEventListeners, createMarker, setPopup } from "./util";
 
 /**
  * Creates a marker component.
  */
 export default function Marker({
+  anchor,
   children,
+  color,
+  draggable,
+  location,
+  offset,
+  popup,
   ...props
 }: MarkerProps): JSX.Element | null {
   const map = useMap();
-  const uid = useRef(`${moduleUid++}`);
+  const marker = useRef<MarkerGL | null>(null);
+  const markerPortal = useRef<React.ReactNode | null>(null);
+  const removeEvent = useRef<(() => void) | null>(null);
+  const popupPortal = useRef<React.ReactNode | null>(null);
 
-  if (!map) {
-    return null;
+  useEffect(
+    () => () => {
+      removeEvent.current && removeEvent.current();
+      marker.current && marker.current.remove();
+      removeEvent.current = null;
+      marker.current = null;
+      markerPortal.current = null;
+    },
+    []
+  );
+
+  if (map && !marker.current) {
+    // Optionally create the contents of a custom marker.
+    let element: HTMLElement | undefined = undefined;
+    if (0 < React.Children.count(children)) {
+      element = document.createElement("div");
+      markerPortal.current = ReactDOM.createPortal(children, element);
+    }
+
+    // Create the MapboxGL marker instance.
+    marker.current = createMarker(map, {
+      anchor,
+      color,
+      draggable,
+      element,
+      location,
+      offset
+    });
+
+    removeEvent.current = connectEventListeners(marker.current, props);
+
+    if (popup) {
+      popupPortal.current = setPopup(marker.current, popup);
+    }
   }
 
-  const markerProps = {
-    ...props,
-    map,
-    uid: uid.current
-  };
-
-  return 0 < React.Children.count(children) ? (
-    <MarkerCustom {...markerProps}>{children}</MarkerCustom>
-  ) : (
-    <MarkerDefault {...markerProps} />
+  // The portals for a custom marker and custom popup have to be rendered so
+  // that React will construct the contents of the portals.
+  return (
+    <>
+      {markerPortal.current}
+      {popupPortal.current}
+    </>
   );
 }
