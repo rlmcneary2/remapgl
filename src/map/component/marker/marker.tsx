@@ -55,28 +55,62 @@ export default function Marker({
     []
   );
 
-  if (map && !marker.current) {
-    // Optionally create the contents of a custom marker.
-    let element: HTMLElement | undefined = undefined;
-    if (0 < React.Children.count(children)) {
-      element = document.createElement("div");
-      markerPortal.current = ReactDOM.createPortal(children, element);
+  useEffect(() => {
+    if (!map || !marker.current || typeof draggable !== "boolean") {
+      return;
     }
 
-    // Create the MapboxGL marker instance.
-    marker.current = createMarker(map, {
-      anchor,
-      color,
-      draggable,
-      element,
-      location,
-      offset
-    });
+    marker.current.setDraggable(draggable);
+  }, [draggable, map]);
 
-    removeEvent.current = connectEventListeners(marker.current, props);
+  useEffect(() => {
+    if (!map || !marker.current || !location) {
+      return;
+    }
 
-    if (popup) {
-      popupPortal.current = setPopup(marker.current, popup);
+    marker.current.setLngLat(location);
+  }, [location, map]);
+
+  useEffect(() => {
+    if (!map || !marker.current || !offset) {
+      return;
+    }
+
+    marker.current.setOffset(offset);
+  }, [map, offset]);
+
+  useEffect(() => {
+    if (!map || !marker.current || !popup) {
+      return;
+    }
+
+    popupPortal.current = setPopup(marker.current, popup);
+  }, [map, popup]);
+
+  if (map) {
+    if (!marker.current) {
+      // Optionally create the contents of a custom marker.
+      let element: HTMLElement | undefined = undefined;
+      if (0 < React.Children.count(children)) {
+        element = document.createElement("div");
+        markerPortal.current = ReactDOM.createPortal(children, element);
+      }
+
+      // Create the MapboxGL marker instance.
+      marker.current = createMarker(map, {
+        anchor,
+        color,
+        draggable,
+        element,
+        location,
+        offset
+      });
+
+      removeEvent.current = connectEventListeners(marker.current, props);
+
+      if (popup) {
+        popupPortal.current = setPopup(marker.current, popup);
+      }
     }
   }
 
