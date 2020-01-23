@@ -26,10 +26,13 @@ import {
   extractCenter,
   extractZoom
 } from "../util/extractors/extractors";
+import { copyDefinedProperties } from "../util/props/props";
 
 export default function useUpdateMap(
   map: MapMbx | null,
-  {
+  props: UseUpdateMapOptions
+) {
+  const {
     animationOptions,
     bounds,
     center,
@@ -40,11 +43,41 @@ export default function useUpdateMap(
     motionType,
     zoom,
     ...eventListenerProps
-  }: UseUpdateMapOptions
-) {
-  /**
-   * Update the map when props change.
-   */
+  } = copyDefinedProperties<UseUpdateMapOptions>(props);
+
+  /* Connect events when the map exists. */
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    console.log("Map: connecting listeners.");
+    for (const prop in eventListenerProps) {
+      if (
+        prop.startsWith("on") &&
+        typeof eventListenerProps[prop] === "function"
+      ) {
+        map.on(prop.substr(2).toLowerCase(), eventListenerProps[prop]);
+      }
+    }
+
+    return () => {
+      if (!map) {
+        return;
+      }
+
+      console.log("Map: disconnecting listeners.");
+      for (const prop in eventListenerProps) {
+        if (
+          prop.startsWith("on") &&
+          typeof eventListenerProps[prop] === "function"
+        ) {
+          map.off(prop.substr(2).toLowerCase(), eventListenerProps[prop]);
+        }
+      }
+    };
+  }, [eventListenerProps, map]);
+
   useEffect(() => {
     if (map && maxBounds) {
       map.setMaxBounds(maxBounds);
@@ -75,14 +108,15 @@ export default function useUpdateMap(
     }
 
     const { bounds: nextBounds, eventData } = extractBounds(bounds);
-
-    map.fitBounds(
-      nextBounds,
-      animationOptions && motionType
-        ? { ...animationOptions, linear: motionType === "ease" }
-        : undefined,
-      eventData
-    );
+    if (nextBounds) {
+      map.fitBounds(
+        nextBounds,
+        animationOptions && motionType
+          ? { ...animationOptions, linear: motionType === "ease" }
+          : undefined,
+        eventData
+      );
+    }
   }, [animationOptions, bounds, map, motionType]);
 
   useEffect(() => {
@@ -109,34 +143,4 @@ export default function useUpdateMap(
 
     map[`${motionType || "jump"}To`](options, eventData);
   }, [center, map, motionType, zoom]);
-
-  useEffect(() => {
-    if (!map) {
-      return;
-    }
-
-    for (const prop in eventListenerProps) {
-      updateMapEventListener(map, prop, eventListenerProps);
-    }
-
-    return () => {
-      for (const prop in eventListenerProps) {
-        updateMapEventListener(map, prop, eventListenerProps, false);
-      }
-    };
-  }, [eventListenerProps, map]);
-}
-
-function updateMapEventListener(
-  map: MapMbx,
-  prop: string,
-  eventListenerProps: { [key: string]: any },
-  add = true
-) {
-  if (prop.startsWith("on") && typeof eventListenerProps[prop] === "function") {
-    map[add ? "on" : "off"](
-      prop.substr(2).toLowerCase(),
-      eventListenerProps[prop]
-    );
-  }
 }

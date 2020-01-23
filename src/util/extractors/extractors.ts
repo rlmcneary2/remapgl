@@ -28,12 +28,20 @@ import {
 } from "../../types/location";
 
 export function extractBounds(
-  options: BoundsOptions | LngLatBounds
+  options: BoundsOptions | LngLatBounds | undefined
 ): {
-  bounds: LngLatBounds;
+  bounds: LngLatBounds | undefined;
   eventData: { [key: string]: any } | undefined;
   fitBoundsOptions: FitBoundsOptions | undefined;
 } {
+  if (!options) {
+    return {
+      bounds: undefined,
+      eventData: undefined,
+      fitBoundsOptions: undefined
+    };
+  }
+
   let bounds: LngLatBounds;
   let eventData: { [key: string]: any } | undefined;
   let fitBoundsOptions: FitBoundsOptions | undefined;
@@ -53,8 +61,15 @@ export function extractBounds(
 }
 
 export function extractCenter(
-  options: CenterOptions | LngLat
-): { center: LngLat; eventData: { [key: string]: any } | undefined } {
+  options: CenterOptions | LngLat | undefined
+): {
+  center: LngLat | undefined;
+  eventData: { [key: string]: any } | undefined;
+} {
+  if (!options) {
+    return { center: undefined, eventData: undefined };
+  }
+
   let center: LngLat;
   let eventData: { [key: string]: any } | undefined;
   if (isCenterOptions(options)) {

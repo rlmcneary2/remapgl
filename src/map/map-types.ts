@@ -28,6 +28,7 @@ import {
   ZoomOptions
 } from "../types/location";
 import { EventData } from "../types/event";
+import { Map as MapMbx, LngLatBoundsLike, LngLatLike } from "mapbox-gl";
 
 export interface MapContainerProps {
   /**
@@ -316,28 +317,24 @@ export interface MapContainerProps {
   zoom?: number | ZoomOptions;
 }
 
-export interface UseCreateMapOptions {
-  /**
-   * Sets the map's access token.
-   */
-  accessToken: string;
+export interface MapOptions {
   /**
    * Pans and zooms the map to contain its visible area within the specified
    * geographical bounds. Changing this value will cause the map position/zoom
    * to change. The appearance of the transition can be controlled through
    * animationOptions and motionType.
    */
-  bounds?: LngLatBounds | BoundsOptions;
+  bounds?: LngLatBoundsLike;
   /**
    * The geographical center point of the map. Changing this value will cause
    * the map position to change. The appearance of the transition can be
    * controlled through animationOptions and motionType.
    */
-  center?: LngLat | CenterOptions;
+  center?: LngLatLike;
   /**
    * The element where the map will appear.
    */
-  container?: HTMLElement;
+  container: Element;
   /**
    * Controls the duration of the fade-in/fade-out animation for label
    * collisions, in milliseconds.
@@ -347,7 +344,7 @@ export interface UseCreateMapOptions {
    * The map's Mapbox style. This must be an a JSON object conforming to the
    * schema described in the Mapbox Style Specification, or a URL to such JSON.
    */
-  mapboxStyle?: string;
+  style: string;
   /**
    * The map will be constrained to the given bounds.
    */
@@ -364,7 +361,7 @@ export interface UseCreateMapOptions {
    * The zoom level of the map. The appearance of the transition can be
    * controlled through animationOptions and motionType.
    */
-  zoom?: number | ZoomOptions;
+  zoom?: number;
 }
 
 export interface UseUpdateMapOptions {
@@ -414,6 +411,6 @@ export interface UseUpdateMapOptions {
   zoom?: number | ZoomOptions;
 }
 
-export interface MapContextProps
-  extends UseCreateMapOptions,
-    UseUpdateMapOptions {}
+export interface MapContextValue {
+  map: MapMbx | null;
+}
