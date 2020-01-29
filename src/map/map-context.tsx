@@ -20,7 +20,6 @@
  */
 import { Map as MapMbx } from "mapbox-gl";
 import React, { useContext } from "react";
-import { MapContextValue } from "./map-types";
 
 const mapContext = React.createContext<MapContextValue>({} as any);
 
@@ -29,6 +28,10 @@ export default function MapContextProvider({
   map
 }: React.PropsWithChildren<{ map: MapMbx }>): React.ReactElement {
   return <mapContext.Provider value={{ map }}>{children}</mapContext.Provider>;
+}
+
+interface MapContextValue {
+  map: MapMbx | null;
 }
 
 export function useMap() {

@@ -19,17 +19,16 @@
  * SOFTWARE.
  */
 import React, { useMemo, useState, useRef, useEffect } from "react";
-import { MapContainerProps, MapOptions } from "./map-types";
 import { debug } from "../util/logger/logger";
-import mapboxgl, { Map as MapMbx, version as versionMbx } from "mapbox-gl";
+import mapboxgl, {
+  Map as MapMbx,
+  MapboxOptions as MapboxOptionsMbx,
+  version as versionMbx
+} from "mapbox-gl";
 import { copyDefinedProperties } from "../util/props/props";
 import MapContextProvider from "./map-context";
-import {
-  extractCenter,
-  extractZoom,
-  extractBounds
-} from "../util/extractors/extractors";
 import useUpdateMap from "./use-update-map";
+import { MapProps } from "./map-props";
 
 const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v11";
 const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css";
@@ -46,12 +45,14 @@ export default function Map({
   children,
   className,
   cssFile = MAPBOXGL_CSS,
+  ease,
   fadeDuration,
-  mapboxStyle = DEFAULT_MAPBOX_STYLE,
+  fly,
+  jump,
   maxBounds,
   maxZoom,
   minZoom,
-  motionType,
+  styleMbx = DEFAULT_MAPBOX_STYLE,
   style,
   zoom,
   ...eventListenerProps
@@ -64,21 +65,20 @@ export default function Map({
   const versionLogged = useRef(false);
   const orderedChildren = useMemo(() => orderLayers(children), [children]);
   useUpdateMap(map, {
-    animationOptions,
     bounds,
-    center,
+    ease,
+    fly,
+    jump,
     maxBounds,
     maxZoom,
     minZoom,
-    motionType,
-    zoom,
+    styleMbx,
     ...eventListenerProps
   });
 
   /* Cleanup map when this component is unmounted. */
   useEffect(
     () => () => {
-      console.log("Map: being destroyed.");
       setMap(null);
     },
     []
@@ -114,27 +114,27 @@ export default function Map({
     // Only set one time for the life of the APPLICATION.
     mapboxgl.accessToken = mapboxgl.accessToken || accessToken;
 
-    const { bounds: boundsOption } = extractBounds(bounds);
-    const { center: centerOption } = extractCenter(center);
-    const { zoom: zoomOption } = extractZoom(zoom);
+    const createStyle =
+      typeof styleMbx === "object" && "style" in styleMbx
+        ? styleMbx.style
+        : styleMbx;
 
     createMap({
-      bounds: boundsOption,
-      center: centerOption,
+      bounds,
+      center,
       container: mapContainer.current,
       fadeDuration,
-      style: mapboxStyle,
+      style: createStyle,
       maxBounds,
       maxZoom,
       minZoom,
-      zoom: zoomOption
+      zoom
     }).then(map => {
       mapStatus.current = "yes";
       setMap(map);
     });
   }
 
-  console.log(`Map: mapContainer=${!!mapContainer.current}, map=${!!map}.`);
   return React.createElement(
     as,
     {
@@ -172,8 +172,8 @@ async function createCssLink(cssFile: string) {
   });
 }
 
-async function createMap(options: MapOptions): Promise<MapMbx> {
-  const map = new MapMbx(copyDefinedProperties<MapOptions>(options));
+async function createMap(options: MapboxOptionsMbx): Promise<MapMbx> {
+  const map = new MapMbx(copyDefinedProperties<MapboxOptionsMbx>(options));
 
   // Wait until the map has loaded and styledata is available. Trying to change
   // the map before these have completed will cause errors.
@@ -230,14 +230,4 @@ function orderLayersBeforeId(currentIndex: number, children: any[]) {
   }
 
   return "";
-}
-
-// type MapOptions = Omit<Omit<UseCreateMapOptions, "accessToken">, "container">;
-
-export interface MapProps extends MapContainerProps {
-  /**
-   * The MapboxGL CSS file to use. Must match the current version of the
-   * mapbox-gl package.
-   */
-  cssFile?: string;
 }
