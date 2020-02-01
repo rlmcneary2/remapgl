@@ -30,7 +30,9 @@ import MapContextProvider from "./map-context";
 import useUpdateMap from "./use-update-map";
 import { MapProps } from "./map-props";
 
+const DEFAULT_CENTER: [number, number] = [-68.2954881, 44.3420759];
 const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v11";
+const DEFAULT_ZOOM = 9.5;
 const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css";
 
 /**
@@ -41,7 +43,7 @@ export default function Map({
   animationOptions,
   as = "div",
   bounds,
-  center,
+  center = DEFAULT_CENTER,
   children,
   className,
   cssFile = MAPBOXGL_CSS,
@@ -54,7 +56,7 @@ export default function Map({
   minZoom,
   styleMbx = DEFAULT_MAPBOX_STYLE,
   style,
-  zoom,
+  zoom = DEFAULT_ZOOM,
   ...eventListenerProps
 }: React.PropsWithChildren<MapProps>): JSX.Element | null {
   const [cssAdded, setCssAdded] = useState(false);
