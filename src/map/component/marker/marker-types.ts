@@ -80,7 +80,7 @@ export interface MarkerProps {
    */
   onMouseleave?: EventHandler;
   /**
-   * A Popup component with content for this marker.
+   * Options that will be used to create a popup for this marker.
    */
   popup?: MarkerPopup;
   /**
