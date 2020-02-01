@@ -34,14 +34,16 @@ vehicles are being changed into Marker components that are children of a
           {...props}
           draggable={false}
           key={label}
-          popup={{
-            content: (
-              <p>{`Vehicle: ${label}`}</p>
-            ),
-            options: {
-              offset: 40
+          popup={
+            {
+              content: (
+                <p>{`Vehicle: ${label}`}</p>
+              ),
+              options: {
+                offset: 40
+              }
             }
-          }}
+          }
         />
       );
     })}
