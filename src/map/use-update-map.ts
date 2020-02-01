@@ -19,32 +19,85 @@
  * SOFTWARE.
  */
 import { useEffect } from "react";
-import { CameraOptions, Map as MapMbx } from "mapbox-gl";
-import { UseUpdateMapOptions } from "./map-types";
-import {
-  extractBounds,
-  extractCenter,
-  extractZoom
-} from "../util/extractors/extractors";
+import { Map as MapMbx } from "mapbox-gl";
+import { MapInstanceProps, MapEventProps } from "./map-props";
+import { copyDefinedProperties } from "../util/props/props";
 
 export default function useUpdateMap(
   map: MapMbx | null,
-  {
-    animationOptions,
+  props: MapInstanceProps & MapEventProps
+) {
+  const {
     bounds,
-    center,
-    mapboxStyle,
+    ease,
+    fly,
+    jump,
     maxBounds,
     maxZoom,
     minZoom,
-    motionType,
-    zoom,
+    styleMbx,
     ...eventListenerProps
-  }: UseUpdateMapOptions
-) {
-  /**
-   * Update the map when props change.
-   */
+  } = copyDefinedProperties<MapInstanceProps & MapEventProps>(props);
+
+  useEffect(() => {
+    if (map && bounds) {
+      const { bounds: nextBounds, eventData, options } = bounds;
+      map.fitBounds(nextBounds, options, eventData);
+    }
+  }, [bounds, map]);
+
+  useEffect(() => {
+    if (map && ease) {
+      const { eventData, options } = ease;
+      map.easeTo(options, eventData);
+    }
+  }, [ease, map]);
+
+  useEffect(() => {
+    if (map && fly) {
+      const { eventData, options } = fly;
+      map.flyTo(options, eventData);
+    }
+  }, [fly, map]);
+
+  useEffect(() => {
+    if (map && jump) {
+      const { eventData, options } = jump;
+      map.jumpTo(options, eventData);
+    }
+  }, [jump, map]);
+
+  /* Connect events when the map exists. */
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    for (const prop in eventListenerProps) {
+      if (
+        prop.startsWith("on") &&
+        typeof eventListenerProps[prop] === "function"
+      ) {
+        map.on(prop.substr(2).toLowerCase(), eventListenerProps[prop]);
+      }
+    }
+
+    return () => {
+      if (!map) {
+        return;
+      }
+
+      for (const prop in eventListenerProps) {
+        if (
+          prop.startsWith("on") &&
+          typeof eventListenerProps[prop] === "function"
+        ) {
+          map.off(prop.substr(2).toLowerCase(), eventListenerProps[prop]);
+        }
+      }
+    };
+  }, [eventListenerProps, map]);
+
   useEffect(() => {
     if (map && maxBounds) {
       map.setMaxBounds(maxBounds);
@@ -64,79 +117,13 @@ export default function useUpdateMap(
   }, [map, minZoom]);
 
   useEffect(() => {
-    if (map && mapboxStyle) {
-      map.setStyle(mapboxStyle);
+    if (map && styleMbx) {
+      const nextStyle =
+        typeof styleMbx === "object" && "style" in styleMbx
+          ? styleMbx.style
+          : styleMbx;
+
+      map.setStyle(nextStyle);
     }
-  }, [map, mapboxStyle]);
-
-  useEffect(() => {
-    if (!map || !bounds) {
-      return;
-    }
-
-    const { bounds: nextBounds, eventData } = extractBounds(bounds);
-
-    map.fitBounds(
-      nextBounds,
-      animationOptions && motionType
-        ? { ...animationOptions, linear: motionType === "ease" }
-        : undefined,
-      eventData
-    );
-  }, [animationOptions, bounds, map, motionType]);
-
-  useEffect(() => {
-    if (!map || !center) {
-      return;
-    }
-
-    const { center: nextCenter, eventData: centerEventData } = extractCenter(
-      center
-    );
-    const { zoom: nextZoom, eventData: zoomEventData } = extractZoom(zoom);
-
-    const options: Partial<CameraOptions> = {};
-    let eventData: any;
-    if (zoom) {
-      options.zoom = nextZoom;
-      eventData = zoomEventData;
-    }
-
-    if (center) {
-      options.center = nextCenter;
-      eventData = { ...eventData, ...centerEventData };
-    }
-
-    map[`${motionType || "jump"}To`](options, eventData);
-  }, [center, map, motionType, zoom]);
-
-  useEffect(() => {
-    if (!map) {
-      return;
-    }
-
-    for (const prop in eventListenerProps) {
-      updateMapEventListener(map, prop, eventListenerProps);
-    }
-
-    return () => {
-      for (const prop in eventListenerProps) {
-        updateMapEventListener(map, prop, eventListenerProps, false);
-      }
-    };
-  }, [eventListenerProps, map]);
-}
-
-function updateMapEventListener(
-  map: MapMbx,
-  prop: string,
-  eventListenerProps: { [key: string]: any },
-  add = true
-) {
-  if (prop.startsWith("on") && typeof eventListenerProps[prop] === "function") {
-    map[add ? "on" : "off"](
-      prop.substr(2).toLowerCase(),
-      eventListenerProps[prop]
-    );
-  }
+  }, [map, styleMbx]);
 }

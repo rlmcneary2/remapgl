@@ -1,4 +1,10 @@
-/* Copyright (c) 2020 Richard L. McNeary II
+import commonjs from "@rollup/plugin-commonjs";
+import replace from "@rollup/plugin-replace";
+import resolve from "@rollup/plugin-node-resolve";
+import { terser } from "rollup-plugin-terser";
+import typescript from "@rollup/plugin-typescript";
+
+const banner = `/* Copyright (c) 2020 Richard L. McNeary II
  *
  * MIT License Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation files (the
@@ -17,24 +23,41 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- */
-import { Map as MapMbx } from "mapbox-gl";
-import React, { useContext } from "react";
+ */`;
 
-const mapContext = React.createContext<MapContextValue>({} as any);
+const ENV = process.env.NODE_ENV || "development";
+console.log("ENV=", ENV);
 
-export default function MapContextProvider({
-  children,
-  map
-}: React.PropsWithChildren<{ map: MapMbx }>): React.ReactElement {
-  return <mapContext.Provider value={{ map }}>{children}</mapContext.Provider>;
-}
+const cjs = {
+  external: ["react", "react-dom"],
+  input: "./src/index.ts",
+  output: {
+    banner,
+    file: `./dist/index.cjs.js`,
+    format: "cjs",
+    plugins: [ENV !== "development" && terser()],
+    sourcemap: ENV === "development"
+  },
+  plugins: [
+    typescript(),
+    resolve(),
+    commonjs({
+      namedExports: {
+        "mapbox-gl": [
+          "AttributionControl",
+          "GeolocateControl",
+          "Map",
+          "Marker",
+          "NavigationControl",
+          "Point",
+          "Popup",
+          "ScaleControl",
+          "version"
+        ]
+      }
+    }),
+    replace({ "process.env.NODE_ENV": JSON.stringify(ENV) })
+  ]
+};
 
-interface MapContextValue {
-  map: MapMbx | null;
-}
-
-export function useMap() {
-  const { map } = useContext(mapContext);
-  return map;
-}
+export default [cjs];

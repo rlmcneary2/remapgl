@@ -19,74 +19,45 @@
  * SOFTWARE.
  */
 import React, { useEffect, useRef } from "react";
-import { Marker as MarkerGL, Popup as PopupGL } from "mapbox-gl";
+import ReactDOM from "react-dom";
+import { Popup as PopupGL } from "mapbox-gl";
 import { useMap } from "../../map-context";
 import { PopupProps } from "./popup-types";
+import { copyDefinedProperties } from "../../../util/props/props";
 
 export default function Popup({
   anchor,
   children,
   closeButton = true,
   location,
-  offset,
-  ...props
-}: PopupProps): JSX.Element {
-  const ref = useRef<HTMLDivElement>(
-    null
-  ) as React.MutableRefObject<HTMLDivElement | null>;
-  const popup = useRef<PopupGL | null>(null);
+  offset
+}: PopupProps): JSX.Element | null {
   const map = useMap();
+  const popup = useRef<PopupGL | null>(null);
+  const popupPortal = useRef<React.ReactPortal | null>(null);
 
-  const { marker, onPopupAttached } = props as any;
-
-  useEffect(() => {
-    if (!ref.current || !map) {
-      return;
-    }
-
-    const popupNext = new PopupGL({
-      anchor,
-      closeButton,
-      offset
-    }).setDOMContent(ref.current);
-
-    if (onPopupAttached) {
-      onPopupAttached(popupNext);
-      return;
-    }
-
-    if (marker) {
-      (marker as MarkerGL).setPopup(popupNext);
-    } else {
-      popupNext.addTo(map);
-      location && popupNext.setLngLat([0, 0]);
-    }
-
-    popup.current = popupNext;
-
-    onPopupAttached && onPopupAttached(true);
-
-    return () => {
-      !marker ? popupNext.remove() : marker.setPopup();
+  useEffect(
+    () => () => {
+      popup.current && popup.current.remove();
       popup.current = null;
-      onPopupAttached && onPopupAttached(false);
-    };
-  }, [
-    anchor,
-    closeButton,
-    location,
-    map,
-    marker,
-    offset,
-    onPopupAttached,
-    ref
-  ]);
+      popupPortal.current = null;
+    },
+    []
+  );
 
-  useEffect(() => {
-    if (!marker && location && popup.current) {
-      popup.current.setLngLat(location);
-    }
-  }, [location, marker]);
+  if (map && !popup.current) {
+    popup.current = new PopupGL(
+      copyDefinedProperties({ anchor, closeButton, offset })
+    );
 
-  return <div ref={ref}>{children}</div>;
+    const container = document.createElement("div");
+    popup.current.setDOMContent(container);
+    popupPortal.current = ReactDOM.createPortal(children, container);
+
+    popup.current.addTo(map);
+
+    location && popup.current.setLngLat(location);
+  }
+
+  return <>{popupPortal.current}</>;
 }

@@ -25,14 +25,12 @@
  * that property will not be copied to the destination object.
  * @param source Copy properties from this object.
  */
-export function copyDefinedProperties(source: {
-  [key: string]: any;
-}): { [key: string]: any } {
+export function copyDefinedProperties<T>(source: T): T {
   return Object.keys(source).reduce((dest, key) => {
     if (typeof source[key] !== "undefined") {
       dest[key] = source[key];
     }
 
     return dest;
-  }, {});
+  }, {}) as T;
 }
