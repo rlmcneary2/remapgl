@@ -32,6 +32,7 @@ import { MapProps } from "./map-props";
 
 const DEFAULT_CENTER: [number, number] = [-68.2954881, 44.3420759];
 const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v11";
+const DEFAULT_TAG = "div";
 const DEFAULT_ZOOM = 9.5;
 const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css";
 
@@ -40,8 +41,7 @@ const MAPBOXGL_CSS = "//api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css";
  */
 export default function Map({
   accessToken,
-  animationOptions,
-  as = "div",
+  as = DEFAULT_TAG,
   bounds,
   center,
   children,

@@ -1,6 +1,5 @@
 import {
   AnimationOptions,
-  AnySourceData,
   CameraOptions,
   EventData,
   LngLatBoundsLike,
@@ -17,8 +16,6 @@ import {
   MapContextEvent,
   MapWheelEvent,
   Style,
-  Layer,
-  CustomLayerInterface,
   Light
 } from "mapbox-gl";
 
@@ -30,24 +27,11 @@ interface MapComponentProps {
   /**
    * Options common to camera animation through bounds, center, or zoom
    */
-  animationOptions?: AnimationOptions;
+  // animationOptions?: AnimationOptions;
   /**
    * The name of an HTML element that hosts the map; defaults to div.
    */
   as?: string;
-  /**
-   * Pans and zooms the map to contain its visible area within the specified
-   * geographical bounds. Changing this value will cause the map position/zoom
-   * to change. The appearance of the transition can be controlled through
-   * animationOptions and motionType.
-   */
-  // bounds?: LngLatBounds | BoundsOptions;
-  /**
-   * The geographical center point of the map. Changing this value will cause
-   * the map position to change. The appearance of the transition can be
-   * controlled through animationOptions and motionType.
-   */
-  // center?: LngLatLike;
   /**
    * A class name to set on the containing DIV element.
    */
@@ -58,65 +42,32 @@ interface MapComponentProps {
    */
   cssFile?: string;
   /**
-   * Controls the duration of the fade-in/fade-out animation for label
-   * collisions, in milliseconds.
-   */
-  // fadeDuration?: number;
-  /**
-   * The map's Mapbox style. This must be an a JSON object conforming to the
-   * schema described in the Mapbox Style Specification, or a URL to such JSON.
-   */
-  // mapboxStyle?: string;
-  /**
-   * The map will be constrained to the given bounds.
-   */
-  // maxBounds?: LngLatBounds;
-  /**
-   * The maximum zoom level of the map (0-24).
-   */
-  // maxZoom?: number;
-  /**
-   * The minimum zoom level of the map (0-24).
-   */
-  // minZoom?: number;
-  /**
-   * How the camera moves when transitioning from one location to another
-   * through bounds, center, or zoom.
-   */
-  // motionType?: MotionType;
-  /**
    * An Object with properties to set styles on the element that contains the
    * map. Per React documentation customizing the appearance of React components
    * using "style" is not recommended. See:
    * https://reactjs.org/docs/dom-elements.html#style
    */
   style?: { [key: string]: string | number };
-  /**
-   * The zoom level of the map. The appearance of the transition can be
-   * controlled through animationOptions and motionType.
-   */
-  // zoom?: number | ZoomOptions;
 }
 
 type MapConstructorOptions = Omit<MapboxOptions, "container">;
 
 export interface MapInstanceProps {
+  /**
+   * Sets the map's bearing (rotation). The bearing is the compass direction
+   * that is "up"; for example, a bearing of 90° orients the map so that east is
+   * up.
+   */
   bearing?: {
     bearing: number;
     eventData?: EventData;
-    options:
-      | AnimationOptions
-      | AnimationOptions & CameraOptions
-      | AnimationOptions &
-          CameraOptions & {
-            curve: number;
-            maxDuration?: number;
-            minZoom?: number;
-            screenSpeed?: number;
-            speed: number;
-          };
   };
 
+  /**
+   * Pans and zooms the map to contain its visible area within the specified
+   * geographical bounds. This function will also reset the map's bearing to 0
+   * if bearing is nonzero.
+   */
   bounds?: {
     bounds: LngLatBoundsLike;
     eventData?: EventData;
@@ -130,13 +81,22 @@ export interface MapInstanceProps {
       };
   };
 
+  /**
+   * Changes any combination of center, zoom, bearing, and pitch, with an
+   * animated transition between old and new values. The map will retain its
+   * current values for any details not specified in options.
+   */
   ease?: {
     eventData?: EventData;
     options: CameraOptions | CameraOptions & AnimationOptions;
   };
 
-  filters?: [{ layer: string; filter?: any[] }]; // addFilter / setFilter
-
+  /**
+   * Changes any combination of center, zoom, bearing, and pitch, animating the
+   * transition along a curve that evokes flight. The animation seamlessly
+   * incorporates zooming and panning to help the user maintain her bearings
+   * even after traversing a great distance.
+   */
   fly?: {
     eventData?: EventData;
     options:
@@ -152,6 +112,13 @@ export interface MapInstanceProps {
           };
   };
 
+  /**
+   * These images will be available to the style. Images can be displayed on the
+   * map like any other icon in the style's sprite using an image's ID with
+   * icon-image, background-pattern, fill-pattern, or line-pattern. A Map error
+   * event will be fired if there is not enough space in the sprite to add an
+   * image.
+   */
   images?: [
     {
       name: string;
@@ -168,64 +135,80 @@ export interface MapInstanceProps {
     }
   ]; // addImage / removeImage
 
+  /**
+   * Changes any combination of center, zoom, bearing, and pitch, without an
+   * animated transition. The map will retain its current values for any details
+   * not specified in options.
+   */
   jump?: {
     eventData?: EventData;
     options: CameraOptions;
   };
 
-  layers?: [
-    {
-      layer: Layer | CustomLayerInterface;
-      layoutProperty?: { name: string; value: any };
-      paintProperty?: { name: string; value: any; klass?: string };
-      zoomRange?: { minzoom: number; maxzoom: number };
-    }
-  ]; // addLayer / removeLayer / moveLayer
-
+  /**
+   * Sets the any combination of light values.
+   */
   light?: { options: Light; lightOptions?: any };
 
+  /**
+   * The map will be constrained to the given bounds.
+   */
   maxBounds?: LngLatBoundsLike; // if undefined setMaxBounds()
 
+  /**
+   * The maximum zoom level of the map (0-24).
+   */
   maxZoom?: number; // if undefined setMaxZoom()
 
+  /**
+   * The minimum zoom level of the map (0-24).
+   */
   minZoom?: number; // if undefined setMinZoom()
 
+  /**
+   * Sets the map's pitch (tilt).
+   */
   pitch?: {
     pitch: number;
     eventData?: EventData;
-    options:
-      | AnimationOptions
-      | AnimationOptions & CameraOptions
-      | AnimationOptions &
-          CameraOptions & {
-            curve: number;
-            maxDuration?: number;
-            minZoom?: number;
-            screenSpeed?: number;
-            speed: number;
-          };
   };
 
+  /**
+   * If true:
+   * - multiple copies of the world will be rendered side by side beyond -180
+   *   and 180 degrees longitude.
+   * If set to false:
+   * - When the map is zoomed out far enough that a single representation of the
+   *   world does not fill the map's entire container, there will be blank space
+   *   beyond 180 and -180 degrees longitude.
+   * - Features that cross 180 and -180 degrees longitude will be cut in two
+   *   (with one portion on the right edge of the map and the other on the left
+   *   edge of the map) at every zoom level.
+   */
   renderWorldCopies?: boolean; // if undefined setRenderWorldCopies(true)
 
+  /**
+   * Gets and sets a Boolean indicating whether the map will continuously
+   * repaint. This information is useful for analyzing performance.
+   */
   repaint?: boolean; // default false
 
+  /**
+   * Rotates the map to the specified bearing, with an animated transition. The
+   * bearing is the compass direction that is "up"; for example, a bearing of
+   * 90° orients the map so that east is up.
+   */
   rotate?: {
     bearing: number;
     eventData?: EventData;
-    options:
-      | AnimationOptions
-      | AnimationOptions & CameraOptions
-      | AnimationOptions &
-          CameraOptions & {
-            curve: number;
-            maxDuration?: number;
-            minZoom?: number;
-            screenSpeed?: number;
-            speed: number;
-          };
+    options?: AnimationOptions;
   };
 
+  /**
+   * Pans, rotates and zooms the map to to fit the box made by points p0 and p1
+   * once the map is rotated to the specified bearing. To zoom without rotating,
+   * pass in the current map bearing.
+   */
   screen?: {
     p0: PointLike;
     p1: PointLike;
@@ -240,12 +223,28 @@ export interface MapInstanceProps {
     };
   };
 
+  /**
+   * Gets and sets a Boolean indicating whether the map will render boxes around
+   * all symbols in the data source, revealing which symbols were rendered or
+   * which were hidden due to collisions. This information is useful for
+   * debugging.
+   */
   showCollisionBoxes?: boolean; // default false
 
+  /**
+   * Gets and sets a Boolean indicating whether the map will render an outline
+   * around each tile and the tile ID. These tile boundaries are useful for
+   * debugging.
+   *
+   * The uncompressed file size of the first vector source is drawn in the top
+   * left corner of each tile, next to the tile ID.
+   */
   showTileBoundaries?: boolean; // default false
 
-  sources?: [{ id: string; source: AnySourceData }]; // addSource() / removeSource()
-
+  /**
+   * The map's Mapbox style. This must be an a JSON object conforming to the
+   * schema described in the Mapbox Style Specification, or a URL to such JSON.
+   */
   styleMbx?:
     | Style
     | string
@@ -439,7 +438,6 @@ export interface MapEventProps {
    * and patterns.
    */
   onStyleimagemissing?: (data: string) => void;
-  onTiledataloading?: (data: MapDataEvent) => void;
   /**
    * Fired when a touchcancel event occurs within the map.
    */
