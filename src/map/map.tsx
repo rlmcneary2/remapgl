@@ -43,7 +43,7 @@ export default function Map({
   animationOptions,
   as = "div",
   bounds,
-  center = DEFAULT_CENTER,
+  center,
   children,
   className,
   cssFile = MAPBOXGL_CSS,
@@ -56,7 +56,7 @@ export default function Map({
   minZoom,
   styleMbx = DEFAULT_MAPBOX_STYLE,
   style,
-  zoom = DEFAULT_ZOOM,
+  zoom,
   ...eventListenerProps
 }: React.PropsWithChildren<MapProps>): JSX.Element | null {
   const [cssAdded, setCssAdded] = useState(false);
@@ -174,8 +174,14 @@ async function createCssLink(cssFile: string) {
   });
 }
 
-async function createMap(options: MapboxOptionsMbx): Promise<MapMbx> {
-  const map = new MapMbx(copyDefinedProperties<MapboxOptionsMbx>(options));
+async function createMap({
+  center = DEFAULT_CENTER,
+  zoom = DEFAULT_ZOOM,
+  ...options
+}: MapboxOptionsMbx): Promise<MapMbx> {
+  const map = new MapMbx(
+    copyDefinedProperties<MapboxOptionsMbx>({ ...options, center, zoom })
+  );
 
   // Wait until the map has loaded and styledata is available. Trying to change
   // the map before these have completed will cause errors.
