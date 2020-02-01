@@ -45,9 +45,10 @@ not be changed without refreshing the page.
 ## Mapbox CSS
 
 The Mapbox CSS file affects the default appearance of DOM objects like markers,
-popups, and UI controls. The CSS file can be included as a &lt;link&gt; `href`
-in the &lt;head&gt; section of an HTML file or the URL can be passed as the
-value of the Map component's `cssFile` prop.
+popups, and UI controls. A CSS file compatible with the current version of the
+MapboxGL will be loaded automatically. Alternately a CSS file can be included as
+a &lt;link&gt; `href` in the &lt;head&gt; section of an HTML file or the URL can
+be passed as the value of the Map component's `cssFile` prop.
 
 
 ## Mapbox Styles
@@ -57,7 +58,7 @@ styles](https://docs.mapbox.com/api/maps/#mapbox-styles) or [custom
 styles](https://docs.mapbox.com/help/glossary/style-url/) to define the map's
 appearance, in fact a style must be applied to a map for it to be visible. The
 default style "mapbox://styles/mapbox/outdoors-v10" is applied for convenience
-but a specific style can be applied using the `mapboxStyle` prop.
+but a specific style can be applied using the `styleMbx` prop.
 
 ## Style
 

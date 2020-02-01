@@ -34,11 +34,14 @@ vehicles are being changed into Marker components that are children of a
           {...props}
           draggable={false}
           key={label}
-          popup={
-            <MarkerPopup offset={40}>
+          popup={{
+            content: (
               <p>{`Vehicle: ${label}`}</p>
-            </MarkerPopup>
-          }
+            ),
+            options: {
+              offset: 40
+            }
+          }}
         />
       );
     })}
@@ -84,18 +87,19 @@ Event objects.
 
 ## Popups
 
-Any Marker can have a [MarkerPopup](/markerpopup) component provided through the
-`popup` prop. By default this popup will be shown when the marker is clicked and
-hidden when the marker is clicked again or the optional "close" button is
-tapped. The MarkerPopup accepts children.
+Any Marker can have a popup with custom content via a component provided through
+the `popup` prop. By default this popup will be shown when the marker is clicked
+and hidden when the marker is clicked again or the optional "close" button is
+tapped.
 
 ```jsx
 <Marker
-  popup={
-    <MarkerPopup offset={40}>
-      Pop!
-    </MarkerPopup>
-  }
+  popup={{
+    content: (<MyComponent>This is a popup!</MyComponent>),
+    options: {
+      offset: 40
+    }
+  }}
 />
 ```
 

@@ -31,6 +31,17 @@ Attribution is a child of the [Map](/map) component.
 </Map>
 ```
 
+## Geolocate
+
+The [Geolocate](/geolocate) control will move the map to the user's current location. Geolocate is a child of the [Map](/map)
+component.
+
+```jsx
+<Map accessToken={accessToken}>
+  <Geolocate />
+</Map>
+```
+
 ## Navigation
 
 The user may zoom the map or reorient it to North using the
@@ -40,5 +51,16 @@ component.
 ```jsx
 <Map accessToken={accessToken}>
   <Navigation />
+</Map>
+```
+
+## Scale
+
+The [Scale](/scale) control displays the ratio of a distance on the map to the
+corresponding distance on the ground.
+
+```jsx
+<Map accessToken={accessToken}>
+  <Scale maxWidth={200} unit="imperial" />
 </Map>
 ```

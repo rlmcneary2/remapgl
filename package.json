@@ -26,6 +26,7 @@
   },
   "scripts": {
     "clean": "rimraf ./build ./dist ./.rts2_cache_* ./pkg && yarn docz:clean",
+    "docz:build": "yarn docz:clean && docz build",
     "docz:clean": "rimraf ./.docz ./docs",
     "rollup": "NODE_ENV=production rollup -c",
     "rollup:bundle:dev": "yarn clean && yarn rollup:dev && yarn tsc",
@@ -63,6 +64,7 @@
     "@typescript-eslint/eslint-plugin": "2.10.0",
     "@typescript-eslint/parser": "2.10.0",
     "babel-eslint": "10.0.3",
+    "docz": "^2.2.0-alpha.8",
     "eslint": "5.16.0",
     "eslint-config-prettier": "6.5.0",
     "eslint-config-react-app": "5.0.2",
