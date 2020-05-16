@@ -214,7 +214,10 @@ function orderLayers(children: React.ReactNode) {
   // "beforeId" prop to each layer clone so the clone knows where it belongs in
   // the map object and can update its position if needed.
   const clones = React.Children.toArray(children).map((child, i, arr) => {
-    if ("isRemapGLLayer" in (child as any).type) {
+    if (
+      typeof (child as any).type === "object" &&
+      "isRemapGLLayer" in (child as any).type
+    ) {
       const beforeId = orderLayersBeforeId(i, arr);
       return React.cloneElement(child as any, { beforeId });
     }

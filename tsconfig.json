@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2019",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -22,13 +18,12 @@
     "sourceMap": true,
     "types": ["mapbox-gl"],
     "declaration": true,
-    "declarationDir": "dist"
+    "declarationDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@enzyme": ["test/enzyme.ts"]
+    }
   },
-  "exclude": [
-    "src/*.tsx",
-    "dist"
-  ],
-  "include": [
-    "src"
-  ]
+  "exclude": ["src/*.tsx", "dist"],
+  "include": ["src"]
 }
